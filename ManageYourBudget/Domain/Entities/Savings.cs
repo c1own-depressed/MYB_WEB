@@ -1,6 +1,6 @@
 ﻿namespace Domain.Entities
 {
-    internal class Savings
+    public class Savings
     {
         public int Id { get; set; }
         public string SavingsName { get; set; } = string.Empty;
