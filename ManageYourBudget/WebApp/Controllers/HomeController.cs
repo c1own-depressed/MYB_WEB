@@ -12,28 +12,17 @@ namespace WebApp.Controllers
     /// </summary>
     public class HomeController : Controller
     {
-        private readonly LogController logController;
+        private readonly ILogger<HomeController> _logger;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="HomeController"/> class.
-        /// Constructor for HomeController.
-        /// </summary>
-        /// <param name="logController">The log controller instance.</param>
-        public HomeController(LogController logController)
+        public HomeController(ILogger<HomeController> logger)
         {
-            this.logController = logController;
+            _logger = logger;
         }
 
-        /// <summary>
-        /// Action method for rendering the home page.
-        /// </summary>
-        /// <returns>ViewResult representing the home page view.</returns>
         public IActionResult Index()
         {
-            // Call the method of LogController which logs.
-            this.logController.Index();
-
-            return this.View();
+            _logger.LogInformation("Index method was called.");
+            return View();
         }
     }
 }
