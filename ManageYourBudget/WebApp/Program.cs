@@ -1,7 +1,14 @@
 using Microsoft.EntityFrameworkCore;
 using Persistence.Data;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+
+// Configure Serilog
+builder.Host.UseSerilog((ctx, lc) => lc
+    .WriteTo.Console()
+    .WriteTo.Seq("http://localhost:5341"));
+
 
 // Add services to the container.
 builder.Services.AddRazorPages();
