@@ -1,15 +1,9 @@
-﻿//-----------------------------------------------------------------------
-// <copyright file="HomeController.cs" company="PlaceholderCompany">
-// Copyright (c) PlaceholderCompany. All rights reserved.
-// </copyright>
-//-----------------------------------------------------------------------
+using Microsoft.AspNetCore.Mvc;
+using System.Diagnostics;
+using WebApp.Models;
+
 namespace WebApp.Controllers
 {
-    using Microsoft.AspNetCore.Mvc;
-
-    /// <summary>
-    /// Controller for managing home page.
-    /// </summary>
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
@@ -21,8 +15,18 @@ namespace WebApp.Controllers
 
         public IActionResult Index()
         {
-            _logger.LogInformation("Index method was called.");
             return View();
+        }
+
+        public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
