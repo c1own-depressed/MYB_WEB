@@ -1,4 +1,12 @@
+using Microsoft.AspNetCore.Mvc.TagHelpers;
+using Microsoft.EntityFrameworkCore;
+using Persistence.Data;
+
 var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("RostikConnection");
+builder.Services.AddDbContext<MYBDbContext>(options =>
+    options.UseMySQL(connectionString));
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
