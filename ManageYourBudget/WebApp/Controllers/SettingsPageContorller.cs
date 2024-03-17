@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Serilog;
 using System.Diagnostics;
 using WebApp.Models;
 
@@ -16,6 +17,8 @@ namespace WebApp.Controllers
 
         public IActionResult Index()
         {
+            _logger.LogInformation("User accessed SettingsPage."); 
+
             return View("~/Views/SettingsPage/Index.cshtml");
         }
 
