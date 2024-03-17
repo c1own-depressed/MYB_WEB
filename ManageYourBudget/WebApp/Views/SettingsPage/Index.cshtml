@@ -1,0 +1,104 @@
+﻿@{
+    ViewData["Title"] = "SettingsPage";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Settings</title>
+    <style>
+        /* Додайте свої стилі тут */
+        body {
+            background-color: #D9D9D9;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #000000;
+            font-size: 48px;
+            margin-top: 20px;
+            font-weight: bold;
+            margin-bottom:7%;
+            margin-left:42.5%;
+        }
+
+        .SelectOption {
+            display: flex;
+            align-items: center;
+            margin-top: 40px;
+            margin-left:30%;  
+        }
+
+            .SelectOption label {
+                margin-right:15%;
+                width: 20%;
+                margin-right: 10px;
+                text-align: center;
+                margin-right:30px;
+                font-size: 20px;
+            }
+
+        .selection {
+            width: 30%;
+            height: 41px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            width: 182px;
+            height:42px;
+            background-color: #545454;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0 auto;
+            display: block;
+            text-align:center;
+            margin-TOP:60px;
+        }
+
+            input[type="submit"]:hover {
+                background-color: white;
+                color: #545454;
+            }
+    </style>
+</head>
+<body>
+    <h1>Settings</h1>
+    <div class="SelectOption">
+        <label for="language">Language:</label>
+        <select id="language" name="language" class="selection">
+            <option value="english">English</option>
+            <option value="spanish">Spanish</option>
+            <option value="french">French</option>
+            <!-- Додайте інші варіанти, якщо потрібно -->
+        </select>
+    </div>
+    <div class="SelectOption">
+        <label for="theme">Choose theme:</label>
+        <select id="theme" name="theme" class="selection">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+            <!-- Додайте інші варіанти, якщо потрібно -->
+        </select>
+    </div>
+    <div class="SelectOption">
+        <label for="currency">Choose currency:</label>
+        <select id="currency" name="currency" class="selection">
+            <option value="usd">USD</option>
+            <option value="eur">EUR</option>
+            <option value="gbp">GBP</option>
+            <!-- Додайте інші варіанти, якщо потрібно -->
+        </select>
+    </div>
+    <input type="submit" value="Save">
+</body>
+</html>
