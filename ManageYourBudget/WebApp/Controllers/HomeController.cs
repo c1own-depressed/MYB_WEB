@@ -15,7 +15,34 @@ namespace WebApp.Controllers
 
         public IActionResult Index()
         {
-            return View();
+            var model = new HomeViewModel
+            {
+                Categories = new[]
+                {
+                    new CategoryViewModel
+                    {
+                        Name = "Restaurant",
+                        PlannedBudget = 500,
+                        RemainingBudget = 400
+                    },
+                    new CategoryViewModel
+                    {
+                        Name = "ATB",
+                        PlannedBudget = 9900,
+                        RemainingBudget = 8733
+                    }
+                },
+                Income = new IncomeViewModel 
+                {
+                    Name = "Main work"
+                },
+                Savings = new SavingsViewModel 
+                {  
+                    Name = "Travelling"
+                }                
+            };
+
+            return View(model);
         }
 
         public IActionResult Privacy()
