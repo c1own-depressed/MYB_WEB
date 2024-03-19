@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using Serilog;
 using System.Diagnostics;
 using WebApp.Models;
 

@@ -6,6 +6,7 @@ using Persistence;
 using Persistence.Data;
 using Persistence.Repositories;
 using Serilog;
+using Application.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +29,8 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IExpenseCategoryRepository, ExpenseCategoryRepository>();
 
 // Register your application services
-builder.Services.AddScoped<ExpenseCategoryService>();
+builder.Services.AddScoped<IExpenseCategoryService, ExpenseCategoryService>();
+builder.Services.AddScoped<IExpenseService, ExpenseService>();
 
 var app = builder.Build();
 

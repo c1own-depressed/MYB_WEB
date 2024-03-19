@@ -1,10 +1,11 @@
-﻿using Domain.Entities;
+﻿using Application.DTOs;
+using Application.Interfaces;
+using Domain.Entities;
 using Domain.Interfaces;
-
 
 namespace Application.Services
 {
-    public class ExpenseService
+    public class ExpenseService : IExpenseService
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -16,7 +17,20 @@ namespace Application.Services
         public async Task AddExpense(ExpenseCategory expense)
         {
             _unitOfWork.ExpenseCategories.AddAsync(expense);
-            //await _unitOfWork.SaveAsync();
+            await _unitOfWork.CompleteAsync();
+        }
+
+        public async Task<IEnumerable<ExpenseDTO>> GetExpensesByCategoryIdAsync(int categoryId)
+        {
+            var expenses = await _unitOfWork.Expenses.GetExpensesByExpenseCategoryIdAsync(categoryId);
+
+            var expenseDTOs = expenses.Select(expense => new ExpenseDTO
+            {
+                ExpenseName = expense.ExpenseName,
+                Amount = expense.Amount,
+            });
+
+            return expenseDTOs;
         }
     }
 }
