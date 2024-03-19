@@ -1,12 +1,13 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Persistence.Data;
 
 namespace Persistence.Repositories
 {
     public class ExpenseRepository : RepositoryBase<Expense>, IExpenseRepository
     {
-        public ExpenseRepository(DbContext context) : base(context)
+        public ExpenseRepository(MYBDbContext context) : base(context)
         {
         }
 

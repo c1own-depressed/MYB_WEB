@@ -1,3 +1,4 @@
+using Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WebApp.Models;
@@ -7,31 +8,23 @@ namespace WebApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly ExpenseCategoryService _expenseCategoryService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ExpenseCategoryService expenseCategoryService)
         {
             _logger = logger;
+            _expenseCategoryService = expenseCategoryService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            var userId = 1; // Assuming a hardcoded userId for demonstration. Replace with actual user's id.
+            var categories = await _expenseCategoryService.GetExpenseCategoriesByUserIdAsync(userId);
+
             var model = new HomeViewModel
             {
-                Categories = new[]
-                {
-                    new CategoryViewModel
-                    {
-                        Name = "Restaurant",
-                        PlannedBudget = 500,
-                        RemainingBudget = 400
-                    },
-                    new CategoryViewModel
-                    {
-                        Name = "ATB",
-                        PlannedBudget = 9900,
-                        RemainingBudget = 8733
-                    }
-                },
+                Categories = categories,
+                
                 Income = new IncomeViewModel 
                 {
                     Name = "Main work"

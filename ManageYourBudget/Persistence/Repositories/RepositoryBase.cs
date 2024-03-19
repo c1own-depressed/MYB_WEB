@@ -1,6 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Domain.Interfaces.Repositories;
+using Microsoft.EntityFrameworkCore;
 
-public abstract class RepositoryBase<T> where T : class
+public abstract class RepositoryBase<T>: IRepositoryBase<T> where T : class
 {
     protected readonly DbContext _context;
 
