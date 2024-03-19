@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces.Repositories
 {
-    public interface IExpenseCategoryRepository
+    public interface IExpenseCategoryRepository : IRepositoryBase<ExpenseCategory>
     {
         IEnumerable<ExpenseCategory> GetExpenseCategoriesByUserId(int userId);
         //IEnumerable<ExpenseCategory> GetExpenseCategories();

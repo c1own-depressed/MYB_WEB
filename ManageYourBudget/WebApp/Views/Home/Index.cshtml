@@ -3,7 +3,7 @@
 } *@
 @model WebApp.Models.HomeViewModel
 
-<div class="text-center">
+@* <div class="text-center">
     
     <p>@Model.Savings.Name</p>
     <p>@Model.Income.Name</p>
@@ -13,4 +13,45 @@
         <p>@category.Name</p>
         // Display other review details
     }
-</div>
+</div> *@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Settings</title>
+    <style>
+        html {
+            font-size: 16px; 
+        }
+
+        .category-wrapper {
+            margin: 1rem;
+            border-radius: 0.3125rem;
+            max-width: 20rem;
+            background-color: #7B7B7B;
+            color: white;
+        }
+
+        .category-heading-wrapper {
+            padding: 0.625rem; 
+            padding-left: 1.25rem
+        }
+
+        .category-heading {
+            font-size: 2.25rem;
+        }
+    </style>
+</head>
+<body>
+    @foreach (var category in Model.Categories)
+    {
+        <div class="category-wrapper">
+            <div class="category-content">
+                <div class="category-heading-wrapper">
+                    <h2 class="category-heading">@category.Name</h2>
+                </div>
+            </div>
+        </div>
+    }
+</body>
+</html>

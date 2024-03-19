@@ -3,12 +3,13 @@
 using Domain.Entities;
 using Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Persistence.Data;
 
 namespace Persistence.Repositories
 {
     internal class SavingsRepository : RepositoryBase<Savings>, ISavingsRepository
     {
-        public SavingsRepository(DbContext context) : base(context)
+        public SavingsRepository(MYBDbContext context) : base(context)
         {
         }
 
