@@ -16,7 +16,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Seq("http://localhost:5341"));
 
 
-var connectionString = builder.Configuration.GetConnectionString("RomanConnection");
+var connectionString = builder.Configuration.GetConnectionString("AndriyConnection");
 builder.Services.AddDbContext<MYBDbContext>(options =>
     options.UseMySQL(connectionString));
 
