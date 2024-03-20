@@ -4,9 +4,9 @@ namespace WebApp.Models
 {
     public class HomeViewModel
     {
-        public SavingsViewModel? Savings { get; set; }
-        public IncomeViewModel? Income { get; set; }
-        //public ExpenseCategoryDTO[]? Categories { get; set; }
+        // TODO:
+        //public IEnumerable<SavingsDTO>? Savings { get; set; }
+        //public IEnumerable<IncomeDTO>? Income { get; set; }
         public IEnumerable<ExpenseCategoryDTO>? Categories { get; set; }
 
     }

@@ -1,19 +1,6 @@
-﻿@* @{
-    ViewData["Title"] = "Home Page";
-} *@
-@model WebApp.Models.HomeViewModel
+﻿@model WebApp.Models.HomeViewModel
 
-@* <div class="text-center">
-    
-    <p>@Model.Savings.Name</p>
-    <p>@Model.Income.Name</p>
 
-    @foreach (var category in Model.Categories) 
-    {
-        <p>@category.Name</p>
-        // Display other review details
-    }
-</div> *@
 <!DOCTYPE html>
 <html>
 <head>
@@ -26,19 +13,38 @@
 
         .category-wrapper {
             margin: 1rem;
-            border-radius: 0.3125rem;
-            max-width: 20rem;
-            background-color: #7B7B7B;
             color: white;
         }
 
         .category-heading-wrapper {
-            padding: 0.625rem; 
-            padding-left: 1.25rem
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .category-heading-name-wrapper {
+            background-color: #7B7B7B;
+            border-radius: 0.3125rem;
+            padding: 1rem; 
+            padding-left: 1.5rem;
+            display: inline-block;
         }
 
         .category-heading {
             font-size: 2.25rem;
+        }
+
+        .category-heading-details-wrapper {
+            color: burlywood;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .expenses-wrapper {
+            color: burlywood;
         }
     </style>
 </head>
@@ -48,7 +54,19 @@
         <div class="category-wrapper">
             <div class="category-content">
                 <div class="category-heading-wrapper">
-                    <h2 class="category-heading">@category.Name</h2>
+                    <div class="category-heading-name-wrapper">
+                        <h2 class="category-heading">@category.Name</h2>
+                    </div>
+                    <div class="category-heading-details-wrapper">
+                        <p>Remaining budget: @category.RemainingBudget</p>
+                        <p>Planned buget: @category.PlannedBudget</p>
+                    </div>  
+                </div>
+                <div class="expenses-wrapper">
+                    @foreach (var expense in category.Expenses)
+                    {
+                        <p>Expense: @expense.ExpenseName  (@expense.Amount ₴)</p>
+                    }
                 </div>
             </div>
         </div>
