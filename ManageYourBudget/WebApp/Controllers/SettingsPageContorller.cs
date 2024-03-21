@@ -1,21 +1,55 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging; // Додано простір імен для ILogger
 using System.Diagnostics;
+using System.Threading.Tasks;
 using WebApp.Models;
+using Application.DTOs;
+using Application.Interfaces;
+using Application.Services;
 
 namespace WebApp.Controllers
 {
     public class SettingsController : Controller
     {
         private readonly ILogger<SettingsController> _logger;
+        private readonly ISettingsService _settingsService;
+        private string selectedLanguage;
+        private bool selectedTheme;
+        private string selectedCurrency;
 
-        public SettingsController(ILogger<SettingsController> logger)
+        public SettingsController(ILogger<SettingsController> logger, ISettingsService settingsService)
         {
             _logger = logger;
+            _settingsService = settingsService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            _logger.LogInformation("User accessed SettingsPage."); 
+            int userId = 1;
+            try
+            {
+                var userSettings = await _settingsService.GetUserSettingsAsync(userId);
+
+                if (userSettings != null)
+                {
+                    var model = new SettingsViewModel
+                    {
+                        Language = userSettings.Language,
+                        IsLightTheme = userSettings.IsLightTheme,
+                        Currency = userSettings.Currency,
+                    };
+
+                    _logger.LogInformation($"User accessed SettingsPage with pre-filled settings. Currency: {model.Currency}");
+
+                    return View("~/Views/SettingsPage/Index.cshtml", model);
+                }
+
+                _logger.LogInformation("User accessed SettingsPage without pre-filled settings.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while fetching user settings.");
+            }
 
             return View("~/Views/SettingsPage/Index.cshtml");
         }
@@ -24,6 +58,30 @@ namespace WebApp.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveSettings(SettingsViewModel model)
+        {
+            try
+            {
+                this.selectedLanguage = model.Language;
+                this.selectedTheme = model.IsLightTheme;
+                this.selectedCurrency = model.Currency;
+                SettingsDTO settingsDTO = new SettingsDTO();
+                settingsDTO.Language = this.selectedLanguage;
+                settingsDTO.Currency = this.selectedCurrency;
+                settingsDTO.IsLightTheme = this.selectedTheme;
+                settingsDTO.Id = 1;
+                await _settingsService.SaveSettings(settingsDTO);
+                _logger.LogInformation("User settings saved successfully.");
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while saving user settings.");
+                return RedirectToAction("Index");
+            }
         }
     }
 }

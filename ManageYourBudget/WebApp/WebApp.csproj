@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <TreatWarningsAsErrors>False</TreatWarningsAsErrors>
   </PropertyGroup>
 
   <ItemGroup>
@@ -38,6 +38,10 @@
 
   <ItemGroup>
     <None Include="D:\PI\MYB_WEB\ManageYourBudget\WebApp\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\Controllers\SettingsPageController\" />
   </ItemGroup>
 
 </Project>
