@@ -3,7 +3,7 @@
 
 namespace Domain.Interfaces.Repositories
 {
-    public interface IIncomeRepository
+    public interface IIncomeRepository : IRepositoryBase<Income>
     {
         IEnumerable<Income> GetIncomesByUserId(int userId);
     }
