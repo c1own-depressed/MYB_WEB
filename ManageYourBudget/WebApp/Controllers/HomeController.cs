@@ -1,3 +1,4 @@
+using Application.DTOs;
 using Application.Interfaces;
 using Application.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -29,7 +30,7 @@ namespace WebApp.Controllers
                 //Income = ,
                 //Savings =                 
             };
-
+            _logger.LogError("Home page opened");
             return View(model);
         }
 
@@ -42,6 +43,26 @@ namespace WebApp.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddExpenseCategory([FromBody] CreateExpenseCategoryDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state for AddExpenseCategory");
+                return BadRequest(ModelState);
+            }
+
+            var (isSuccess, errorMessage) = await _expenseCategoryService.AddExpenseCategoryAsync(model);
+            if (!isSuccess)
+            {
+                _logger.LogError($"Failed to add category: {errorMessage}");
+                return BadRequest(errorMessage);
+            }
+
+            _logger.LogInformation($"Category added: {model.Title} with budget {model.PlannedBudget}");
+            return Ok();
         }
     }
 }

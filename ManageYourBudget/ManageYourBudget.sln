@@ -1,4 +1,3 @@
-﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34316.72
@@ -16,6 +15,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{84CA6BCE-3F0B-4635-87E0-002B4BD93247}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Persistence", "Persistence\Persistence.csproj", "{7771C982-D1BC-4E9E-B655-5EF7CAE610A0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{954D2CF0-9B14-4D35-8881-B10559E9745A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{14FEBDEB-F89D-4073-B8AE-43C66BD98736}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +42,10 @@ Global
 		{7771C982-D1BC-4E9E-B655-5EF7CAE610A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7771C982-D1BC-4E9E-B655-5EF7CAE610A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7771C982-D1BC-4E9E-B655-5EF7CAE610A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14FEBDEB-F89D-4073-B8AE-43C66BD98736}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14FEBDEB-F89D-4073-B8AE-43C66BD98736}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14FEBDEB-F89D-4073-B8AE-43C66BD98736}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14FEBDEB-F89D-4073-B8AE-43C66BD98736}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +55,7 @@ Global
 		{30DA5865-E1BB-4B96-BCD3-86BC25CB4E4A} = {08CBAE51-E25E-4E64-A238-A5AD32093921}
 		{84CA6BCE-3F0B-4635-87E0-002B4BD93247} = {08CBAE51-E25E-4E64-A238-A5AD32093921}
 		{7771C982-D1BC-4E9E-B655-5EF7CAE610A0} = {53F7612F-D77B-4194-9F6B-A4891DA06982}
+		{14FEBDEB-F89D-4073-B8AE-43C66BD98736} = {954D2CF0-9B14-4D35-8881-B10559E9745A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5EA926F3-0946-4131-9FEF-759008390523}
