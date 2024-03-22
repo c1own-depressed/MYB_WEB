@@ -5,6 +5,6 @@ namespace Domain.Interfaces.Repositories
 {
     public interface IIncomeRepository : IRepositoryBase<Income>
     {
-        IEnumerable<Income> GetIncomesByUserId(int userId);
+        Task<IEnumerable<Income>> GetIncomesByUserIdAsync(int userId);
     }
 }

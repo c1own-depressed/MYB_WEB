@@ -11,23 +11,26 @@ namespace WebApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IExpenseCategoryService _expenseCategoryService;
+        private readonly IIncomeService _incomeService;
 
-        public HomeController(ILogger<HomeController> logger, IExpenseCategoryService expenseCategoryService)
+        public HomeController(ILogger<HomeController> logger, IExpenseCategoryService expenseCategoryService, IIncomeService incomeService)
         {
             _logger = logger;
             _expenseCategoryService = expenseCategoryService;
+            _incomeService = incomeService;
         }
 
         public async Task<IActionResult> Index()
         {
             var userId = 1;
             var categories = await _expenseCategoryService.GetExpenseCategoriesByUserIdAsync(userId);
+            var incomes = await _incomeService.GetIncomesByUserIdAsync(userId);
 
             var model = new HomeViewModel
             {
                 Categories = categories,
-                
-                //Income = ,
+
+                Incomes = incomes,
                 //Savings =                 
             };
             _logger.LogError("Home page opened");

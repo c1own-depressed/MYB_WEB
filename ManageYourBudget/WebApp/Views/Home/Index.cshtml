@@ -59,6 +59,22 @@
 </head>
 <body>
     <div class="content">
+        <div class="category-wrapper">
+            <div class="category-content">
+                <div class="category-heading-wrapper">
+                    <div class="category-heading-name-wrapper">
+                        <h2 class="category-heading">Incomes</h2>
+                    </div>
+                </div>
+                <div class="expenses-wrapper">
+                    @foreach (var income in Model.Incomes)
+                    {
+                        <p>Expense: @income.IncomeName  (@income.Amount ₴)</p>
+                    }
+                </div>
+            </div>
+        </div>
+
         @foreach (var category in Model.Categories)
         {
             <div class="category-wrapper">
