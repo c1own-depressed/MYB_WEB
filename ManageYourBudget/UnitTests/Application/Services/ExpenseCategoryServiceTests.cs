@@ -154,5 +154,71 @@ namespace UnitTests.Application.Services
             _mockUnitOfWork.Verify(); // Verify that AddAsync and CompleteAsync were called as expected
         }
 
+        [Fact]
+        public async Task RemoveExpenseCategoryAsync_WithValidCategoryId_RemovesCategorySuccessfully()
+        {
+            // Arrange
+            int categoryIdToRemove = 1;
+            var categoryToRemove = new ExpenseCategory { Id = categoryIdToRemove, CategoryName = "Test Category", Amount = 100 };
+            _mockUnitOfWork.Setup(u => u.ExpenseCategories.GetByIdAsync(categoryIdToRemove))
+                           .ReturnsAsync(categoryToRemove);
+            _mockExpenseService.Setup(s => s.GetExpensesByCategoryIdAsync(categoryIdToRemove))
+                               .ReturnsAsync(new List<ExpenseDTO>());
+
+            // Act
+            var result = await _service.RemoveExpenseCategoryAsync(categoryIdToRemove);
+
+            // Assert
+            Assert.True(result.isSuccess);
+            Assert.Empty(result.errorMessage);
+            _mockUnitOfWork.Verify(u => u.ExpenseCategories.Delete(categoryToRemove), Times.Once);
+            _mockUnitOfWork.Verify(u => u.CompleteAsync(), Times.Once);
+        }
+
+        [Fact]
+        public async Task RemoveExpenseCategoryAsync_WithNonExistentCategoryId_ReturnsError()
+        {
+            // Arrange
+            int nonExistentCategoryId = 999;
+            _mockUnitOfWork.Setup(u => u.ExpenseCategories.GetByIdAsync(nonExistentCategoryId))
+                           .ReturnsAsync((ExpenseCategory)null);
+
+            // Act
+            var result = await _service.RemoveExpenseCategoryAsync(nonExistentCategoryId);
+
+            // Assert
+            Assert.False(result.isSuccess);
+            Assert.Equal("Expense category not found.", result.errorMessage);
+            _mockUnitOfWork.Verify(u => u.ExpenseCategories.Delete(It.IsAny<ExpenseCategory>()), Times.Never);
+            _mockUnitOfWork.Verify(u => u.CompleteAsync(), Times.Never);
+        }
+
+        [Fact]
+        public async Task RemoveExpenseCategoryAsync_WithAssociatedExpenses_ReturnsError()
+        {
+            // Arrange
+            int categoryIdWithExpenses = 2;
+            var categoryToRemove = new ExpenseCategory { Id = categoryIdWithExpenses, CategoryName = "Test Category", Amount = 100 };
+            var associatedExpenses = new List<ExpenseDTO>
+            {
+                new ExpenseDTO { ExpenseName = "Expense 1", Amount = 50 },
+                new ExpenseDTO { ExpenseName = "Expense 2", Amount = 75 }
+            };
+            _mockUnitOfWork.Setup(u => u.ExpenseCategories.GetByIdAsync(categoryIdWithExpenses))
+                           .ReturnsAsync(categoryToRemove);
+            _mockExpenseService.Setup(s => s.GetExpensesByCategoryIdAsync(categoryIdWithExpenses))
+                               .ReturnsAsync(associatedExpenses);
+
+            // Act
+            var result = await _service.RemoveExpenseCategoryAsync(categoryIdWithExpenses);
+
+            // Assert
+            Assert.False(result.isSuccess);
+            Assert.Equal("Cannot delete category with associated expenses.", result.errorMessage);
+            _mockUnitOfWork.Verify(u => u.ExpenseCategories.Delete(It.IsAny<ExpenseCategory>()), Times.Never);
+            _mockUnitOfWork.Verify(u => u.CompleteAsync(), Times.Never);
+        }
+
+
     }
 }

@@ -72,15 +72,16 @@
                         </div>
                         <div class="category-heading-details-wrapper">
                             <p>Remaining budget: @category.RemainingBudget</p>
-                            <p>Planned buget: @category.PlannedBudget</p>
-                        </div>  
+                            <p>Planned budget: @category.PlannedBudget</p>
+                        </div>
                     </div>
                     <div class="expenses-wrapper">
                         @foreach (var expense in category.Expenses)
                         {
-                            <p>Expense: @expense.ExpenseName  (@expense.Amount ₴)</p>
+                            <p>Expense: @expense.ExpenseName (@expense.Amount ₴)</p>
                         }
                     </div>
+                    <button type="button" class="btn btn-danger remove-category-button" data-category-id=1>Remove Category</button>
                 </div>
             </div>
         }
@@ -139,6 +140,31 @@
                         alert("Wrong data");
                     }
                 });
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function () {
+            // Handle click event of remove category button
+            $('.remove-category-button').on('click', function () {
+                var categoryId = $(this).data('category-id');
+                if (confirm('Are you sure you want to remove this category?')) {
+                    $.ajax({
+                        url: '@Url.Action("RemoveExpenseCategory", "Home")',
+                        type: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            categoryId: categoryId
+                        }),
+                        success: function (response) {
+                            // Reload the page after successful removal
+                            window.location.reload();
+                        },
+                        error: function (error) {
+                            alert("Error occurred while removing the category.");
+                        }
+                    });
+                }
             });
         });
     </script>

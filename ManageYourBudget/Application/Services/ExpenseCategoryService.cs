@@ -68,5 +68,33 @@ namespace Application.Services
 
             return (true, "");
         }
+
+        public async Task<(bool isSuccess, string errorMessage)> RemoveExpenseCategoryAsync(int categoryId)
+        {
+            try
+            {
+                var categoryToRemove = await _unitOfWork.ExpenseCategories.GetByIdAsync(categoryId);
+
+                if (categoryToRemove == null)
+                {
+                    return (false, "Expense category not found.");
+                }
+
+                var associatedExpenses = await _expenseService.GetExpensesByCategoryIdAsync(categoryId);
+                if (associatedExpenses.Any())
+                {
+                    return (false, "Cannot delete category with associated expenses.");
+                }
+
+                _unitOfWork.ExpenseCategories.Delete(categoryToRemove);
+                await _unitOfWork.CompleteAsync();
+
+                return (true, "");
+            }
+            catch (Exception ex)
+            {
+                return (false, "An error occurred while removing the expense category.");
+            }
+        }
     }
 }

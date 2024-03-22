@@ -64,5 +64,19 @@ namespace WebApp.Controllers
             _logger.LogInformation($"Category added: {model.Title} with budget {model.PlannedBudget}");
             return Ok();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveExpenseCategory(int categoryId)
+        {
+            var (isSuccess, errorMessage) = await _expenseCategoryService.RemoveExpenseCategoryAsync(categoryId);
+            if (!isSuccess)
+            {
+                _logger.LogError($"Failed to remove category with ID {categoryId}: {errorMessage}");
+                return BadRequest(errorMessage);
+            }
+
+            _logger.LogInformation($"Category with ID {categoryId} removed successfully");
+            return Ok();
+        }
     }
 }

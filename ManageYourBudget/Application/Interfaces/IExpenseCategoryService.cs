@@ -7,5 +7,6 @@ namespace Application.Interfaces
     {
         Task<IEnumerable<ExpenseCategoryDTO>> GetExpenseCategoriesByUserIdAsync(int userId);
         Task<(bool isSuccess, string errorMessage)> AddExpenseCategoryAsync(CreateExpenseCategoryDTO model);
+        Task<(bool isSuccess, string errorMessage)> RemoveExpenseCategoryAsync(int categoryId);
     }
 }
