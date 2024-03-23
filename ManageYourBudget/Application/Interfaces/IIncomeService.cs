@@ -10,8 +10,8 @@ namespace Application.Interfaces
 {
     public interface IIncomeService
     {
-        Task AddIncome(Income income);
         Task<IEnumerable<IncomeDTO>> GetIncomesByUserIdAsync(int userId);
+        Task<(bool isSuccess, string errorMessage)> AddIncomeAsync(IncomeDTO income);
 
     }
 }

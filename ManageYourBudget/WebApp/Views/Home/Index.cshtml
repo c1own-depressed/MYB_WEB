@@ -5,14 +5,14 @@
 <html>
 <head>
     <meta charset="utf-8" />
-    <title>Settings</title>
+    <title>Home</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <style>
         html {
-            font-size: 16px; 
+            font-size: 16px;
         }
 
         .category-wrapper {
@@ -29,7 +29,7 @@
         .category-heading-name-wrapper {
             background-color: #7B7B7B;
             border-radius: 0.3125rem;
-            padding: 1rem 1.5rem; 
+            padding: 1rem 1.5rem;
             display: inline-block;
         }
 
@@ -53,7 +53,6 @@
         .add-category-button {
             margin: 1rem;
             color: #1C25FF;
-            
         }
     </style>
 </head>
@@ -69,10 +68,14 @@
                 <div class="expenses-wrapper">
                     @foreach (var income in Model.Incomes)
                     {
-                        <p>Expense: @income.IncomeName  (@income.Amount ₴)</p>
+                        <p>Income: @income.IncomeName  (@income.Amount ₴)</p>
                     }
                 </div>
             </div>
+
+            <button type="button" class="btn btn-primary add-income-button" data-toggle="modal" data-target="#addIncomeModal">
+                + Add Income
+            </button>
         </div>
 
         @foreach (var category in Model.Categories)
@@ -86,7 +89,7 @@
                         <div class="category-heading-details-wrapper">
                             <p>Remaining budget: @category.RemainingBudget</p>
                             <p>Planned buget: @category.PlannedBudget</p>
-                        </div>  
+                        </div>
                     </div>
                     <div class="expenses-wrapper">
                         @foreach (var expense in category.Expenses)
@@ -100,7 +103,7 @@
         <button type="button" class="btn btn-primary add-category-button" data-toggle="modal" data-target="#addCategoryModal">
             + Add Category
         </button>
-        <!-- Modal -->
+
         <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
@@ -129,11 +132,41 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="addIncomeModal" tabindex="-1" role="dialog" aria-labelledby="addIncomeModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addIncomeModalLabel">Add Income</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="add-income-form">
+                            <div class="form-group">
+                                <label for="income-name">Income Name</label>
+                                <input type="text" class="form-control" id="income-name" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="income-amount">Amount</label>
+                                <input type="number" class="form-control" id="income-amount" name="amount" required>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary" form="add-income-form">Add</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     <script>
-        $(document).ready(function(){
-            $('#add-category-form').on('submit', function(e){
+        $(document).ready(function () {
+            $('#add-category-form').on('submit', function (e) {
                 e.preventDefault();
                 $.ajax({
                     url: '@Url.Action("AddExpenseCategory", "Home")',
@@ -143,17 +176,44 @@
                         Title: $('#category-title').val(),
                         PlannedBudget: $('#planned-budget').val()
                     }),
-                    success: function(response) {
-                        $('#addCategoryModal').modal('hide'); // Close modal
-                        $('#add-category-form')[0].reset(); // Clear the form
-                        //loadCategories();
+                    success: function (response) {
+                        $('#addCategoryModal').modal('hide');
+                        $('#add-category-form')[0].reset();
+
+                        location.reload();
                     },
-                    error: function(error) {
+                    error: function (error) {
                         alert("Wrong data");
+                        $('#add-category-form')[0].reset();
                     }
                 });
             });
         });
     </script>
+
+    <script>
+        $(document).ready(function () {
+            $('#add-income-form').on('submit', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '@Url.Action("AddIncome", "Home")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        IncomeName: $('#income-name').val(),
+                        Amount: $('#income-amount').val()
+                    }),
+                    success: function (response) {
+                        $('#addIncomeModal').modal('hide');
+                        location.reload();
+                    },
+                    error: function (error) {
+                        alert("Error adding income");
+                    }
+                });
+            });
+        });
+    </script>
+
 </body>
 </html>

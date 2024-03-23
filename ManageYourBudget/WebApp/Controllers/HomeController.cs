@@ -1,6 +1,5 @@
 using Application.DTOs;
 using Application.Interfaces;
-using Application.Services;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WebApp.Models;
@@ -29,7 +28,6 @@ namespace WebApp.Controllers
             var model = new HomeViewModel
             {
                 Categories = categories,
-
                 Incomes = incomes,
                 //Savings =                 
             };
@@ -58,14 +56,40 @@ namespace WebApp.Controllers
             }
 
             var (isSuccess, errorMessage) = await _expenseCategoryService.AddExpenseCategoryAsync(model);
-            if (!isSuccess)
+
+            if (isSuccess)
+            {
+                _logger.LogInformation($"Category added: {model.Title} with budget {model.PlannedBudget}");
+                return Ok();
+            }
+            else
             {
                 _logger.LogError($"Failed to add category: {errorMessage}");
                 return BadRequest(errorMessage);
             }
-
-            _logger.LogInformation($"Category added: {model.Title} with budget {model.PlannedBudget}");
-            return Ok();
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddIncome([FromBody] IncomeDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var (isSuccess, errorMessage) = await _incomeService.AddIncomeAsync(model);
+
+            if (isSuccess)
+            {
+                _logger.LogError($"Income added: {model.IncomeName} with budget {model.Amount}");
+                return Ok();
+            }
+            else
+            {
+                _logger.LogError($"Failed to add income: {errorMessage}");
+                return BadRequest(errorMessage);
+            }
+        }
+
     }
 }
