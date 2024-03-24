@@ -1,7 +1,10 @@
 ﻿using Application.DTOs;
+using Application.DTOs.Validators;
 using Application.Interfaces;
+using Application.Utils;
 using Domain.Entities;
 using Domain.Interfaces;
+using FluentValidation;
 using System.Reflection;
 
 
@@ -16,20 +19,14 @@ namespace Application.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<(bool isSuccess, string errorMessage)> AddIncomeAsync(IncomeDTO model)
+        public async Task<ServiceResult> AddIncomeAsync(IncomeDTO model)
         {
+            var validator = new IncomeDTOValidator();
+            var validationResult = validator.Validate(model);
 
-            if (model.Amount <= 0)
+            if (!validationResult.IsValid)
             {
-                return (false, "Planned budget must be greater than 0.");
-            }
-            if (model.Amount > 99999999)
-            {
-                return (false, "Planned budget must be lower than 100000000.");
-            }
-            if (model.IncomeName.Length < 5 || model.IncomeName.Length > 100)
-            {
-                return (false, "Title length should be between 5 and 100 characters.");
+                return new ServiceResult(success: false, errors: validationResult.Errors.Select(e => e.ErrorMessage));
             }
 
             var income = new Income
@@ -42,7 +39,7 @@ namespace Application.Services
             await _unitOfWork.Incomes.AddAsync(income);
             await _unitOfWork.CompleteAsync();
 
-            return (true, "");
+            return new ServiceResult(success: true);
         }
 
         public async Task<IEnumerable<IncomeDTO>> GetIncomesByUserIdAsync(int userId)

@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
 using Application.Interfaces;
 using Application.Services;
+using Application.Utils;
 using Domain.Entities;
 using Domain.Interfaces;
 using Moq;
@@ -68,11 +69,12 @@ namespace UnitTests.Application.Services
             var dto = new CreateExpenseCategoryDTO { Title = "Negative Budget Category", PlannedBudget = -100 };
 
             // Act
-            var result = await _service.AddExpenseCategoryAsync(dto);
+            var serviceResult = await _service.AddExpenseCategoryAsync(dto);
 
             // Assert
-            Assert.False(result.isSuccess);
-            Assert.Equal("Planned budget must be greater than 0.", result.errorMessage);
+            Assert.False(serviceResult.Success);
+            var errorMessages = string.Join("; ", serviceResult.Errors);
+            Assert.Equal("Planned budget must be greater than 0.", errorMessages);
         }
 
         [Fact]
@@ -82,11 +84,12 @@ namespace UnitTests.Application.Services
             var dto = new CreateExpenseCategoryDTO { Title = "Zero Budget Category", PlannedBudget = 0 };
 
             // Act
-            var result = await _service.AddExpenseCategoryAsync(dto);
+            var serviceResult = await _service.AddExpenseCategoryAsync(dto);
 
             // Assert
-            Assert.False(result.isSuccess);
-            Assert.Equal("Planned budget must be greater than 0.", result.errorMessage);
+            Assert.False(serviceResult.Success);
+            var errorMessages = string.Join("; ", serviceResult.Errors);
+            Assert.Equal("Planned budget must be greater than 0.", errorMessages);
         }
 
 
@@ -97,11 +100,12 @@ namespace UnitTests.Application.Services
             var dto = new CreateExpenseCategoryDTO { Title = "High Budget Category", PlannedBudget = double.MaxValue };
 
             // Act
-            var result = await _service.AddExpenseCategoryAsync(dto);
+            var serviceResult = await _service.AddExpenseCategoryAsync(dto);
 
             // Assert
-            Assert.False(result.isSuccess);
-            Assert.Equal("Planned budget must be lower than 100000000.", result.errorMessage);
+            Assert.False(serviceResult.Success);
+            var errorMessages = string.Join("; ", serviceResult.Errors);
+            Assert.Equal("Planned budget must be lower than 100000000.", errorMessages);
         }
 
         [Fact]
@@ -111,11 +115,12 @@ namespace UnitTests.Application.Services
             var dto = new CreateExpenseCategoryDTO { Title = "Cate", PlannedBudget = 450 };
 
             // Act
-            var result = await _service.AddExpenseCategoryAsync(dto);
-
+            var serviceResult = await _service.AddExpenseCategoryAsync(dto);
+            
             // Assert
-            Assert.False(result.isSuccess);
-            Assert.Equal("Title length should be between 5 and 100 characters.", result.errorMessage);
+            Assert.False(serviceResult.Success);
+            var errorMessages = string.Join("; ", serviceResult.Errors);
+            Assert.Equal("Title length should be between 5 and 100 characters.", errorMessages);
         }
 
         [Fact]
@@ -125,11 +130,12 @@ namespace UnitTests.Application.Services
             var dto = new CreateExpenseCategoryDTO { Title = "Category New Category New Category New Category New Category New Category New Category New Category New Category New Category New", PlannedBudget = 450 };
 
             // Act
-            var result = await _service.AddExpenseCategoryAsync(dto);
+            var serviceResult = await _service.AddExpenseCategoryAsync(dto);
 
             // Assert
-            Assert.False(result.isSuccess);
-            Assert.Equal("Title length should be between 5 and 100 characters.", result.errorMessage);
+            Assert.False(serviceResult.Success);
+            var errorMessages = string.Join("; ", serviceResult.Errors);
+            Assert.Equal("Title length should be between 5 and 100 characters.", errorMessages);
         }
 
         [Fact]
@@ -145,11 +151,12 @@ namespace UnitTests.Application.Services
                            .Verifiable("CompleteAsync was not called to save the changes.");
 
             // Act
-            var result = await _service.AddExpenseCategoryAsync(dto);
+            var serviceResult = await _service.AddExpenseCategoryAsync(dto);
 
             // Assert
-            Assert.True(result.isSuccess);
-            Assert.Empty(result.errorMessage);
+            Assert.True(serviceResult.Success);
+            var errorMessages = string.Join("; ", serviceResult.Errors);
+            Assert.Empty(errorMessages);
 
             _mockUnitOfWork.Verify(); // Verify that AddAsync and CompleteAsync were called as expected
         }

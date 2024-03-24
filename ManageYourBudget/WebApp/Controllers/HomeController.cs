@@ -1,5 +1,6 @@
 using Application.DTOs;
 using Application.Interfaces;
+using Application.Utils;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WebApp.Models;
@@ -55,17 +56,18 @@ namespace WebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var (isSuccess, errorMessage) = await _expenseCategoryService.AddExpenseCategoryAsync(model);
+            ServiceResult serviceResult = await _expenseCategoryService.AddExpenseCategoryAsync(model);
 
-            if (isSuccess)
+            if (serviceResult.Success)
             {
                 _logger.LogInformation($"Category added: {model.Title} with budget {model.PlannedBudget}");
                 return Ok();
             }
             else
             {
-                _logger.LogError($"Failed to add category: {errorMessage}");
-                return BadRequest(errorMessage);
+                var errorMessages = string.Join("; ", serviceResult.Errors);
+                _logger.LogError($"Failed to add category: {errorMessages}");
+                return BadRequest(errorMessages);
             }
         }
 
@@ -77,17 +79,18 @@ namespace WebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var (isSuccess, errorMessage) = await _incomeService.AddIncomeAsync(model);
+            ServiceResult serviceResult = await _incomeService.AddIncomeAsync(model);
 
-            if (isSuccess)
+            if (serviceResult.Success)
             {
                 _logger.LogError($"Income added: {model.IncomeName} with budget {model.Amount}");
                 return Ok();
             }
             else
             {
-                _logger.LogError($"Failed to add income: {errorMessage}");
-                return BadRequest(errorMessage);
+                var errorMessages = string.Join("; ", serviceResult.Errors);
+                _logger.LogError($"Failed to add income: {errorMessages}");
+                return BadRequest(errorMessages);
             }
         }
 

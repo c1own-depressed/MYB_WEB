@@ -1,4 +1,5 @@
 ﻿using Application.DTOs;
+using Application.Utils;
 
 
 namespace Application.Interfaces
@@ -6,6 +7,6 @@ namespace Application.Interfaces
     public interface IExpenseCategoryService
     {
         Task<IEnumerable<ExpenseCategoryDTO>> GetExpenseCategoriesByUserIdAsync(int userId);
-        Task<(bool isSuccess, string errorMessage)> AddExpenseCategoryAsync(CreateExpenseCategoryDTO model);
+        Task<ServiceResult> AddExpenseCategoryAsync(CreateExpenseCategoryDTO model);
     }
 }

@@ -5,6 +5,7 @@ using Persistence;
 using Persistence.Data;
 using Serilog;
 using Application.Interfaces;
+using FluentValidation.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +31,8 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();  // TODO: check if should
 builder.Services.AddScoped<IExpenseCategoryService, ExpenseCategoryService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IIncomeService, IncomeService>();
+builder.Services.AddControllersWithViews()
+        .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateExpenseCategoryDTOValidator>());
 
 var app = builder.Build();
 
