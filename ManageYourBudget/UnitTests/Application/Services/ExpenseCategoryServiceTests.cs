@@ -161,5 +161,151 @@ namespace UnitTests.Application.Services
             _mockUnitOfWork.Verify(); // Verify that AddAsync and CompleteAsync were called as expected
         }
 
+        [Fact]
+        public async Task RemoveExpenseCategoryAsync_ExistingCategory_RemovesCategoryAndExpenses()
+        {
+            // Arrange
+            int categoryId = 1;
+            var categoryToRemove = new ExpenseCategory { Id = categoryId };
+            var expensesToRemove = new List<Expense> { new Expense { CategoryId = categoryId } };
+
+            _mockUnitOfWork.Setup(u => u.ExpenseCategories.GetByIdAsync(categoryId))
+                           .ReturnsAsync(categoryToRemove);
+            _mockUnitOfWork.Setup(u => u.Expenses.GetExpensesByExpenseCategoryIdAsync(categoryId))
+                           .ReturnsAsync(expensesToRemove);
+
+            // Act
+            var serviceResult = await _service.RemoveExpenseCategoryAsync(categoryId);
+
+            // Assert
+            Assert.True(serviceResult.Success);
+            Assert.Empty(serviceResult.Errors);
+
+            _mockUnitOfWork.Verify(u => u.Expenses.Delete(It.IsAny<Expense>()), Times.Exactly(expensesToRemove.Count));
+            _mockUnitOfWork.Verify(u => u.ExpenseCategories.Delete(categoryToRemove), Times.Once);
+            _mockUnitOfWork.Verify(u => u.CompleteAsync(), Times.Once);
+        }
+
+        [Fact]
+        public async Task RemoveExpenseCategoryAsync_NonExistingCategory_ReturnsError()
+        {
+            // Arrange
+            int categoryId = 1;
+
+            _mockUnitOfWork.Setup(u => u.ExpenseCategories.GetByIdAsync(categoryId))
+                           .ReturnsAsync((ExpenseCategory)null);
+
+            // Act
+            var serviceResult = await _service.RemoveExpenseCategoryAsync(categoryId);
+
+            // Assert
+            Assert.False(serviceResult.Success);
+            Assert.Collection(serviceResult.Errors, error => Assert.Equal("Expense category not found.", error));
+
+            _mockUnitOfWork.Verify(u => u.Expenses.Delete(It.IsAny<Expense>()), Times.Never);
+            _mockUnitOfWork.Verify(u => u.ExpenseCategories.Delete(It.IsAny<ExpenseCategory>()), Times.Never);
+            _mockUnitOfWork.Verify(u => u.CompleteAsync(), Times.Never);
+        }
+
+
+        [Fact]
+        public async Task EditExpenseCategoryAsync_WithNegativeBudget_ReturnsError()
+        {
+            // Arrange
+            var categoryId = 1;
+            var dto = new EditExpenseCategoryDTO { Id = categoryId, Name = "Negative Budget Category", PlannedBudget = -100 };
+
+            // Act
+            var serviceResult = await _service.EditExpenseCategoryAsync(dto);
+
+            // Assert
+            Assert.False(serviceResult.Success);
+            var errorMessages = string.Join("; ", serviceResult.Errors);
+            Assert.Equal("Planned budget must be greater than 0.", errorMessages);
+        }
+
+        [Fact]
+        public async Task EditExpenseCategoryAsync_WithZeroBudget_ReturnsError()
+        {
+            // Arrange
+            var categoryId = 1;
+            var dto = new EditExpenseCategoryDTO { Id = categoryId, Name = "Zero Budget Category", PlannedBudget = 0 };
+
+            // Act
+            var serviceResult = await _service.EditExpenseCategoryAsync(dto);
+
+            // Assert
+            Assert.False(serviceResult.Success);
+            var errorMessages = string.Join("; ", serviceResult.Errors);
+            Assert.Equal("Planned budget must be greater than 0.", errorMessages);
+        }
+
+        [Fact]
+        public async Task EditExpenseCategoryAsync_WithExtremelyHighBudget_ReturnsError()
+        {
+            // Arrange
+            var categoryId = 1;
+            var dto = new EditExpenseCategoryDTO { Id = categoryId, Name = "High Budget Category", PlannedBudget = double.MaxValue };
+
+            // Act
+            var serviceResult = await _service.EditExpenseCategoryAsync(dto);
+
+            // Assert
+            Assert.False(serviceResult.Success);
+            var errorMessages = string.Join("; ", serviceResult.Errors);
+            Assert.Equal("Planned budget must be lower than 100000000.", errorMessages);
+        }
+
+        [Fact]
+        public async Task EditExpenseCategoryAsync_WithShortName_ReturnsError()
+        {
+            // Arrange
+            var categoryId = 1;
+            var dto = new EditExpenseCategoryDTO { Id = categoryId, Name = "Cate", PlannedBudget = 450 };
+
+            // Act
+            var serviceResult = await _service.EditExpenseCategoryAsync(dto);
+
+            // Assert
+            Assert.False(serviceResult.Success);
+            var errorMessages = string.Join("; ", serviceResult.Errors);
+            Assert.Equal("Name length should be between 5 and 100 characters.", errorMessages);
+        }
+
+        [Fact]
+        public async Task EditExpenseCategoryAsync_WithLongName_ReturnsError()
+        {
+            // Arrange
+            var categoryId = 1;
+            var dto = new EditExpenseCategoryDTO { Id = categoryId, Name = "Category New Category New Category New Category New Category New Category New Category New Category New Category New Category New", PlannedBudget = 450 };
+
+            // Act
+            var serviceResult = await _service.EditExpenseCategoryAsync(dto);
+
+            // Assert
+            Assert.False(serviceResult.Success);
+            var errorMessages = string.Join("; ", serviceResult.Errors);
+            Assert.Equal("Name length should be between 5 and 100 characters.", errorMessages);
+        }
+
+        [Fact]
+        public async Task EditExpenseCategoryAsync_WithValidData_ReturnsSuccess()
+        {
+            // Arrange
+            var categoryId = 1;
+            var dto = new EditExpenseCategoryDTO { Id = categoryId, Name = "Valid Category", PlannedBudget = 5000 };
+            _mockUnitOfWork.Setup(u => u.ExpenseCategories.GetByIdAsync(categoryId))
+                           .ReturnsAsync(new ExpenseCategory { Id = categoryId }); // Simulate getting an existing category
+            _mockUnitOfWork.Setup(u => u.CompleteAsync())
+                           .ReturnsAsync(1); // Simulate saving changes successfully
+
+            // Act
+            var serviceResult = await _service.EditExpenseCategoryAsync(dto);
+
+            // Assert
+            Assert.True(serviceResult.Success);
+            var errorMessages = string.Join("; ", serviceResult.Errors);
+            Assert.Empty(errorMessages);
+        }
     }
 }

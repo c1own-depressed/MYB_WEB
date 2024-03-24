@@ -11,14 +11,44 @@
                     </div>
                     <div class="category-heading-details-wrapper">
                         <p>Remaining budget: @category.RemainingBudget</p>
-                        <p>Planned buget: @category.PlannedBudget</p>
+                        <p>Planned budget: @category.PlannedBudget</p>
+                        <button class="btn btn-danger" onclick="removeCategory(@category.Id)">Remove</button>
+                        <button class="btn btn-primary" onclick="openEditModal('@category.Id', '@category.Name', '@category.PlannedBudget')">Edit</button>
                     </div>
                 </div>
                 <div class="expenses-wrapper">
                     @foreach (var expense in category.Expenses)
                     {
-                        <p>Expense: @expense.ExpenseName  (@expense.Amount ₴)</p>
+                        <p>Expense: @expense.ExpenseName (@expense.Amount ₴)</p>
                     }
+                </div>
+            </div>
+        </div>
+
+        <!-- Edit Category Modal -->
+        <div class="modal fade" id="editCategoryModal_@category.Id" tabindex="-1" role="dialog" aria-labelledby="editCategoryModalLabel_@category.Id" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="editCategoryModalLabel_@category.Id">Edit Category</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="editCategoryName">Category Name</label>
+                            <input type="text" class="form-control" id="editCategoryName_@category.Id" value="@category.Name">
+                        </div>
+                        <div class="form-group">
+                            <label for="editPlannedBudget">Planned Budget</label>
+                            <input type="number" class="form-control" id="editPlannedBudget_@category.Id" value="@category.PlannedBudget">
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary" onclick="editCategory('@category.Id')">Save changes</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -56,6 +86,7 @@
             </div>
         </div>
     </div>
+
     <script>
         $(document).ready(function () {
             $('#add-category-form').on('submit', function (e) {
@@ -81,6 +112,54 @@
                 });
             });
         });
+    </script>
+    <script>
+        function removeCategory(categoryId) {
+            if (confirm("Are you sure you want to remove this category?")) {
+                $.ajax({
+                    url: '@Url.Action("RemoveExpenseCategory", "Home")' + '?categoryId=' + categoryId,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    success: function (response) {
+                        location.reload();
+                    },
+                    error: function (error) {
+                        alert("Failed to remove category");
+                    }
+                });
+            }
+        }
+    </script>
+
+    <script>
+        function openEditModal(categoryId, categoryName, plannedBudget) {
+            $('#editCategoryName_' + categoryId).val(categoryName); // Set the category name in the input field
+            $('#editPlannedBudget_' + categoryId).val(plannedBudget); // Set the planned budget in the input field
+            $('#editCategoryModal_' + categoryId).modal('show'); // Show the modal
+        }
+
+        function editCategory(categoryId) {
+            var newName = $('#editCategoryName_' + categoryId).val();
+            var newPlannedBudget = $('#editPlannedBudget_' + categoryId).val();
+
+            $.ajax({
+                url: '@Url.Action("EditExpenseCategory", "Home")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    Id: categoryId,
+                    Name: newName,
+                    PlannedBudget: newPlannedBudget
+                }),
+                success: function (response) {
+                    $('#editCategoryModal_' + categoryId).modal('hide'); // Hide the modal
+                    location.reload(); // Reload the page or update UI as needed
+                },
+                error: function (error) {
+                    alert("Failed to edit category");
+                }
+            });
+        }
     </script>
 </div>
 

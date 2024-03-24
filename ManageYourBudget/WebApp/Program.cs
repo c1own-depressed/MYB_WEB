@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
     .WriteTo.Seq("http://localhost:5341"));
-var connectionString = builder.Configuration.GetConnectionString("AndriyConnection");
+var connectionString = builder.Configuration.GetConnectionString("RostikConnection");
 builder.Services.AddDbContext<MYBDbContext>(options =>
     options.UseMySQL(connectionString));
 
@@ -35,6 +35,8 @@ builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IIncomeService, IncomeService>();
 builder.Services.AddControllersWithViews()
         .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateExpenseCategoryDTOValidator>());
+builder.Services.AddControllersWithViews()
+        .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<EditExpenseCategoryDTOValidator>());
 builder.Services.AddScoped<ISettingsService, SettingsService>();
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.AddMvc().AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
