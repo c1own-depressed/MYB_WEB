@@ -1,12 +1,14 @@
 using Application.Interfaces;
 using Application.Services;
-using Domain.Interfaces.Repositories;
 using Domain.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Persistence.Data;
+using Serilog;
+using Application.Interfaces;
+using FluentValidation.AspNetCore;
 using Persistence.Repositories;
 using Persistence;
-using Serilog;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,18 +24,21 @@ builder.Services.AddDbContext<MYBDbContext>(options =>
 builder.Services.AddControllersWithViews();
 
 // Register your unit of work and repositories
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();  // TODO: check if should depend on IUnitOfWork from Domain Layer
 
 // If you have interfaces for your repositories, register them here
-builder.Services.AddScoped<IExpenseCategoryRepository, ExpenseCategoryRepository>();
+//builder.Services.AddScoped<IExpenseCategoryRepository, ExpenseCategoryRepository>();
 
 // Register your application services
 builder.Services.AddScoped<IExpenseCategoryService, ExpenseCategoryService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
+builder.Services.AddScoped<IIncomeService, IncomeService>();
+builder.Services.AddControllersWithViews()
+        .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateExpenseCategoryDTOValidator>());
 builder.Services.AddScoped<ISettingsService, SettingsService>();
-
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.AddMvc().AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
+
 
 var app = builder.Build();
 

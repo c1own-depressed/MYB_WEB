@@ -1,6 +1,6 @@
 using Application.DTOs;
 using Application.Interfaces;
-using Application.Services;
+using Application.Utils;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using WebApp.Models;
@@ -11,23 +11,25 @@ namespace WebApp.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IExpenseCategoryService _expenseCategoryService;
+        private readonly IIncomeService _incomeService;
 
-        public HomeController(ILogger<HomeController> logger, IExpenseCategoryService expenseCategoryService)
+        public HomeController(ILogger<HomeController> logger, IExpenseCategoryService expenseCategoryService, IIncomeService incomeService)
         {
             _logger = logger;
             _expenseCategoryService = expenseCategoryService;
+            _incomeService = incomeService;
         }
 
         public async Task<IActionResult> Index()
         {
             var userId = 1;
             var categories = await _expenseCategoryService.GetExpenseCategoriesByUserIdAsync(userId);
+            var incomes = await _incomeService.GetIncomesByUserIdAsync(userId);
 
             var model = new HomeViewModel
             {
                 Categories = categories,
-                
-                //Income = ,
+                Incomes = incomes,
                 //Savings =                 
             };
             _logger.LogError("Home page opened");
@@ -54,15 +56,43 @@ namespace WebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            var (isSuccess, errorMessage) = await _expenseCategoryService.AddExpenseCategoryAsync(model);
-            if (!isSuccess)
+            ServiceResult serviceResult = await _expenseCategoryService.AddExpenseCategoryAsync(model);
+
+            if (serviceResult.Success)
             {
-                _logger.LogError($"Failed to add category: {errorMessage}");
-                return BadRequest(errorMessage);
+                _logger.LogInformation($"Category added: {model.Title} with budget {model.PlannedBudget}");
+                return Ok();
+            }
+            else
+            {
+                var errorMessages = string.Join("; ", serviceResult.Errors);
+                _logger.LogError($"Failed to add category: {errorMessages}");
+                return BadRequest(errorMessages);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddIncome([FromBody] IncomeDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
             }
 
-            _logger.LogInformation($"Category added: {model.Title} with budget {model.PlannedBudget}");
-            return Ok();
+            ServiceResult serviceResult = await _incomeService.AddIncomeAsync(model);
+
+            if (serviceResult.Success)
+            {
+                _logger.LogError($"Income added: {model.IncomeName} with budget {model.Amount}");
+                return Ok();
+            }
+            else
+            {
+                var errorMessages = string.Join("; ", serviceResult.Errors);
+                _logger.LogError($"Failed to add income: {errorMessages}");
+                return BadRequest(errorMessages);
+            }
         }
+
     }
 }

@@ -1,9 +1,10 @@
-﻿
-using Application.DTOs;
+﻿using Application.DTOs;
 using Application.Interfaces;
+using Application.Utils;
 using Domain.Entities;
 using Domain.Interfaces;
 using System.Xml.Serialization;
+
 
 namespace Application.Services
 {
@@ -41,19 +42,14 @@ namespace Application.Services
             return expenseCategoryDTOs;
         }
 
-        public async Task<(bool isSuccess, string errorMessage)> AddExpenseCategoryAsync(CreateExpenseCategoryDTO model)
+        public async Task<ServiceResult> AddExpenseCategoryAsync(CreateExpenseCategoryDTO model)
         {
-            if (model.PlannedBudget <= 0)
+            var validator = new CreateExpenseCategoryDTOValidator();
+            var validationResult = validator.Validate(model);
+
+            if (!validationResult.IsValid)
             {
-                return (false, "Planned budget must be greater than 0.");
-            }
-            if (model.PlannedBudget > 99999999)
-            {
-                return (false, "Planned budget must be lower than 100000000.");
-            }
-            if (model.Title.Length < 5 || model.Title.Length > 100)
-            {
-                return (false, "Title length should be between 5 and 100 characters.");
+                return new ServiceResult(success: false, errors: validationResult.Errors.Select(e => e.ErrorMessage));
             }
 
             var expenseCategory = new ExpenseCategory
@@ -66,7 +62,7 @@ namespace Application.Services
             await _unitOfWork.ExpenseCategories.AddAsync(expenseCategory);
             await _unitOfWork.CompleteAsync();
 
-            return (true, "");
+            return new ServiceResult(success: true);
         }
     }
 }
