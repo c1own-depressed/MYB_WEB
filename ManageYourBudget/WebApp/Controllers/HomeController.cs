@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Application.Utils;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
+using System.Threading.Tasks;
 using WebApp.Models;
 
 namespace WebApp.Controllers
@@ -70,6 +71,49 @@ namespace WebApp.Controllers
                 return BadRequest(errorMessages);
             }
         }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveExpenseCategory(int categoryId)
+        {
+            ServiceResult serviceResult = await _expenseCategoryService.RemoveExpenseCategoryAsync(categoryId);
+
+            if (serviceResult.Success)
+            {
+                _logger.LogInformation($"Category with ID {categoryId} removed.");
+                return Ok();
+            }
+            else
+            {
+                var errorMessages = string.Join("; ", serviceResult.Errors);
+                _logger.LogError($"Failed to remove category: {errorMessages}");
+                return BadRequest(errorMessages);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditExpenseCategory([FromBody] EditExpenseCategoryDTO model)
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state for EditExpenseCategory");
+                return BadRequest(ModelState);
+            }
+
+            ServiceResult serviceResult = await _expenseCategoryService.EditExpenseCategoryAsync(model);
+
+            if (serviceResult.Success)
+            {
+                _logger.LogInformation($"Category edited: ID {model.Id}, Name: {model.Name}, Planned Budget: {model.PlannedBudget}");
+                return Ok();
+            }
+            else
+            {
+                var errorMessages = string.Join("; ", serviceResult.Errors);
+                _logger.LogError($"Failed to edit category: {errorMessages}");
+                return BadRequest(errorMessages);
+            }
+        }
+
 
         [HttpPost]
         public async Task<IActionResult> AddIncome([FromBody] IncomeDTO model)
