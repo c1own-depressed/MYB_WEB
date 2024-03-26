@@ -8,6 +8,7 @@ using Application.Interfaces;
 using FluentValidation.AspNetCore;
 using Persistence.Repositories;
 using Persistence;
+using Application.DTOs.Validators;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,7 +17,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
     .WriteTo.Seq("http://localhost:5341"));
-var connectionString = builder.Configuration.GetConnectionString("RostikConnection");
+var connectionString = builder.Configuration.GetConnectionString("DimaConnection");
 builder.Services.AddDbContext<MYBDbContext>(options =>
     options.UseMySQL(connectionString));
 
@@ -33,10 +34,15 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();  // TODO: check if should
 builder.Services.AddScoped<IExpenseCategoryService, ExpenseCategoryService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IIncomeService, IncomeService>();
+builder.Services.AddScoped<ISavingsService, SavingsService>();
 builder.Services.AddControllersWithViews()
         .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateExpenseCategoryDTOValidator>());
 builder.Services.AddControllersWithViews()
         .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<EditExpenseCategoryDTOValidator>());
+builder.Services.AddControllersWithViews()
+        .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateSavingsDTOValidator>());
+builder.Services.AddControllersWithViews()
+        .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<EditSavingsDTOValidator>());
 builder.Services.AddScoped<ISettingsService, SettingsService>();
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.AddMvc().AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
