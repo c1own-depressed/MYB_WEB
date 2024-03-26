@@ -138,5 +138,44 @@ namespace WebApp.Controllers
             }
         }
 
+        public async Task<IActionResult> EditIncome([FromBody] EditIncomeDTO model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                this._logger.LogError("Invalid model state for EditIncome");
+                return this.BadRequest(this.ModelState);
+            }
+
+            ServiceResult serviceResult = await this._incomeService.EditIncomeAsync(model);
+
+            if (serviceResult.Success)
+            {
+                this._logger.LogInformation($"Income edited: ID {model.Id}, Name: {model.Name}, Amount: {model.Amount}");
+                return this.Ok();
+            }
+            else
+            {
+                var errorMessages = string.Join("; ", serviceResult.Errors);
+                this._logger.LogError($"Failed to edit income: {errorMessages}");
+                return this.BadRequest(errorMessages);
+            }
+        }
+
+        public async Task<IActionResult> RemoveIncome(int incomeId)
+        {
+            ServiceResult serviceResult = await this._incomeService.RemoveIncomeAsync(incomeId);
+
+            if (serviceResult.Success)
+            {
+                this._logger.LogInformation($"Income with ID {incomeId} removed.");
+                return this.Ok();
+            }
+            else
+            {
+                var errorMessages = string.Join("; ", serviceResult.Errors);
+                this._logger.LogError($"Failed to remove income: {errorMessages}");
+                return this.BadRequest(errorMessages);
+            }
+        }
     }
 }

@@ -15,23 +15,27 @@ namespace Application.Services
 
         public async Task<SettingsDTO> GetUserSettingsAsync(int userId)
         {
-            var userFromDb = await _unitOfWork.Users.GetByIdAsync(userId);
+            var userFromDb = await this._unitOfWork.Users.GetByIdAsync(userId);
             if (userFromDb != null)
             {
-                SettingsDTO dto = new SettingsDTO();
-                dto.Currency = userFromDb.Currency;
-                dto.IsLightTheme = userFromDb.IsLightTheme;
-                dto.Language = userFromDb.Language;
+                SettingsDTO dto = new SettingsDTO
+                {
+                    Currency = userFromDb.Currency,
+                    IsLightTheme = userFromDb.IsLightTheme,
+                    Language = userFromDb.Language,
+                };
+
                 return dto;
             }
 
+            // TODO: Service Result
             return null;
         }
 
         public async Task SaveSettings(SettingsDTO settingsDTO)
         {
             // Отримуємо користувача з бази даних за його Id
-            var user = await _unitOfWork.Users.GetByIdAsync(settingsDTO.Id);
+            var user = await this._unitOfWork.Users.GetByIdAsync(settingsDTO.Id);
 
             // Оновлюємо налаштування користувача з даних DTO
             if (user != null)
@@ -41,8 +45,8 @@ namespace Application.Services
                 user.Currency = settingsDTO.Currency;
 
                 // Оновлюємо користувача в базі даних
-                _unitOfWork.Users.Update(user);
-                await _unitOfWork.CompleteAsync();
+                this._unitOfWork.Users.Update(user);
+                await this._unitOfWork.CompleteAsync();
             }
             else
             {

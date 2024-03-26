@@ -16,7 +16,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
     .WriteTo.Seq("http://localhost:5341"));
-var connectionString = builder.Configuration.GetConnectionString("RostikConnection");
+var connectionString = builder.Configuration.GetConnectionString("RomanConnection");
 builder.Services.AddDbContext<MYBDbContext>(options =>
     options.UseMySQL(connectionString));
 

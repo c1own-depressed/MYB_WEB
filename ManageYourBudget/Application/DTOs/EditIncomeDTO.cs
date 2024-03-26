@@ -6,9 +6,11 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs
 {
-    public class ExpenseDTO
+    public class EditIncomeDTO
     {
-        public string ExpenseName { get; set; } = string.Empty;
+        public int Id { get; set; }
+
+        public string Name { get; set; }
 
         public double Amount { get; set; }
     }

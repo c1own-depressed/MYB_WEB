@@ -91,7 +91,6 @@ namespace Application.Services
             return new ServiceResult(success: true);
         }
 
-
         public async Task<ServiceResult> EditExpenseCategoryAsync(EditExpenseCategoryDTO model)
         {
             var validator = new EditExpenseCategoryDTOValidator();

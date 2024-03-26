@@ -12,8 +12,8 @@ namespace Application.DTOs
 
         public bool IsLightTheme { get; set; }
 
-        public string Language { get; set; }
+        required public string Language { get; set; }
 
-        public string Currency { get; set; }
+        required public string Currency { get; set; }
     }
 }
