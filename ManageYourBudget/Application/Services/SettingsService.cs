@@ -28,13 +28,8 @@ namespace Application.Services
                 return dto;
             }
 
-<<<<<<< HEAD
-            // TODO: Service Result
-            return null;
-=======
             // Return default settings when user is not found
             return GetDefaultSettings();
->>>>>>> dev/test
         }
 
         public async Task SaveSettings(SettingsDTO settingsDTO)
