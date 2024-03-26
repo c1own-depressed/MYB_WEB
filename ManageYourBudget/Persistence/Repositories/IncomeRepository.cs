@@ -7,7 +7,8 @@ namespace Persistence.Repositories
 {
     public class IncomeRepository : RepositoryBase<Income>, IIncomeRepository
     {
-        public IncomeRepository(MYBDbContext context) : base(context)
+        public IncomeRepository(MYBDbContext context)
+            : base(context)
         {
         }
 

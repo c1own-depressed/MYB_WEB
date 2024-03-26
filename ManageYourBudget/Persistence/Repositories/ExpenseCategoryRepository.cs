@@ -6,7 +6,8 @@ namespace Persistence.Repositories
 {
     public class ExpenseCategoryRepository : RepositoryBase<ExpenseCategory>, IExpenseCategoryRepository
     {
-        public ExpenseCategoryRepository(MYBDbContext context) : base(context)
+        public ExpenseCategoryRepository(MYBDbContext context)
+            : base(context)
         {
         }
 

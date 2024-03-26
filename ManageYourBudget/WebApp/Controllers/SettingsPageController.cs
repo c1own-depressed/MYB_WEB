@@ -1,23 +1,20 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging; // Додано простір імен для ILogger
-using System.Diagnostics;
-using System.Threading.Tasks;
-using WebApp.Models;
+﻿using System.Diagnostics;
 using Application.DTOs;
 using Application.Interfaces;
-using Application.Services;
+using Microsoft.AspNetCore.Mvc;
+using WebApp.Models;
 
 namespace WebApp.Controllers
 {
-    public class SettingsController : Controller
+    public class SettingsPageController : Controller
     {
-        private readonly ILogger<SettingsController> _logger;
+        private readonly ILogger<SettingsPageController> _logger;
         private readonly ISettingsService _settingsService;
-        private string selectedLanguage;
+        private string? selectedLanguage;
         private bool selectedTheme;
-        private string selectedCurrency;
+        private string? selectedCurrency;
 
-        public SettingsController(ILogger<SettingsController> logger, ISettingsService settingsService)
+        public SettingsPageController(ILogger<SettingsPageController> logger, ISettingsService settingsService)
         {
             _logger = logger;
             _settingsService = settingsService;

@@ -16,7 +16,7 @@ namespace Application.Services
 
         public async Task AddExpense(ExpenseCategory expense)
         {
-            _unitOfWork.ExpenseCategories.AddAsync(expense);
+            await _unitOfWork.ExpenseCategories.AddAsync(expense);
             await _unitOfWork.CompleteAsync();
         }
 

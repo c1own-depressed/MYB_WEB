@@ -28,8 +28,13 @@ namespace Application.Services
                 return dto;
             }
 
+<<<<<<< HEAD
             // TODO: Service Result
             return null;
+=======
+            // Return default settings when user is not found
+            return GetDefaultSettings();
+>>>>>>> dev/test
         }
 
         public async Task SaveSettings(SettingsDTO settingsDTO)
@@ -53,6 +58,17 @@ namespace Application.Services
                 // Якщо користувача не знайдено, можна обробити цю ситуацію відповідним чином, наприклад, кинути виключення або створити нового користувача.
                 // Ваш код обробки тут.
             }
+        }
+
+        private SettingsDTO GetDefaultSettings()
+        {
+            // Initialize with default values
+            return new SettingsDTO
+            {
+                Currency = "USD",
+                IsLightTheme = true,
+                Language = "English",
+            };
         }
     }
 }
