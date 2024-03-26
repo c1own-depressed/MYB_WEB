@@ -4,10 +4,6 @@ using Application.Interfaces;
 using Application.Utils;
 using Domain.Entities;
 using Domain.Interfaces;
-using FluentValidation;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Application.Services
 {
@@ -27,7 +23,7 @@ namespace Application.Services
             {
                 Id = s.Id,
                 SavingsName = s.SavingsName,
-                Amount = s.Amount
+                Amount = s.Amount,
             });
             return savingsDTOs;
         }
@@ -46,7 +42,7 @@ namespace Application.Services
             {
                 UserId = 1, // TODO: Use actual user ID from session or request
                 SavingsName = model.SavingsName,
-                Amount = model.Amount
+                Amount = model.Amount,
             };
 
             await _unitOfWork.Savings.AddAsync(savings);

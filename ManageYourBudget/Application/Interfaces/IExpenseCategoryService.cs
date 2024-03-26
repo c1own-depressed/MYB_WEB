@@ -1,6 +1,5 @@
 ﻿using Application.DTOs;
 using Application.Utils;
-using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {

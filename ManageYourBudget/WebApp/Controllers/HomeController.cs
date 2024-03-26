@@ -1,9 +1,8 @@
+using System.Diagnostics;
 using Application.DTOs;
 using Application.Interfaces;
 using Application.Utils;
 using Microsoft.AspNetCore.Mvc;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using WebApp.Models;
 
 namespace WebApp.Controllers
@@ -28,7 +27,7 @@ namespace WebApp.Controllers
             var userId = 1;
             var categories = await _expenseCategoryService.GetExpenseCategoriesByUserIdAsync(userId);
             var incomes = await _incomeService.GetIncomesByUserIdAsync(userId);
-            var savings= await _savingsService.GetSavingsByUserIdAsync(userId);
+            var savings = await _savingsService.GetSavingsByUserIdAsync(userId);
             var model = new HomeViewModel
             {
                 Categories = categories,
@@ -116,7 +115,6 @@ namespace WebApp.Controllers
                 return BadRequest(errorMessages);
             }
         }
-
 
         [HttpPost]
         public async Task<IActionResult> AddIncome([FromBody] IncomeDTO model)
@@ -206,6 +204,5 @@ namespace WebApp.Controllers
                 return BadRequest(errorMessages);
             }
         }
-
     }
 }

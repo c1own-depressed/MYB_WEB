@@ -4,9 +4,6 @@ using Application.Interfaces;
 using Application.Utils;
 using Domain.Entities;
 using Domain.Interfaces;
-using FluentValidation;
-using System.Reflection;
-
 
 namespace Application.Services
 {

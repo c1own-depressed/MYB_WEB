@@ -3,7 +3,6 @@ using Domain.Interfaces.Repositories;
 using Persistence.Data;
 using Persistence.Repositories;
 
-
 namespace Persistence
 {
     public class UnitOfWork : IUnitOfWork
@@ -14,6 +13,7 @@ namespace Persistence
         private ExpenseCategoryRepository? _expenseCategoryRepository;
         private IncomeRepository? _incomeRepository;
         private SavingsRepository? _savingsRepository;
+        private bool _disposed = false;
 
         public UnitOfWork(MYBDbContext context)
         {
@@ -88,10 +88,14 @@ namespace Persistence
         public async Task<int> CompleteAsync()
         {
             // Save changes across all repositories
-            return await _context.SaveChangesAsync();  
+            return await _context.SaveChangesAsync();
         }
 
-        private bool _disposed = false;
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
 
         protected virtual void Dispose(bool disposing)
         {
@@ -104,12 +108,6 @@ namespace Persistence
             }
 
             _disposed = true;
-        }
-
-        public void Dispose()
-        {
-            Dispose(true);
-            GC.SuppressFinalize(this);
         }
     }
 }
