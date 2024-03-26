@@ -139,6 +139,22 @@ namespace WebApp.Controllers
             }
         }
 
+<<<<<<< HEAD
+        public async Task<IActionResult> EditIncome([FromBody] EditIncomeDTO model)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                this._logger.LogError("Invalid model state for EditIncome");
+                return this.BadRequest(this.ModelState);
+            }
+
+            ServiceResult serviceResult = await this._incomeService.EditIncomeAsync(model);
+
+            if (serviceResult.Success)
+            {
+                this._logger.LogInformation($"Income edited: ID {model.Id}, Name: {model.Name}, Amount: {model.Amount}");
+                return this.Ok();
+=======
         [HttpPost]
         public async Task<IActionResult> AddSavings([FromBody] CreateSavingsDTO model)
         {
@@ -154,10 +170,26 @@ namespace WebApp.Controllers
             {
                 _logger.LogInformation($"Savings added: {model.SavingsName} with amount {model.Amount}");
                 return Ok();
+>>>>>>> dev/test
             }
             else
             {
                 var errorMessages = string.Join("; ", serviceResult.Errors);
+<<<<<<< HEAD
+                this._logger.LogError($"Failed to edit income: {errorMessages}");
+                return this.BadRequest(errorMessages);
+            }
+        }
+
+        public async Task<IActionResult> RemoveIncome(int incomeId)
+        {
+            ServiceResult serviceResult = await this._incomeService.RemoveIncomeAsync(incomeId);
+
+            if (serviceResult.Success)
+            {
+                this._logger.LogInformation($"Income with ID {incomeId} removed.");
+                return this.Ok();
+=======
                 _logger.LogError($"Failed to add savings: {errorMessages}");
                 return BadRequest(errorMessages);
             }
@@ -172,10 +204,15 @@ namespace WebApp.Controllers
             {
                 _logger.LogInformation($"Savings with ID {savingsId} removed.");
                 return Ok();
+>>>>>>> dev/test
             }
             else
             {
                 var errorMessages = string.Join("; ", serviceResult.Errors);
+<<<<<<< HEAD
+                this._logger.LogError($"Failed to remove income: {errorMessages}");
+                return this.BadRequest(errorMessages);
+=======
                 _logger.LogError($"Failed to remove savings: {errorMessages}");
                 return BadRequest(errorMessages);
             }
@@ -202,6 +239,7 @@ namespace WebApp.Controllers
                 var errorMessages = string.Join("; ", serviceResult.Errors);
                 _logger.LogError($"Failed to edit savings: {errorMessages}");
                 return BadRequest(errorMessages);
+>>>>>>> dev/test
             }
         }
     }

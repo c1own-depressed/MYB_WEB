@@ -13,7 +13,7 @@
                         <p>Remaining budget: @category.RemainingBudget</p>
                         <p>Planned budget: @category.PlannedBudget</p>
                         <button class="btn btn-danger" onclick="removeCategory(@category.Id)">Remove</button>
-                        <button class="btn btn-primary" onclick="openEditModal('@category.Id', '@category.Name', '@category.PlannedBudget')">Edit</button>
+                        <button class="btn btn-primary" onclick="openEditCategoryModal('@category.Id', '@category.Name', '@category.PlannedBudget')">Edit</button>
                     </div>
                 </div>
                 <div class="expenses-wrapper">
@@ -58,6 +58,7 @@
         + Add Category
     </button>
 
+    <!-- Add Category Modal -->
     <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -132,7 +133,7 @@
     </script>
 
     <script>
-        function openEditModal(categoryId, categoryName, plannedBudget) {
+        function openEditCategoryModal(categoryId, categoryName, plannedBudget) {
             $('#editCategoryName_' + categoryId).val(categoryName); // Set the category name in the input field
             $('#editPlannedBudget_' + categoryId).val(plannedBudget); // Set the planned budget in the input field
             $('#editCategoryModal_' + categoryId).modal('show'); // Show the modal

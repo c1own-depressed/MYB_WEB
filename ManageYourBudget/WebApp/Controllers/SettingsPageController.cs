@@ -36,25 +36,25 @@ namespace WebApp.Controllers
                         Currency = userSettings.Currency,
                     };
 
-                    _logger.LogInformation($"User accessed SettingsPage with pre-filled settings. Currency: {model.Currency}");
+                    this._logger.LogInformation($"User accessed SettingsPage with pre-filled settings. Currency: {model.Currency}");
 
-                    return View("~/Views/SettingsPage/Index.cshtml", model);
+                    return this.View("~/Views/SettingsPage/Index.cshtml", model);
                 }
 
-                _logger.LogInformation("User accessed SettingsPage without pre-filled settings.");
+                this._logger.LogInformation("User accessed SettingsPage without pre-filled settings.");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while fetching user settings.");
+                this._logger.LogError(ex, "An error occurred while fetching user settings.");
             }
 
-            return View("~/Views/SettingsPage/Index.cshtml");
+            return this.View("~/Views/SettingsPage/Index.cshtml");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return this.View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
         [HttpPost]
@@ -65,19 +65,23 @@ namespace WebApp.Controllers
                 this.selectedLanguage = model.Language;
                 this.selectedTheme = model.IsLightTheme;
                 this.selectedCurrency = model.Currency;
-                SettingsDTO settingsDTO = new SettingsDTO();
-                settingsDTO.Language = this.selectedLanguage;
-                settingsDTO.Currency = this.selectedCurrency;
-                settingsDTO.IsLightTheme = this.selectedTheme;
+
+                SettingsDTO settingsDTO = new SettingsDTO
+                {
+                    Language = this.selectedLanguage,
+                    Currency = this.selectedCurrency,
+                    IsLightTheme = this.selectedTheme,
+                };
+
                 settingsDTO.Id = 1;
-                await _settingsService.SaveSettings(settingsDTO);
-                _logger.LogInformation("User settings saved successfully.");
-                return RedirectToAction("Index");
+                await this._settingsService.SaveSettings(settingsDTO);
+                this._logger.LogInformation("User settings saved successfully.");
+                return this.RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "An error occurred while saving user settings.");
-                return RedirectToAction("Index");
+                this._logger.LogError(ex, "An error occurred while saving user settings.");
+                return this.RedirectToAction("Index");
             }
         }
     }
