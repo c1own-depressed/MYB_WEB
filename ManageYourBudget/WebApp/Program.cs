@@ -1,15 +1,12 @@
+using Application.DTOs.Validators;
 using Application.Interfaces;
 using Application.Services;
 using Domain.Interfaces;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
+using Persistence;
 using Persistence.Data;
 using Serilog;
-using Application.Interfaces;
-using FluentValidation.AspNetCore;
-using Persistence.Repositories;
-using Persistence;
-using Application.DTOs.Validators;
-
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,9 +14,17 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
     .WriteTo.Seq("http://localhost:5341"));
-var connectionString = builder.Configuration.GetConnectionString("DimaConnection");
-builder.Services.AddDbContext<MYBDbContext>(options =>
-    options.UseMySQL(connectionString));
+var connectionString = builder.Configuration.GetConnectionString("AndriyConnection");
+
+if (connectionString != null)
+{
+    builder.Services.AddDbContext<MYBDbContext>(options =>
+        options.UseMySQL(connectionString));
+}
+else
+{
+    Log.Error("Connection string is null.");
+}
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -28,7 +33,7 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();  // TODO: check if should depend on IUnitOfWork from Domain Layer
 
 // If you have interfaces for your repositories, register them here
-//builder.Services.AddScoped<IExpenseCategoryRepository, ExpenseCategoryRepository>();
+// builder.Services.AddScoped<IExpenseCategoryRepository, ExpenseCategoryRepository>();
 
 // Register your application services
 builder.Services.AddScoped<IExpenseCategoryService, ExpenseCategoryService>();
@@ -46,7 +51,6 @@ builder.Services.AddControllersWithViews()
 builder.Services.AddScoped<ISettingsService, SettingsService>();
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.AddMvc().AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
-
 
 var app = builder.Build();
 
@@ -75,8 +79,12 @@ app.UseRequestLocalization(localizationOptions);
 app.MapControllerRoute(
     name: "faq",
     pattern: "faq",
-    defaults: new { controller = "FAQPage", action = "Index" }
-);
+    defaults: new { controller = "FAQPage", action = "Index" });
+
+app.MapControllerRoute(
+    name: "settings",
+    pattern: "settings",
+    defaults: new { controller = "SettingsPage", action = "Index" });
 
 app.MapControllerRoute(
     name: "default",

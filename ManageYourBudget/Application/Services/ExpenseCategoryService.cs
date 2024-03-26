@@ -3,9 +3,6 @@ using Application.Interfaces;
 using Application.Utils;
 using Domain.Entities;
 using Domain.Interfaces;
-using FluentValidation;
-using System.Xml.Serialization;
-
 
 namespace Application.Services
 {
@@ -33,17 +30,16 @@ namespace Application.Services
 
                 expenseCategoryDTOs.Add(new ExpenseCategoryDTO
                 {
-                    Id = category.Id, 
+                    Id = category.Id,
                     Name = category.CategoryName,
                     PlannedBudget = category.Amount,
                     RemainingBudget = remainingBudget,
-                    Expenses = expenses
+                    Expenses = expenses,
                 });
             }
 
             return expenseCategoryDTOs;
         }
-
 
         public async Task<ServiceResult> AddExpenseCategoryAsync(CreateExpenseCategoryDTO model)
         {
@@ -90,7 +86,6 @@ namespace Application.Services
 
             return new ServiceResult(success: true);
         }
-
 
         public async Task<ServiceResult> EditExpenseCategoryAsync(EditExpenseCategoryDTO model)
         {

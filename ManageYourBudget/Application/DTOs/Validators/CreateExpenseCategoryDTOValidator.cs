@@ -1,16 +1,16 @@
-﻿using FluentValidation;
-using Application.DTOs;
+﻿using Application.DTOs;
+using FluentValidation;
 
 public class CreateExpenseCategoryDTOValidator : AbstractValidator<CreateExpenseCategoryDTO>
 {
     public CreateExpenseCategoryDTOValidator()
     {
-        RuleFor(x => x.Title)
+        this.RuleFor(x => x.Title)
             .NotEmpty()
             .Length(5, 100)
             .WithMessage("Title length should be between 5 and 100 characters.");
 
-        RuleFor(x => x.PlannedBudget)
+        this.RuleFor(x => x.PlannedBudget)
             .GreaterThan(0)
             .WithMessage("Planned budget must be greater than 0.")
             .LessThan(100000000)

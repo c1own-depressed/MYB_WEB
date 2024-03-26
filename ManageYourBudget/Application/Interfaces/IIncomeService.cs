@@ -8,7 +8,5 @@ namespace Application.Interfaces
         Task<IEnumerable<IncomeDTO>> GetIncomesByUserIdAsync(int userId);
 
         Task<ServiceResult> AddIncomeAsync(IncomeDTO income);
-
-
     }
 }
