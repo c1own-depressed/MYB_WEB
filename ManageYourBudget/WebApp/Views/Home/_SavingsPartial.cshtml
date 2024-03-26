@@ -130,10 +130,10 @@
 
         // Edit Savings
         $('.edit-savings-button').click(function () {
-            var savingsId = $(this).data('id');
             var savingItem = $(this).closest('.saving-item');
-            var savingsName = savingItem.find('p').text().split(' ')[1];
-            var savingsAmount = parseFloat(savingItem.find('p').text().split(' ')[3].trim());
+            var savingsId = $(this).data('id');
+            var savingsName = savingItem.find('p').text().split(' ').slice(1, -2).join(" ");
+            var savingsAmount = parseFloat(savingItem.find('p').text().match(/\d+(\.\d+)?/)[0]);
 
             $('#editSavingsName').val(savingsName);
             $('#editSavingsAmount').val(savingsAmount);
@@ -167,5 +167,18 @@
             });
         });
 
+        // Close Modal
+        $('#editSavingsModal').on('hidden.bs.modal', function () {
+            $(this).find('form')[0].reset();
+        });
+
+        // Close Modal when Close button or Cross button is clicked
+        $('#editSavingsModal .close').click(function () {
+            $('#editSavingsModal').modal('hide');
+        });
+
+        $('#editSavingsModal [data-dismiss="modal"]').click(function () {
+            $('#editSavingsModal').modal('hide');
+        });
     });
 </script>
