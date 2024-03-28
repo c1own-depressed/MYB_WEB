@@ -1,6 +1,5 @@
 ﻿using Domain.Interfaces;
 using Domain.Interfaces.Repositories;
-using Persistence.Data;
 using Persistence.Repositories;
 
 namespace Persistence
@@ -99,12 +98,9 @@ namespace Persistence
 
         protected virtual void Dispose(bool disposing)
         {
-            if (!_disposed)
+            if (!_disposed && disposing)
             {
-                if (disposing)
-                {
-                    _context.Dispose();
-                }
+                _context.Dispose();
             }
 
             _disposed = true;

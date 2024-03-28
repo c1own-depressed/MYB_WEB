@@ -1,6 +1,5 @@
 ﻿using Domain.Entities;
 using Domain.Interfaces.Repositories;
-using Persistence.Data;
 
 namespace Persistence.Repositories
 {

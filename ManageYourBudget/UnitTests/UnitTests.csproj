@@ -28,4 +28,12 @@
     <ProjectReference Include="..\Domain\Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EditorConfigFiles Remove="D:\PI\MYB_WEB\ManageYourBudget\UnitTests\.editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="D:\PI\MYB_WEB\ManageYourBudget\UnitTests\.editorconfig" />
+  </ItemGroup>
+
 </Project>

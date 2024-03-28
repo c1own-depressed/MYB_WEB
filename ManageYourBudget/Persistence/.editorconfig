@@ -20,5 +20,23 @@ dotnet_diagnostic.SA1309.severity = none
 # SA1101: Prefix local calls with this
 dotnet_diagnostic.SA1101.severity = silent
 
+# SA0001: XML comment analysis disabled
+dotnet_diagnostic.SA0001.severity = silent
+
+# S101: Types should be named in PascalCase
+dotnet_diagnostic.S101.severity = silent
+
+# S2953: Methods named "Dispose" should implement "IDisposable.Dispose"
+dotnet_diagnostic.S2953.severity = silent
+
+# S3971: "GC.SuppressFinalize" should not be called
+dotnet_diagnostic.S3971.severity = silent
+
+# SA1401: Fields should be private
+dotnet_diagnostic.SA1401.severity = silent
+
+# S112: General or reserved exceptions should never be thrown
+dotnet_diagnostic.S112.severity = silent
+
 [*.xml]
 indent_size = 2
