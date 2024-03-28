@@ -204,6 +204,7 @@ namespace WebApp.Controllers
                 return BadRequest(errorMessages);
             }
         }
+
         public async Task<IActionResult> EditIncome([FromBody] EditIncomeDTO model)
         {
             if (!this.ModelState.IsValid)

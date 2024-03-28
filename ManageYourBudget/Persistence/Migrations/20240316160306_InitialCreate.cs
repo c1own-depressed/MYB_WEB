@@ -24,7 +24,7 @@ namespace Persistence.Migrations
                     ExpenseName = table.Column<string>(type: "longtext", nullable: false),
                     Amount = table.Column<double>(type: "double", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    CategoryId = table.Column<int>(type: "int", nullable: false)
+                    CategoryId = table.Column<int>(type: "int", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -40,7 +40,7 @@ namespace Persistence.Migrations
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     CategoryName = table.Column<string>(type: "longtext", nullable: false),
                     Amount = table.Column<double>(type: "double", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -56,7 +56,7 @@ namespace Persistence.Migrations
                         .Annotation("MySQL:ValueGenerationStrategy", MySQLValueGenerationStrategy.IdentityColumn),
                     IncomeName = table.Column<string>(type: "longtext", nullable: false),
                     Amount = table.Column<double>(type: "double", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -73,7 +73,7 @@ namespace Persistence.Migrations
                     SavingsName = table.Column<string>(type: "longtext", nullable: false),
                     Amount = table.Column<double>(type: "double", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime(6)", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false)
+                    UserId = table.Column<int>(type: "int", nullable: false),
                 },
                 constraints: table =>
                 {
@@ -92,7 +92,7 @@ namespace Persistence.Migrations
                     Email = table.Column<string>(type: "longtext", nullable: false),
                     IsLightTheme = table.Column<bool>(type: "tinyint(1)", nullable: false),
                     Language = table.Column<string>(type: "longtext", nullable: false),
-                    Currency = table.Column<string>(type: "longtext", nullable: false)
+                    Currency = table.Column<string>(type: "longtext", nullable: false),
                 },
                 constraints: table =>
                 {
