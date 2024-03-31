@@ -5,7 +5,6 @@ using Domain.Interfaces;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-using Persistence.Data;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

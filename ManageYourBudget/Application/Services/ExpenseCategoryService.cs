@@ -1,4 +1,5 @@
 ﻿using Application.DTOs;
+using Application.DTOs.Validators;
 using Application.Interfaces;
 using Application.Utils;
 using Domain.Entities;

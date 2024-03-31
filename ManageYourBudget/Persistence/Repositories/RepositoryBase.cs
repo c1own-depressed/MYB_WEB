@@ -1,49 +1,52 @@
 ﻿using Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 
-public abstract class RepositoryBase<T> : IRepositoryBase<T>
-    where T : class
+namespace Persistence.Repositories
 {
-    protected readonly DbContext _context;
-
-    public RepositoryBase(DbContext context)
+    public abstract class RepositoryBase<T> : IRepositoryBase<T>
+        where T : class
     {
-        _context = context;
-    }
+        protected readonly DbContext _context;
 
-    public async Task<IEnumerable<T>> GetAllAsync()
-    {
-        return await _context.Set<T>().ToListAsync();
-    }
-
-    public async Task<T> GetByIdAsync(int id)
-    {
-        var entity = await _context.Set<T>().FindAsync(id);
-        if (entity == null)
+        protected RepositoryBase(DbContext context)
         {
-            throw new Exception($"Entity of type {typeof(T).Name} with ID {id} not found.");
+            _context = context;
         }
 
-        return entity;
-    }
+        public async Task<IEnumerable<T>> GetAllAsync()
+        {
+            return await _context.Set<T>().ToListAsync();
+        }
 
-    public async Task AddAsync(T entity)
-    {
-        await _context.Set<T>().AddAsync(entity);
-    }
+        public async Task<T> GetByIdAsync(int id)
+        {
+            var entity = await _context.Set<T>().FindAsync(id);
+            if (entity == null)
+            {
+                throw new Exception($"Entity of type {typeof(T).Name} with ID {id} not found.");
+            }
 
-    public void Update(T entity)
-    {
-        _context.Set<T>().Update(entity);
-    }
+            return entity;
+        }
 
-    public void Delete(T entity)
-    {
-        _context.Set<T>().Remove(entity);
-    }
+        public async Task AddAsync(T entity)
+        {
+            await _context.Set<T>().AddAsync(entity);
+        }
 
-    public async Task SaveAsync()
-    {
-        await _context.SaveChangesAsync();
+        public void Update(T entity)
+        {
+            _context.Set<T>().Update(entity);
+        }
+
+        public void Delete(T entity)
+        {
+            _context.Set<T>().Remove(entity);
+        }
+
+        public async Task SaveAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }
