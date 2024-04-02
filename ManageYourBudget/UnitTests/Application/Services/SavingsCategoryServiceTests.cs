@@ -1,14 +1,13 @@
 ﻿using Application.DTOs;
 using Application.Interfaces;
 using Application.Services;
-using Application.Utils;
 using Domain.Entities;
 using Domain.Interfaces;
 using Moq;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
+using FluentAssertions;
 
 namespace UnitTests.Application.Services
 {
@@ -33,8 +32,9 @@ namespace UnitTests.Application.Services
             var serviceResult = await _service.AddSavingsAsync(dto);
 
             // Assert
-            Assert.False(serviceResult.Success);
-            Assert.Contains("Savings amount must be greater than 0.".Trim(), serviceResult.Errors.Select(e => e.Trim()));
+            serviceResult.Should().NotBeNull();
+            serviceResult.Success.Should().BeFalse();
+            serviceResult.Errors.Should().Contain("Savings amount must be greater than 0.");
         }
 
         [Fact]
@@ -47,8 +47,9 @@ namespace UnitTests.Application.Services
             var serviceResult = await _service.AddSavingsAsync(dto);
 
             // Assert
-            Assert.False(serviceResult.Success);
-            Assert.Contains("Savings amount must be greater than 0.", serviceResult.Errors);
+            serviceResult.Should().NotBeNull();
+            serviceResult.Success.Should().BeFalse();
+            serviceResult.Errors.Should().Contain("Savings amount must be greater than 0.");
         }
 
         [Fact]
@@ -64,8 +65,9 @@ namespace UnitTests.Application.Services
             var serviceResult = await _service.AddSavingsAsync(dto);
 
             // Assert
-            Assert.True(serviceResult.Success);
-            Assert.Empty(serviceResult.Errors);
+            serviceResult.Should().NotBeNull();
+            serviceResult.Success.Should().BeTrue();
+            serviceResult.Errors.Should().BeEmpty();
         }
 
         [Fact]
@@ -82,8 +84,9 @@ namespace UnitTests.Application.Services
             var serviceResult = await _service.RemoveSavingsAsync(savingsId);
 
             // Assert
-            Assert.True(serviceResult.Success);
-            Assert.Empty(serviceResult.Errors);
+            serviceResult.Should().NotBeNull();
+            serviceResult.Success.Should().BeTrue();
+            serviceResult.Errors.Should().BeEmpty();
 
             _mockUnitOfWork.Verify(u => u.Savings.Delete(savingsToRemove), Times.Once);
             _mockUnitOfWork.Verify(u => u.CompleteAsync(), Times.Once);
@@ -102,8 +105,9 @@ namespace UnitTests.Application.Services
             var serviceResult = await _service.RemoveSavingsAsync(savingsId);
 
             // Assert
-            Assert.False(serviceResult.Success);
-            Assert.Contains("Savings not found.", serviceResult.Errors);
+            serviceResult.Should().NotBeNull();
+            serviceResult.Success.Should().BeFalse();
+            serviceResult.Errors.Should().Contain("Savings not found.");
 
             _mockUnitOfWork.Verify(u => u.Savings.Delete(It.IsAny<Savings>()), Times.Never);
             _mockUnitOfWork.Verify(u => u.CompleteAsync(), Times.Never);
@@ -124,10 +128,11 @@ namespace UnitTests.Application.Services
             var serviceResult = await _service.EditSavingsAsync(dto);
 
             // Assert
-            Assert.True(serviceResult.Success);
-            Assert.Empty(serviceResult.Errors);
-            Assert.Equal(dto.SavingsName, savings.SavingsName);
-            Assert.Equal(dto.Amount, savings.Amount);
+            serviceResult.Should().NotBeNull();
+            serviceResult.Success.Should().BeTrue();
+            serviceResult.Errors.Should().BeEmpty();
+            savings.SavingsName.Should().Be(dto.SavingsName);
+            savings.Amount.Should().Be(dto.Amount);
 
             _mockUnitOfWork.Verify(u => u.CompleteAsync(), Times.Once);
         }
@@ -146,8 +151,9 @@ namespace UnitTests.Application.Services
             var serviceResult = await _service.EditSavingsAsync(dto);
 
             // Assert
-            Assert.False(serviceResult.Success);
-            Assert.Contains("Savings not found.", serviceResult.Errors);
+            serviceResult.Should().NotBeNull();
+            serviceResult.Success.Should().BeFalse();
+            serviceResult.Errors.Should().Contain("Savings not found.");
 
             _mockUnitOfWork.Verify(u => u.CompleteAsync(), Times.Never);
         }
