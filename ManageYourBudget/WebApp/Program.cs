@@ -86,6 +86,11 @@ app.MapControllerRoute(
     defaults: new { controller = "SettingsPage", action = "Index" });
 
 app.MapControllerRoute(
+    name: "tips",
+    pattern: "tips",
+    defaults: new { controller = "Tips", action = "Index" });
+
+app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
