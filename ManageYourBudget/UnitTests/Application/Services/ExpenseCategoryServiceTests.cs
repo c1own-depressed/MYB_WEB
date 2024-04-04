@@ -171,7 +171,7 @@ namespace UnitTests.Application.Services
 
             _mockUnitOfWork.Setup(u => u.ExpenseCategories.GetByIdAsync(categoryId))
                            .ReturnsAsync(categoryToRemove);
-            _mockUnitOfWork.Setup(u => u.Expenses.GetExpensesByExpenseCategoryIdAsync(categoryId))
+            _mockUnitOfWork.Setup(u => u.Expenses.GetExpensesByCategoryIdAsync(categoryId))
                            .ReturnsAsync(expensesToRemove);
 
             // Act
