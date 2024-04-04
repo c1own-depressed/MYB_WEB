@@ -65,6 +65,7 @@
             </div>
         </div>
 
+
         <!-- Edit Expense Modal -->
         <div class="modal fade" id="editExpenseModal" tabindex="-1" role="dialog" aria-labelledby="editExpenseModalLabel" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -99,6 +100,7 @@
                 </div>
             </div>
         </div>
+
 
         <!-- Edit Category Modal -->
         <div class="modal fade" id="editCategoryModal_@category.Id" tabindex="-1" role="dialog" aria-labelledby="editCategoryModalLabel_@category.Id" aria-hidden="true">
@@ -292,8 +294,17 @@
             $('#selectedExpenseId').val(expenseId);
             $('#edit-expense-name').val(expenseName);
             $('#edit-expense-amount').val(amount);
-            $('#edit-expense-date').val(date);
+            $('#edit-expense-date').val(formatDate(date)); // Set the current date value
             $('#editExpenseModal').modal('show');
+        }
+
+        function formatDate(dateString) {
+            // Format the date string to yyyy-MM-dd
+            var date = new Date(dateString);
+            var year = date.getFullYear();
+            var month = (date.getMonth() + 1).toString().padStart(2, '0');
+            var day = date.getDate().toString().padStart(2, '0');
+            return `${year}-${month}-${day}`;
         }
 
         $(document).ready(function () {
