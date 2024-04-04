@@ -75,7 +75,7 @@ namespace Application.Services
             }
 
             // Remove associated expenses
-            var expensesToRemove = await _unitOfWork.Expenses.GetExpensesByExpenseCategoryIdAsync(categoryId);
+            var expensesToRemove = await _unitOfWork.Expenses.GetExpensesByCategoryIdAsync(categoryId);
             foreach (var expense in expensesToRemove)
             {
                 _unitOfWork.Expenses.Delete(expense);

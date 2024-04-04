@@ -13,13 +13,20 @@ namespace WebApp.Controllers
         private readonly IExpenseCategoryService _expenseCategoryService;
         private readonly IIncomeService _incomeService;
         private readonly ISavingsService _savingsService;
+        private readonly IExpenseService _expenseService;
 
-        public HomeController(ILogger<HomeController> logger, IExpenseCategoryService expenseCategoryService, IIncomeService incomeService, ISavingsService savingsService)
+        public HomeController(
+            ILogger<HomeController> logger,
+            IExpenseCategoryService expenseCategoryService,
+            IIncomeService incomeService,
+            ISavingsService savingsService,
+            IExpenseService expenseService)
         {
             _logger = logger;
             _expenseCategoryService = expenseCategoryService;
             _incomeService = incomeService;
             _savingsService = savingsService;
+            _expenseService = expenseService;
         }
 
         public async Task<IActionResult> Index()
@@ -242,6 +249,71 @@ namespace WebApp.Controllers
                 var errorMessages = string.Join("; ", serviceResult.Errors);
                 this._logger.LogError($"Failed to remove income: {errorMessages}");
                 return this.BadRequest(errorMessages);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddExpense([FromBody] ExpenseDTO model) // Add Expense action
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            ServiceResult serviceResult = await _expenseService.AddExpenseAsync(model);
+
+            if (serviceResult.Success)
+            {
+                _logger.LogError($"Expense added: {model.ExpenseName} with amount {model.Amount}");
+                return Ok();
+            }
+            else
+            {
+                var errorMessages = string.Join("; ", serviceResult.Errors);
+                _logger.LogError($"Failed to add expense: {errorMessages}");
+                return BadRequest(errorMessages);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> RemoveExpense(int expenseId) // Remove Expense action
+        {
+            ServiceResult serviceResult = await _expenseService.RemoveExpenseAsync(expenseId);
+
+            if (serviceResult.Success)
+            {
+                _logger.LogInformation($"Expense with ID {expenseId} removed.");
+                return Ok();
+            }
+            else
+            {
+                var errorMessages = string.Join("; ", serviceResult.Errors);
+                _logger.LogError($"Failed to remove expense: {errorMessages}");
+                return BadRequest(errorMessages);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> EditExpense([FromBody] EditExpenseDTO model) // Edit Expense action
+        {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state for EditExpense");
+                return BadRequest(ModelState);
+            }
+
+            ServiceResult serviceResult = await _expenseService.EditExpenseAsync(model);
+
+            if (serviceResult.Success)
+            {
+                _logger.LogInformation($"Expense edited: ID {model.Id}, Name: {model.ExpenseName}, Amount: {model.Amount}");
+                return Ok();
+            }
+            else
+            {
+                var errorMessages = string.Join("; ", serviceResult.Errors);
+                _logger.LogError($"Failed to edit expense: {errorMessages}");
+                return BadRequest(errorMessages);
             }
         }
     }

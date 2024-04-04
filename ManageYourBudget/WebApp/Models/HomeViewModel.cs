@@ -9,5 +9,7 @@ namespace WebApp.Models
         public IEnumerable<IncomeDTO>? Incomes { get; set; }
 
         public IEnumerable<ExpenseCategoryDTO>? Categories { get; set; }
+
+        public IEnumerable<ExpenseDTO>? Expenses { get; set; }
     }
 }
