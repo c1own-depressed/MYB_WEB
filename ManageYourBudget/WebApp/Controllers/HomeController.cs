@@ -1,5 +1,7 @@
 using System.Diagnostics;
-using Application.DTOs;
+using Application.DTOs.ExpenseDTOs;
+using Application.DTOs.IncomeDTOs;
+using Application.DTOs.SavingsDTOs;
 using Application.Interfaces;
 using Application.Utils;
 using Microsoft.AspNetCore.Mvc;

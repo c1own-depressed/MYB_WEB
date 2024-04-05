@@ -1,4 +1,4 @@
-﻿using Application.DTOs;
+﻿using Application.DTOs.ExpenseDTOs;
 using Application.Utils;
 
 namespace Application.Interfaces

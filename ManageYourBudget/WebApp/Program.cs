@@ -1,6 +1,6 @@
-using Application.DTOs.Validators;
 using Application.Interfaces;
 using Application.Services;
+using Application.Validators;
 using Domain.Interfaces;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
@@ -13,7 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
     .WriteTo.Seq("http://localhost:5341"));
-var connectionString = builder.Configuration.GetConnectionString("AndriyConnection");
+
+var connectionString = builder.Configuration.GetConnectionString("RomanConnection");
+
 
 if (connectionString != null)
 {

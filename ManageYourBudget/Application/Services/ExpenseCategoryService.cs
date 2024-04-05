@@ -1,7 +1,7 @@
-﻿using Application.DTOs;
-using Application.DTOs.Validators;
+﻿using Application.DTOs.ExpenseDTOs;
 using Application.Interfaces;
 using Application.Utils;
+using Application.Validators;
 using Domain.Entities;
 using Domain.Interfaces;
 

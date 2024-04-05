@@ -2,54 +2,69 @@
 
 @model IEnumerable<IncomeDTO>
 
-<div class="incomes-wrapper">
-    <div class="category-wrapper">
-        <div class="category-content">
-            <div class="category-heading-wrapper">
-                <div class="category-heading-name-wrapper">
-                    <h2 class="category-heading">Incomes</h2>
-                </div>
-            </div>
-            <div class="expenses-wrapper">
+
+<div class="card-wrapper" id="card-wrapper">
+    <div class="card">
+        <div class="card-header" id="headingOne">      
+            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseIncome" aria-expanded="true" aria-controls="collapseIncome">
+                <h2 class="mb-0">Income</h2>
+            </button>
+        </div>
+
+        <div id="collapseIncome" class="collapse" aria-labelledby="headingOne" data-parent="#card-wrapper">
+            <div class="card-body">
                 @foreach (var income in Model)
                 {
-                    <p>Income: @income.IncomeName  (@income.Amount ₴)</p>
-                    <button class="btn btn-danger" onclick="removeIncome(@income.Id)">Remove</button>
-                    <button class="btn btn-primary" onclick="openEditIncomeModal('@income.Id', '@income.IncomeName', '@income.Amount')">Edit</button>
-                    <!-- Edit Income Modal -->
-                    <div class="modal fade" id="editIncomeModal_@income.Id" tabindex="-1" role="dialog" aria-labelledby="editIncomeModalLabel_@income.Id" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="editIncomeModalLabel_@income.Id">Edit Category</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="form-group">
-                                        <label for="editIncomeName">Income Name</label>
-                                        <input type="text" class="form-control" id="editIncomeName_@income.Id" value="@income.IncomeName">
+                    <div class="card-content">
+                        <p class="card-name">@income.IncomeName</p>
+                        <div class="card-details">
+                            <p class="card-amount">@income.Amount @income.CurrencyEmblem</p>
+                            <div class="card-interaction">
+                                <button class="btn card-edit" onclick="openEditIncomeModal('@income.Id', '@income.IncomeName', '@income.Amount')">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                                <button class="btn card-delete" onclick="removeIncome(@income.Id)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Edit Income Modal -->
+                        <div class="modal fade" id="editIncomeModal_@income.Id" tabindex="-1" role="dialog" aria-labelledby="editIncomeModalLabel_@income.Id" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editIncomeModalLabel_@income.Id">Edit Income</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="editAmount">Amount</label>
-                                        <input type="number" class="form-control" id="editAmount_@income.Id" value="@income.Amount">
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="editIncomeName_@income.Id">Income Name</label>
+                                            <input type="text" class="form-control" id="editIncomeName_@income.Id" value="@income.IncomeName">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="editAmount_@income.Id">Amount</label>
+                                            <input type="number" class="form-control" id="editAmount_@income.Id" value="@income.Amount">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary" onclick="editIncome('@income.Id')">Save changes</button>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-primary" onclick="editIncome('@income.Id')">Save changes</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 }
+                <div class="separator-line"></div>
+                <!-- Add Income Button -->
+                <button type="button" class="btn add-btn" data-toggle="modal" data-target="#addIncomeModal">
+                    + Add Income
+                </button>
             </div>
         </div>
-
-        <button type="button" class="btn btn-primary add-income-button" data-toggle="modal" data-target="#addIncomeModal">
-            + Add Income
-        </button>
     </div>
 
     <div class="modal fade" id="addIncomeModal" tabindex="-1" role="dialog" aria-labelledby="addIncomeModalLabel" aria-hidden="true">

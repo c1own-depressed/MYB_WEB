@@ -1,6 +1,7 @@
-﻿using FluentValidation;
+﻿using Application.DTOs.IncomeDTOs;
+using FluentValidation;
 
-namespace Application.DTOs.Validators
+namespace Application.Validators
 {
     public class EditIncomeDTOValidator : AbstractValidator<EditIncomeDTO>
     {

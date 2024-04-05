@@ -1,7 +1,7 @@
-﻿using Application.DTOs;
-using Application.DTOs.Validators;
+﻿using Application.DTOs.IncomeDTOs;
 using Application.Interfaces;
 using Application.Utils;
+using Application.Validators;
 using Domain.Entities;
 using Domain.Interfaces;
 
@@ -41,13 +41,17 @@ namespace Application.Services
 
         public async Task<IEnumerable<IncomeDTO>> GetIncomesByUserIdAsync(int userId)
         {
+            var user = await this._unitOfWork.Users.GetByIdAsync(userId);
             var incomes = await this._unitOfWork.Incomes.GetIncomesByUserIdAsync(userId);
+
+            string currencyRepresentation = CurrencyUtils.FormatCurrencyDisplay(user.Currency);
 
             var incomeDTOs = incomes.Select(income => new IncomeDTO
             {
                 Id = income.Id,
                 IncomeName = income.IncomeName,
                 Amount = income.Amount,
+                CurrencyEmblem = currencyRepresentation,
             });
 
             return incomeDTOs;
