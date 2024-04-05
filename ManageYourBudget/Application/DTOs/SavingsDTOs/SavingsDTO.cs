@@ -1,4 +1,4 @@
-﻿namespace Application.DTOs
+﻿namespace Application.DTOs.SavingsDTOs
 {
     public class SavingsDTO
     {
@@ -9,6 +9,8 @@
         public double Amount { get; set; }
 
         public DateTime Date { get; set; }
+
+        public string CurrencyEmblem { get; set; } = "$";
 
         public int UserId { get; set; }
     }

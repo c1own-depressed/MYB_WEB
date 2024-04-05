@@ -1,4 +1,4 @@
-﻿using Application.DTOs;
+﻿using Application.DTOs.ExpenseDTOs;
 using Application.Utils;
 using System.Collections.Generic;
 using System.Threading.Tasks;

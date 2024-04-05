@@ -1,7 +1,7 @@
-﻿using Application.DTOs;
-using Application.DTOs.Validators;
+﻿using Application.DTOs.SavingsDTOs;
 using Application.Interfaces;
 using Application.Utils;
+using Application.Validators;
 using Domain.Entities;
 using Domain.Interfaces;
 
@@ -18,12 +18,17 @@ namespace Application.Services
 
         public async Task<IEnumerable<SavingsDTO>> GetSavingsByUserIdAsync(int userId)
         {
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
             var savings = await _unitOfWork.Savings.GetSavingsByUserIdAsync(userId);
+
+            string currencyRepresentation = CurrencyUtils.FormatCurrencyDisplay(user.Currency);
+
             var savingsDTOs = savings.Select(s => new SavingsDTO
             {
                 Id = s.Id,
                 SavingsName = s.SavingsName,
                 Amount = s.Amount,
+                CurrencyEmblem = currencyRepresentation,
             });
             return savingsDTOs;
         }

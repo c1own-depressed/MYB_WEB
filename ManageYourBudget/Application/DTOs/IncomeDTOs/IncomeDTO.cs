@@ -1,4 +1,4 @@
-﻿namespace Application.DTOs
+﻿namespace Application.DTOs.IncomeDTOs
 {
     public class IncomeDTO
     {
@@ -7,5 +7,7 @@
         public string IncomeName { get; set; } = string.Empty;
 
         public double Amount { get; set; }
+
+        public string CurrencyEmblem { get; set; } = "$";
     }
 }

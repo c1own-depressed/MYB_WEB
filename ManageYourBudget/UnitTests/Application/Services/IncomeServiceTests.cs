@@ -1,24 +1,20 @@
 ﻿using Application.DTOs;
+using Application.DTOs.IncomeDTOs;
 using Application.Interfaces;
 using Application.Services;
 using Application.Utils;
 using Domain.Entities;
 using Domain.Interfaces;
 using Moq;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace UnitTests.Application.Services
 {
-    public class IncomeCategoryServiceTests
+    public class IncomeServiceTests
     {
         private readonly Mock<IUnitOfWork> _mockUnitOfWork;
         private readonly IncomeService _service;
 
-        public IncomeCategoryServiceTests()
+        public IncomeServiceTests()
         {
             _mockUnitOfWork = new Mock<IUnitOfWork>();
             _service = new IncomeService(_mockUnitOfWork.Object);
@@ -128,11 +124,25 @@ namespace UnitTests.Application.Services
         {
             // Arrange
             int userId = 1;
+            var mockUser = new User 
+            { 
+                Id = userId,
+                Username = "Test",
+                Email = "test@gmail.com",
+                Currency = "usd",
+                HashedPassword = "FSDKLJKJ#KJ",
+                IsLightTheme = true,
+                Language = "en",
+            };
+
             var expectedIncomes = new List<Income>
             {
                 new Income { IncomeName = "Salary", Amount = 5000 },
                 new Income { IncomeName = "Freelancing", Amount = 1500 }
             };
+
+            _mockUnitOfWork.Setup(u => u.Users.GetByIdAsync(userId))
+                .ReturnsAsync(mockUser);
 
             _mockUnitOfWork.Setup(u => u.Incomes.GetIncomesByUserIdAsync(userId))
                 .ReturnsAsync(expectedIncomes);

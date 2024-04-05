@@ -1,4 +1,6 @@
-﻿using Application.DTOs;
+﻿using Application.DTOs.ExpenseDTOs;
+using Application.DTOs.IncomeDTOs;
+using Application.DTOs.SavingsDTOs;
 
 namespace WebApp.Models
 {

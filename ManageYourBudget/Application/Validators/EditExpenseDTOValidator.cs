@@ -1,6 +1,7 @@
-﻿using FluentValidation;
+﻿using Application.DTOs.ExpenseDTOs;
+using FluentValidation;
 
-namespace Application.DTOs.Validators
+namespace Application.Validators
 {
     public class EditExpenseDTOValidator : AbstractValidator<EditExpenseDTO>
     {

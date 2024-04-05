@@ -5,30 +5,61 @@
 <div class="categories-list-wrapper">
     @foreach (var category in Model)
     {
-        <div class="category-wrapper">
-            <div class="category-content">
-                <div class="category-heading-wrapper">
-                    <div class="category-heading-name-wrapper">
-                        <h2 class="category-heading">@category.Name</h2>
-                    </div>
-                    <div class="category-heading-details-wrapper">
-                        <p>Remaining budget: @category.RemainingBudget</p>
-                        <p>Planned budget: @category.PlannedBudget</p>
-                        <button class="btn btn-danger" onclick="removeCategory(@category.Id)">Remove</button>
-                        <button class="btn btn-primary" onclick="openEditCategoryModal('@category.Id', '@category.Name', '@category.PlannedBudget')">Edit</button>
-                        <button class="btn btn-success" onclick="openAddExpenseModal('@category.Id')">Add Expense</button> <!-- Added button to add expense -->
-                    </div>
+
+
+        <div class="card-wrapper" id="card-wrapper">
+            <div class="card">
+                <div class="card-header" id="headingOne">
+                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse_@category.Id" aria-expanded="true" aria-controls="collapseIncome">
+                        <div class="card-header-button-content">
+                            <h2 class="mb-0">@category.Name</h2>
+                            <div class="category-details">
+                                <p>Planned: @category.PlannedBudget</p>
+                                <p>Remaining: @category.RemainingBudget</p>
+                            </div>
+                        </div>
+                    </button>
+                    
                 </div>
-                @foreach (var expense in category.Expenses)
-                {
-                    <div class="expense-item">
-                        <p>Expense: @expense.ExpenseName (@expense.Amount ₴)</p>
-                        <div class="expense-buttons">
-                            <button class="btn btn-danger" onclick="removeExpense(@expense.Id)">Remove</button>
-                            <button class="btn btn-primary" onclick="openEditExpenseModal('@expense.Id', '@expense.ExpenseName', '@expense.Amount', '@expense.Date')">Edit</button>
+
+                <div id="collapse_@category.Id" class="collapse" aria-labelledby="headingOne" data-parent="#card-wrapper">
+                    <div class="card-body">
+                        @foreach (var expense in category.Expenses)
+                        {
+                            <div class="card-content">
+                                <p class="card-name">@expense.ExpenseName</p>
+                                <div class="card-details">
+                                    <p class="card-amount">@expense.Amount @* @expense.CurrencyEmblem *@</p>
+                                    <div class="card-interaction">
+                                        <button class="btn card-edit" onclick="openEditExpenseModal('@expense.Id', '@expense.ExpenseName', '@expense.Amount', '@expense.Date')">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </button>
+                                        <button class="btn card-delete" onclick="removeExpense(@expense.Id)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+
+                        <div class="separator-line"></div>
+
+                        <div class="card-details">
+                            <button type="button" class="btn add-btn" onclick="openAddExpenseModal('@category.Id')">
+                                + Add Expense
+                            </button>
+
+                            <div class="card-interaction">
+                                <button class="btn card-edit" onclick="openEditCategoryModal('@category.Id', '@category.Name', '@category.PlannedBudget')">
+                                    <i class="fas fa-pencil-alt"></i>
+                                </button>
+                                <button class="btn card-delete" onclick="removeCategory(@category.Id)">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
-                }
+                </div>
             </div>
         </div>
 
@@ -67,43 +98,6 @@
             </div>
         </div>
 
-
-        <!-- Edit Expense Modal -->
-        <div class="modal fade" id="editExpenseModal" tabindex="-1" role="dialog" aria-labelledby="editExpenseModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="editExpenseModalLabel">Edit Expense</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="edit-expense-form">
-                            <input type="hidden" id="selectedExpenseId" name="expenseId" />
-                            <div class="form-group">
-                                <label for="edit-expense-name">Expense Name</label>
-                                <input type="text" class="form-control" id="edit-expense-name" name="expenseName" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="edit-expense-amount">Amount</label>
-                                <input type="number" class="form-control" id="edit-expense-amount" name="amount" required>
-                            </div>
-                            <div class="form-group">
-                                <label for="edit-expense-date">Date</label>
-                                <input type="date" class="form-control" id="edit-expense-date" name="date" required>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary" form="edit-expense-form">Save Changes</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-
         <!-- Edit Category Modal -->
         <div class="modal fade" id="editCategoryModal_@category.Id" tabindex="-1" role="dialog" aria-labelledby="editCategoryModalLabel_@category.Id" aria-hidden="true">
             <div class="modal-dialog" role="document">
@@ -136,6 +130,41 @@
     <button type="button" class="btn btn-primary add-category-button" data-toggle="modal" data-target="#addCategoryModal">
         + Add Category
     </button>
+
+    <!-- Edit Expense Modal -->
+    <div class="modal fade" id="editExpenseModal" tabindex="-1" role="dialog" aria-labelledby="editExpenseModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editExpenseModalLabel">Edit Expense</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="edit-expense-form">
+                        <input type="hidden" id="selectedExpenseId" name="expenseId" />
+                        <div class="form-group">
+                            <label for="edit-expense-name">Expense Name</label>
+                            <input type="text" class="form-control" id="edit-expense-name" name="expenseName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-expense-amount">Amount</label>
+                            <input type="number" class="form-control" id="edit-expense-amount" name="amount" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edit-expense-date">Date</label>
+                            <input type="date" class="form-control" id="edit-expense-date" name="date" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" form="edit-expense-form">Save Changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Add Category Modal -->
     <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
@@ -241,6 +270,7 @@
             });
         }
     </script>
+
     <script>
         function openAddExpenseModal(categoryId) {
             $('#addExpenseModal').modal('show'); // Show the modal
@@ -267,7 +297,7 @@
                         location.reload();
                     },
                     error: function (error) {
-                        alert("Failed to add expense" + error.responseText);
+                        alert("Failed to add expense");
                         $('#add-expense-form')[0].reset();
                     }
                 });
@@ -335,4 +365,3 @@
         });
     </script>
 </div>
-

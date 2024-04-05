@@ -1,14 +1,9 @@
-﻿using Application.DTOs;
-using Application.DTOs.Validators;
+﻿using Application.DTOs.ExpenseDTOs;
 using Application.Interfaces;
 using Application.Utils;
+using Application.Validators;
 using Domain.Entities;
 using Domain.Interfaces;
-using FluentValidation;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Application.Services
 {
@@ -36,7 +31,7 @@ namespace Application.Services
                 ExpenseName = model.ExpenseName,
                 Amount = model.Amount,
                 Date = model.Date,
-                CategoryId = model.CategoryId
+                CategoryId = model.CategoryId,
             };
 
             await _unitOfWork.Expenses.AddAsync(expense);
@@ -55,7 +50,7 @@ namespace Application.Services
                 ExpenseName = expense.ExpenseName,
                 Amount = expense.Amount,
                 Date = expense.Date,
-                CategoryId = expense.CategoryId
+                CategoryId = expense.CategoryId,
             });
 
             return expenseDTOs;
