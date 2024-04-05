@@ -52,7 +52,7 @@
             font-size: 16px;
         }
 
-        input[type="submit"] {
+        button {
             width: 182px;
             height: 42px;
             background-color: #545454;
@@ -66,7 +66,7 @@
             margin-top: 60px;
         }
 
-        input[type="submit"]:hover {
+            button:hover {
             background-color: white;
             color: #545454;
         }
@@ -74,7 +74,7 @@
 </head>
 <body>
     <h1>@localizer["Settings"]</h1>
-    <form action="/Settings/SaveSettings" method="post">
+    <form asp-controller="SettingsPage" asp-action="SaveSettings" method="post">
         <!-- Додано форму тут -->
         <div class="SelectOption">
             <label for="language">@localizer["Language"]</label>
@@ -97,8 +97,9 @@
                 <option value="uah" id="uahOption">UAH</option>
             </select>
         </div>
-        <input type="submit" value="@localizer["Save"]" formaction="/Settings/SaveSettings"> <!-- Додано formaction -->
-    </form> <!-- Форму закрито -->
+        <button type="submit" >@localizer["Save"]</button>
+        <!-- Додано formaction -->
+    </form>
     <script>
         
         var isLightTheme = '@Model.IsLightTheme.ToString().ToLower()';
