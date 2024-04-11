@@ -1,15 +1,15 @@
-﻿using Application.DTOs.ExpenseDTOs;
-using Application.DTOs.IncomeDTOs;
-using Application.DTOs.SavingsDTOs;
+﻿using System.Collections.Generic;
 
 namespace WebApp.Models
 {
     public class StatisticViewModel
     {
-        public IEnumerable<int>? Savings { get; set; }
+        public double Savings { get; set; }
 
-        public IEnumerable<int>? Incomes { get; set; }
+        public double Incomes { get; set; }
 
-        public IEnumerable<int>? SummaryExpenses { get; set; }
+        public double SummaryExpenses { get; set; }
+
+        public DateTime Date { get; set; }
     }
 }
