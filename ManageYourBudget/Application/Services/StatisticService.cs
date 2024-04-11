@@ -1,5 +1,7 @@
-﻿using Application.DTOs.StatisticDTO;
+﻿using Application.DTOs.IncomeDTOs;
+using Application.DTOs.StatisticDTO;
 using Application.Interfaces;
+using Application.Utils;
 using Domain.Entities;
 using Domain.Interfaces;
 using System.Text.RegularExpressions;
@@ -71,5 +73,36 @@ namespace Application.Services
 
             return groupedExpenses;
         }
+        public async Task<IEnumerable<SavedStatisticDTO>> CountSaved(DateTime from, DateTime to, int userId)
+        {
+            var incomes = await getIncomesByDate(from, to, userId);
+
+            var expenses = await GetTotalExpensesByDate(from, to, userId);
+
+            var savings = new List<SavedStatisticDTO>();
+
+            var combinedData = incomes.Join(expenses,
+                                            income => income.Month,
+                                            expense => expense.Month,
+                                            (income, expense) => new
+                                            {
+                                                Month = income.Month,
+                                                IncomeAmount = income.TotalAmount,
+                                                ExpenseAmount = expense.TotalAmount
+                                            });
+
+            foreach (var data in combinedData)
+            {
+                var savedAmount = new SavedStatisticDTO
+                {
+                    Month = data.Month,
+                    TotalAmount = data.IncomeAmount - data.ExpenseAmount
+                };
+                savings.Add(savedAmount);
+            }
+
+            return savings;
+        }
+
     }
 }
