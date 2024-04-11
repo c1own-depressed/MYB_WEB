@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.DTOs.IncomeDTOs;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApp.Controllers
 {
@@ -15,6 +16,11 @@ namespace WebApp.Controllers
         {
             _logger.LogInformation("User accessed StatisticPage.");
             return View("~/Views/StatisticPage/Index.cshtml");
+        }
+
+        public getStatisticByDate()
+        {
+
         }
     }
 }
