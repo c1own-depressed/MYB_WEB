@@ -31,6 +31,8 @@ namespace Application.Services
                 UserId = 1, // TODO: Use actual user ID from session or request
                 IncomeName = model.IncomeName,
                 Amount = model.Amount,
+                IsRegular = model.IsRegular,
+                Date = model.Date,
             };
 
             await this._unitOfWork.Incomes.AddAsync(income);
@@ -52,6 +54,8 @@ namespace Application.Services
                 IncomeName = income.IncomeName,
                 Amount = income.Amount,
                 CurrencyEmblem = currencyRepresentation,
+                Date = income.Date,
+                IsRegular = income.IsRegular,
             });
 
             return incomeDTOs;
