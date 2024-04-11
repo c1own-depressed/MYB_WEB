@@ -9,5 +9,9 @@
         public double Amount { get; set; }
 
         public string CurrencyEmblem { get; set; } = "$";
+
+        public bool IsRegular { get; set; }
+
+        public DateTime Date { get; set; }
     }
 }
