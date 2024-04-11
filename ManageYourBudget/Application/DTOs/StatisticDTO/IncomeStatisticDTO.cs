@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace Application.DTOs.StatisticDTO
 {
-    internal class IncomeStatisticDTO
+    public class IncomeStatisticDTO
     {
         public DateTime Month { get; set; }
 
-        public int TotalAmount { get; set; }
+        public double TotalAmount { get; set; }
     }
 }
