@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -29,39 +30,23 @@ namespace WebApp.Controllers
 
                 // Initialize the list to hold multiple StatisticViewModel instances
                 List<StatisticViewModel> statistics = new List<StatisticViewModel>();
-
-                // Populate view models from defaultStatistics
-                foreach (var income in defaultStatistics.IncomeStatistics)
+                for (int i = 0; i < defaultStatistics.ExpensesStatistics.Count; i++)
                 {
+                    var income = defaultStatistics.IncomeStatistics[i];
+                    var expense = defaultStatistics.ExpensesStatistics[i];
+                    var saving = defaultStatistics.SavingsStatistics[i];
+
                     var model = new StatisticViewModel
                     {
                         Incomes = income.TotalAmount,
+                        SummaryExpenses = expense.TotalAmount,
+                        Savings = saving.TotalAmount,
                         Date = income.Month,
-
                     };
 
                     statistics.Add(model);
                 }
 
-                foreach (var expense in defaultStatistics.ExpensesStatistics)
-                {
-                    var model = new StatisticViewModel
-                    {
-                        SummaryExpenses = expense.TotalAmount
-                    };
-
-                    statistics.Add(model);
-                }
-
-                foreach (var savings in defaultStatistics.SavingsStatistics)
-                {
-                    var model = new StatisticViewModel
-                    {
-                        Savings = savings.TotalAmount
-                    };
-
-                    statistics.Add(model);
-                }
 
                 return View("~/Views/StatisticPage/Index.cshtml", statistics);
             }
@@ -85,32 +70,18 @@ namespace WebApp.Controllers
                 // Initialize the list to hold multiple StatisticViewModel instances
                 List<StatisticViewModel> viewModelList = new List<StatisticViewModel>();
 
-                // Populate view models from statistics
-                foreach (var income in statistics.IncomeStatistics)
+                for (int i = 0; i < statistics.ExpensesStatistics.Count; i++)
                 {
+                    var income = statistics.IncomeStatistics[i];
+                    var expense = statistics.ExpensesStatistics[i];
+                    var saving = statistics.SavingsStatistics[i];
+
                     var model = new StatisticViewModel
                     {
-                        Incomes = income.TotalAmount
-                    };
-
-                    viewModelList.Add(model);
-                }
-
-                foreach (var expense in statistics.ExpensesStatistics)
-                {
-                    var model = new StatisticViewModel
-                    {
-                        SummaryExpenses = expense.TotalAmount
-                    };
-
-                    viewModelList.Add(model);
-                }
-
-                foreach (var saving in statistics.SavingsStatistics)
-                {
-                    var model = new StatisticViewModel
-                    {
-                        Savings = saving.TotalAmount
+                        Incomes = income.TotalAmount,
+                        SummaryExpenses = expense.TotalAmount,
+                        Savings = saving.TotalAmount,
+                        Date = income.Month,
                     };
 
                     viewModelList.Add(model);
