@@ -14,7 +14,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
     .WriteTo.Seq("http://localhost:5341"));
 
-var connectionString = builder.Configuration.GetConnectionString("DimaConnection");
+var connectionString = builder.Configuration.GetConnectionString("AndriyConnection");
 
 if (connectionString != null)
 {
@@ -40,6 +40,7 @@ builder.Services.AddScoped<IExpenseCategoryService, ExpenseCategoryService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IIncomeService, IncomeService>();
 builder.Services.AddScoped<ISavingsService, SavingsService>();
+builder.Services.AddScoped<IStatisticService, StatisticService>();
 builder.Services.AddControllersWithViews()
         .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateExpenseCategoryDTOValidator>());
 builder.Services.AddControllersWithViews()

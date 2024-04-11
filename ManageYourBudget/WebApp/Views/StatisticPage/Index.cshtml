@@ -4,6 +4,7 @@
 @{
     ViewData["Title"] = "Statistic";
 }
+@model IEnumerable<StatisticViewModel>
 <head>
     <meta charset="utf-8" />
     <title>Statistic</title>
@@ -65,62 +66,58 @@
     </style>
 </head>
 <body>
- <div class="statistic">  
-<div class="choose-options">
-<div class="date-pick">
-    <label >Pick a period:</label>
-<div class="form-group">
-    <label for="startDate">Start Date:</label>
-    <input type="date" class="form-control" id="startDate" name="startDate" />
-</div>
-<div class="form-group">
-    <label for="endDate">End Date:</label>
-    <input type="date" class="form-control" id="endDate" name="endDate" />
-</div>
-</div>
-<div class="form-group">
-    <label for="category">Category:</label>
-    <select class="form-control" id="category" name="category">
-        <option value="category1">Category 1</option>
-        <option value="category2">Category 2</option>
-        <option value="category3">Category 3</option>
-    </select>
-</div>
-<div class="buttons">
-    <button>Submit</button>
-    <button>Export</button>
-</div>
-</div>
+ <div class="statistic">
+        <form method="post" action="@Url.Action("GetStatistics", "StatisticPage")">
+            <div class="choose-options">
+                <div class="date-pick">
+                    <label>Pick a period:</label>
+                    <div class="form-group">
+                        <label for="startDate">Start Date:</label>
+                        <input type="date" class="form-control" id="startDate" name="startDate" />
+                    </div>
+                    <div class="form-group">
+                        <label for="endDate">End Date:</label>
+                        <input type="date" class="form-control" id="endDate" name="endDate" />
+                    </div>
+                </div>
+                @* <div class="form-group">
+                    <label for="category">Category:</label>
+                    <select class="form-control" id="category" name="category">
+                        <option value="category1">Category 1</option>
+                        <option value="category2">Category 2</option>
+                        <option value="category3">Category 3</option>
+                    </select>
+                </div> *@
+                <div class="buttons">
+                    <button type="submit">Submit</button>
+                    <button type="button">Export</button>
+                </div>
+            </div>
+        </form>
+
         <div class="table">
-            <table>
+            <table id="statisticsTable">
                 <thead>
                     <tr>
                         <th>Income</th>
                         <th>Summary Expenses</th>
                         <th>Saved</th>
+                        <th>Month</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Use this area to dynamically populate table rows -->
-                    <tr>
-                        <td>$5000</td>
-                        <td>$3000</td>
-                        <td>$2000</td>
-                    </tr>
-                    <!-- Example row, replace with dynamic data -->
-                    <tr>
-                        <td>$4000</td>
-                        <td>$3500</td>
-                        <td>$500</td>
-                    </tr>
-                    <!-- Another example row -->
-                    <tr>
-                        <td>$6000</td>
-                        <td>$4000</td>
-                        <td>$2000</td>
-                    </tr>
+                    @foreach (var statistic in Model)
+                    {
+                        <tr>
+                            <td>@statistic.Incomes.</td>
+                            <td>@statistic.SummaryExpenses</td>
+                            <td>@statistic.Savings</td>
+                            <td>@statistic.Date.Month/@statistic.Date.Year</td>
+                        </tr>
+                    }
                 </tbody>
             </table>
         </div>
+    
     </div>
 </body>

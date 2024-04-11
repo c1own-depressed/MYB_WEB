@@ -104,5 +104,37 @@ namespace Application.Services
             return savings;
         }
 
+        public async Task<AllStatisticDataDTO> GetAllData(DateTime startDate, DateTime endDate, int userId)
+        {
+            try
+            {
+                // Retrieve income statistics
+                var incomeStatistics = await getIncomesByDate(startDate, endDate, userId);
+
+                // Retrieve total expenses statistics
+                var expensesStatistics = await GetTotalExpensesByDate(startDate, endDate, userId);
+
+                // Retrieve savings statistics
+                var savingsStatistics = await CountSaved(startDate, endDate, userId);
+
+                // Assemble all statistics into a single DTO
+                var allData = new AllStatisticDataDTO
+                {
+                    IncomeStatistics = incomeStatistics.ToList(),
+                    ExpensesStatistics = expensesStatistics.ToList(),
+                    SavingsStatistics = savingsStatistics.ToList()
+                };
+
+                return allData;
+            }
+            catch (Exception ex)
+            {
+                // Handle exceptions or log errors
+                Console.WriteLine($"Error retrieving all statistics: {ex.Message}");
+                throw; // Re-throw exception or return default value as needed
+            }
+        }
+
+
     }
 }

@@ -71,7 +71,9 @@ namespace UnitTests.Application.Services
             Assert.Equal(300, resultList.Find(r => r.Month == new DateTime(2023, 01, 01)).TotalAmount);
             Assert.Equal(150, resultList.Find(r => r.Month == new DateTime(2023, 02, 01)).TotalAmount);
         }
-
+        
     }
 
 }
+
+
