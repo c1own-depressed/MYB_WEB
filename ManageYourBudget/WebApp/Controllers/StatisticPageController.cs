@@ -18,9 +18,9 @@ namespace WebApp.Controllers
             return View("~/Views/StatisticPage/Index.cshtml");
         }
 
-        public getStatisticByDate()
-        {
+        //public getStatisticByDate()
+        //{
 
-        }
+        //}
     }
 }
