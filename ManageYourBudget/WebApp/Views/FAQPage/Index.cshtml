@@ -10,6 +10,20 @@
         body{
             background-color: #D9D9D9;
         }
+
+        .faq-section p {
+            display: none;
+        }
+
+        .toggle-button {
+            cursor: pointer;
+            background-color: #007BFF;
+            color: #FFF;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -18,19 +32,34 @@
 
     <div class="faq-section">
         <h2>Чи будуть змінені цифрові значення моїх доходів та розходів після зміни валюти в налаштуваннях??</h2>
+        <button class="toggle-button" onclick="toggleVisibility(this)">Показати відповідь</button>
         <p>- Ні, цифрові значення автоматично не змінюються.</p>
     </div>
 
     <div class="faq-section">
         <h2>Чи можна створити декілька облікових записів використовуючи одну пошту?</h2>
+        <button class="toggle-button" onclick="toggleVisibility(this)">Показати відповідь</button>
         <p>- Ні, використовуючи одну пошту можна створити лише один обліковий запис.</p>
     </div>
 
     <div class="faq-section">
         <h2>Чи можна завантажити імпортувати дані у система?</h2>
+        <button class="toggle-button" onclick="toggleVisibility(this)">Показати відповідь</button>
         <p>- На даний момент не можна, наша команда працює над реалізацією цієї функції.</p>
     </div>
-
+    <script>
+        function toggleVisibility(button) {
+            var paragraph = button.nextElementSibling; // Отримати наступний елемент, який є <p>
+            if (paragraph.style.display === 'none' || paragraph.style.display === '') {
+                paragraph.style.display = 'block'; // Показати <p> блок
+                button.textContent = 'Приховати відповідь';
+            } else {
+                paragraph.style.display = 'none'; // Сховати <p> блок
+                button.textContent = 'Показати відповідь';
+            }
+        }
+    </script>
 
 </body>
+
 </html>

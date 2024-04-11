@@ -9,7 +9,7 @@ namespace Application.Interfaces
 
         Task<ServiceResult> AddSavingsAsync(CreateSavingsDTO model);
 
-        Task<ServiceResult> RemoveSavingsAsync(int categoryId);
+        Task<ServiceResult> RemoveSavingsAsync(int savingsId);
 
         Task<ServiceResult> EditSavingsAsync(EditSavingsDTO model);
     }
