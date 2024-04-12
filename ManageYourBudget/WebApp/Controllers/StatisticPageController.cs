@@ -1,9 +1,5 @@
 ﻿using Application.Interfaces;
-using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Threading.Tasks;
 using WebApp.Models;
 
 namespace WebApp.Controllers
@@ -47,7 +43,6 @@ namespace WebApp.Controllers
                     statistics.Add(model);
                 }
 
-
                 return View("~/Views/StatisticPage/Index.cshtml", statistics);
             }
             catch (Exception ex)
@@ -62,19 +57,16 @@ namespace WebApp.Controllers
         {
             try
             {
-                // Assuming 'category' is used to filter statistics (e.g., expenses by category)
-                // You can adjust this logic based on your application's requirements
-
                 var statistics = await _statisticService.GetAllData(startDate, endDate, 1); // Replace '1' with actual userId
 
                 // Initialize the list to hold multiple StatisticViewModel instances
                 List<StatisticViewModel> viewModelList = new List<StatisticViewModel>();
 
-                for (int i = 0; i < statistics.ExpensesStatistics.Count; i++)
+                for (int i = 0; i < statistics?.ExpensesStatistics?.Count; i++)
                 {
-                    var income = statistics.IncomeStatistics[i];
-                    var expense = statistics.ExpensesStatistics[i];
-                    var saving = statistics.SavingsStatistics[i];
+                    var income = statistics?.IncomeStatistics?[i];
+                    var expense = statistics?.ExpensesStatistics?[i];
+                    var saving = statistics?.SavingsStatistics?[i];
 
                     var model = new StatisticViewModel
                     {
@@ -87,7 +79,7 @@ namespace WebApp.Controllers
                     viewModelList.Add(model);
                 }
 
-                return View("~/Views/StatisticPage/Index.cshtml", viewModelList); // Pass view models to the view
+                return View("~/Views/StatisticPage/Index.cshtml", viewModelList);
             }
             catch (Exception ex)
             {

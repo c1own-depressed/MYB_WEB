@@ -4,31 +4,14 @@ using Application.Interfaces;
 using Application.Utils;
 using Domain.Entities;
 using Domain.Interfaces;
-using System.Text.RegularExpressions;
-
 
 namespace Application.Services
 {
     public class StatisticService : IStatisticService
-
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        private bool IsIncomeRelevantForMonth(Income income, DateTime month)
-        {
-            if (income.IsRegular)
-            {
-                // Regular income is relevant for the specified month
-                return true;
-            }
-            else
-            {
-                // One-time income is relevant if its date falls within the specified month
-                return income.Date.Year == month.Year && income.Date.Month == month.Month;
-            }
-        }
-
-        public async Task<IEnumerable<IncomeStatisticDTO>> getIncomesByDate(DateTime startDate, DateTime endDate, int userId)
+        public async Task<IEnumerable<IncomeStatisticDTO>> GetIncomesByDate(DateTime startDate, DateTime endDate, int userId)
         {
             var user = await this._unitOfWork.Users.GetByIdAsync(userId);
             var incomes = await this._unitOfWork.Incomes.GetIncomesByUserIdAsync(userId);
@@ -36,7 +19,7 @@ namespace Application.Services
             string currencyRepresentation = CurrencyUtils.FormatCurrencyDisplay(user.Currency);
 
             // Generate all months within the date range
-            var months = Enumerable.Range(0, (endDate.Year - startDate.Year) * 12 + (endDate.Month - startDate.Month) + 1)
+            var months = Enumerable.Range(0, ((endDate.Year - startDate.Year) * 12) + (endDate.Month - startDate.Month) + 1)
                 .Select(offset => new DateTime(startDate.Year, startDate.Month, 1).AddMonths(offset))
                 .ToList();
 
@@ -57,7 +40,7 @@ namespace Application.Services
                             Amount = income.Amount,
                             CurrencyEmblem = currencyRepresentation,
                             Date = month, // Use the current month for this income
-                            IsRegular = income.IsRegular
+                            IsRegular = income.IsRegular,
                         });
                     }
                 }
@@ -69,42 +52,12 @@ namespace Application.Services
                 .Select(group => new IncomeStatisticDTO
                 {
                     Month = new DateTime(group.Key.Year, group.Key.Month, 1),
-                    TotalAmount = group.Sum(income => income.Amount)
+                    TotalAmount = group.Sum(income => income.Amount),
                 })
                 .OrderBy(dto => dto.Month);
 
             return incomeByMonth;
         }
-
-        //public async Task<IEnumerable<IncomeStatisticDTO>> getIncomesByDate (DateTime startDate, DateTime endDate, int UserId)
-        //{
-        //    var user = await this._unitOfWork.Users.GetByIdAsync(UserId);
-        //    var incomes = await this._unitOfWork.Incomes.GetIncomesByUserIdAsync(UserId);
-
-        //    string currencyRepresentation = CurrencyUtils.FormatCurrencyDisplay(user.Currency);
-
-        //    var incomeDTOs = incomes
-        //        .Where(income => (income.Date >= startDate && income.Date <= endDate) || income.IsRegular)
-        //        .Select(income => new IncomeDTO
-        //        {
-        //            Id = income.Id,
-        //            IncomeName = income.IncomeName,
-        //            Amount = income.Amount,
-        //            CurrencyEmblem = currencyRepresentation,
-        //            Date = income.Date,
-        //            IsRegular = income.IsRegular,
-        //        });
-        //    incomeDTOs.GroupBy(x => x.Date.Month);
-        //    var incomeByMonth = incomeDTOs
-        //        .GroupBy(income => new { Year = income.Date.Year, Month = income.Date.Month })
-        //        .Select(group => new IncomeStatisticDTO
-        //        {
-        //            Month = new DateTime(group.Key.Year, group.Key.Month, 1),
-        //            TotalAmount = group.Sum(income => income.Amount),
-        //        })
-        //        .OrderBy(dto => dto.Month);
-        //    return incomeByMonth;
-        //}
 
         public StatisticService(IUnitOfWork unitOfWork)
         {
@@ -151,28 +104,29 @@ namespace Application.Services
 
         public async Task<IEnumerable<SavedStatisticDTO>> CountSaved(DateTime from, DateTime to, int userId)
         {
-            var incomes = await getIncomesByDate(from, to, userId);
+            var incomes = await GetIncomesByDate(from, to, userId);
 
             var expenses = await GetTotalExpensesByDate(from, to, userId);
 
             var savings = new List<SavedStatisticDTO>();
 
-            var combinedData = incomes.Join(expenses,
-                                            income => income.Month,
-                                            expense => expense.Month,
-                                            (income, expense) => new
-                                            {
-                                                Month = income.Month,
-                                                IncomeAmount = income.TotalAmount,
-                                                ExpenseAmount = expense.TotalAmount
-                                            });
+            var combinedData = incomes.Join(
+                expenses,
+                income => income.Month,
+                expense => expense.Month,
+                (income, expense) => new
+                {
+                    Month = income.Month,
+                    IncomeAmount = income.TotalAmount,
+                    ExpenseAmount = expense.TotalAmount,
+                });
 
             foreach (var data in combinedData)
             {
                 var savedAmount = new SavedStatisticDTO
                 {
                     Month = data.Month,
-                    TotalAmount = data.IncomeAmount - data.ExpenseAmount
+                    TotalAmount = data.IncomeAmount - data.ExpenseAmount,
                 };
                 savings.Add(savedAmount);
             }
@@ -185,7 +139,7 @@ namespace Application.Services
             try
             {
                 // Retrieve income statistics
-                var incomeStatistics = await getIncomesByDate(startDate, endDate, userId);
+                var incomeStatistics = await GetIncomesByDate(startDate, endDate, userId);
 
                 // Retrieve total expenses statistics
                 var expensesStatistics = await GetTotalExpensesByDate(startDate, endDate, userId);
@@ -198,7 +152,7 @@ namespace Application.Services
                 {
                     IncomeStatistics = incomeStatistics.ToList(),
                     ExpensesStatistics = expensesStatistics.ToList(),
-                    SavingsStatistics = savingsStatistics.ToList()
+                    SavingsStatistics = savingsStatistics.ToList(),
                 };
 
                 return allData;
@@ -208,6 +162,20 @@ namespace Application.Services
                 // Handle exceptions or log errors
                 Console.WriteLine($"Error retrieving all statistics: {ex.Message}");
                 throw; // Re-throw exception or return default value as needed
+            }
+        }
+
+        private bool IsIncomeRelevantForMonth(Income income, DateTime month)
+        {
+            if (income.IsRegular)
+            {
+                // Regular income is relevant for the specified month
+                return true;
+            }
+            else
+            {
+                // One-time income is relevant if its date falls within the specified month
+                return income.Date.Year == month.Year && income.Date.Month == month.Month;
             }
         }
     }
