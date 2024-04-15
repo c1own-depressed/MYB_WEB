@@ -11,5 +11,7 @@
         public DateTime Date { get; set; }
 
         public int CategoryId { get; set; }
+        public DateTime Month { get; set; }
+        public int TotalAmount { get; set; }
     }
 }
