@@ -56,7 +56,6 @@ namespace Application.Services
             return expenseDTOs;
         }
 
-
         public async Task<ServiceResult> EditExpenseAsync(EditExpenseDTO model)
         {
             var validator = new EditExpenseDTOValidator();
