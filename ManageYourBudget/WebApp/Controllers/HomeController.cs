@@ -1,9 +1,11 @@
 using System.Diagnostics;
+using System.Security.Claims;
 using Application.DTOs.ExpenseDTOs;
 using Application.DTOs.IncomeDTOs;
 using Application.DTOs.SavingsDTOs;
 using Application.Interfaces;
 using Application.Utils;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 
@@ -16,27 +18,30 @@ namespace WebApp.Controllers
         private readonly IIncomeService _incomeService;
         private readonly ISavingsService _savingsService;
         private readonly IExpenseService _expenseService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private string _userId;
 
         public HomeController(
             ILogger<HomeController> logger,
             IExpenseCategoryService expenseCategoryService,
             IIncomeService incomeService,
             ISavingsService savingsService,
-            IExpenseService expenseService)
+            IExpenseService expenseService, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _expenseCategoryService = expenseCategoryService;
             _incomeService = incomeService;
             _savingsService = savingsService;
             _expenseService = expenseService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IActionResult> Index()
         {
-            string userId = Guid.NewGuid().ToString();
-            var categories = await _expenseCategoryService.GetExpenseCategoriesByUserIdAsync(userId);
-            var incomes = await _incomeService.GetIncomesByUserIdAsync(userId);
-            var savings = await _savingsService.GetSavingsByUserIdAsync(userId);
+            _userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var categories = await _expenseCategoryService.GetExpenseCategoriesByUserIdAsync(_userId);
+            var incomes = await _incomeService.GetIncomesByUserIdAsync(_userId);
+            var savings = await _savingsService.GetSavingsByUserIdAsync(_userId);
             var model = new HomeViewModel
             {
                 Categories = categories,
@@ -62,7 +67,6 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddExpenseCategory([FromBody] CreateExpenseCategoryDTO model)
         {
-            string userId = "88888888-8888-8888-8888-888888888888";
 
             if (!ModelState.IsValid)
             {
@@ -70,7 +74,7 @@ namespace WebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            ServiceResult serviceResult = await _expenseCategoryService.AddExpenseCategoryAsync(model, userId);
+            ServiceResult serviceResult = await _expenseCategoryService.AddExpenseCategoryAsync(model, _userId);
 
             if (serviceResult.Success)
             {
@@ -130,14 +134,13 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddIncome([FromBody] IncomeDTO model)
         {
-            string userId = "88888888-8888-8888-8888-888888888888";
 
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            ServiceResult serviceResult = await _incomeService.AddIncomeAsync(model, userId);
+            ServiceResult serviceResult = await _incomeService.AddIncomeAsync(model, _userId);
 
             if (serviceResult.Success)
             {
@@ -155,7 +158,6 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddSavings([FromBody] CreateSavingsDTO model)
         {
-            string userId = "88888888-8888-8888-8888-888888888888";
 
             if (!ModelState.IsValid)
             {
@@ -163,7 +165,7 @@ namespace WebApp.Controllers
                 return BadRequest(ModelState);
             }
 
-            ServiceResult serviceResult = await _savingsService.AddSavingsAsync(model, userId);
+            ServiceResult serviceResult = await _savingsService.AddSavingsAsync(model, _userId);
 
             if (serviceResult.Success)
             {

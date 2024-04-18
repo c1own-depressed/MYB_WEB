@@ -1,5 +1,6 @@
 ﻿using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using WebApp.Models;
 
 namespace WebApp.Controllers
@@ -8,21 +9,25 @@ namespace WebApp.Controllers
     {
         private readonly ILogger<StatisticPageController> _logger;
         private readonly IStatisticService _statisticService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private string _userId;
 
-        public StatisticPageController(ILogger<StatisticPageController> logger, IStatisticService statisticService)
+        public StatisticPageController(ILogger<StatisticPageController> logger, IStatisticService statisticService, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _statisticService = statisticService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IActionResult> Index()
         {
+            string aspNetCoreCookiesValue = _httpContextAccessor.HttpContext.Request.Cookies[".AspNetCore.Cookies"];
             try
             {
                 _logger.LogInformation("User accessed StatisticPage.");
 
-                string userId = "88888888-8888-8888-8888-888888888888";  // Guid.NewGuid().ToString();
-                var defaultStatistics = await _statisticService.GetAllData(DateTime.Now.AddMonths(-1), DateTime.Now, userId);
+                _userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var defaultStatistics = await _statisticService.GetAllData(DateTime.Now.AddMonths(-1), DateTime.Now, _userId);
 
                 // Initialize the list to hold multiple StatisticViewModel instances
                 List<StatisticViewModel> statistics = new List<StatisticViewModel>();
@@ -73,8 +78,7 @@ namespace WebApp.Controllers
         {
             try
             {
-                string userId = "88888888-8888-8888-8888-888888888888";  // Guid.NewGuid().ToString();
-                var statistics = await _statisticService.GetAllData(startDate, endDate, userId); // Replace '1' with actual userId
+                var statistics = await _statisticService.GetAllData(startDate, endDate, _userId); // Replace '1' with actual userId
 
                 // Initialize the list to hold multiple StatisticViewModel instances
                 List<StatisticViewModel> viewModelList = new List<StatisticViewModel>();

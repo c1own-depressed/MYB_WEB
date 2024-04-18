@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Security.Claims;
 using Application.DTOs;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -13,15 +14,20 @@ namespace WebApp.Controllers
         private string? selectedLanguage;
         private bool selectedTheme;
         private string? selectedCurrency;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private string _userId;
 
-        public SettingsPageController(ILogger<SettingsPageController> logger, ISettingsService settingsService)
+        public SettingsPageController(ILogger<SettingsPageController> logger, ISettingsService settingsService, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _settingsService = settingsService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IActionResult> Index()
         {
+            _userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
             string userId = Guid.NewGuid().ToString();
             try
             {
@@ -66,7 +72,7 @@ namespace WebApp.Controllers
                 this.selectedTheme = model.IsLightTheme;
                 this.selectedCurrency = model.Currency;
 
-                string id = "88888888-8888-8888-8888-888888888888";  // Guid.NewGuid().ToString();
+                string id = _userId;
                 SettingsDTO settingsDTO = new SettingsDTO
                 {
                     Id = id,
