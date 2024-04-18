@@ -2,11 +2,14 @@
 using Application.Interfaces;
 using Azure.Core;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using System.Net;
 using System.Net.Mail;
+using System.Security.Claims;
 
 namespace Persistence.AuthService
 {
@@ -50,20 +53,39 @@ namespace Persistence.AuthService
 
             if (user == null)
             {
-                return null;
+                return null; // User not found
             }
 
             var result = await _userManager.CheckPasswordAsync(user, userLoginDTO.Password);
 
             if (!result)
             {
-                return null;
+                return null; // Invalid password
             }
 
-            //if (!await _userManager.IsEmailConfirmedAsync(user))
-            //{
-            //    return null;
-            //}
+            // Create claims for the authenticated user
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+            };
+
+            // Create authentication properties
+            var authProperties = new AuthenticationProperties
+            {
+                IsPersistent = true, // Persist the cookie across browser sessions
+                ExpiresUtc = DateTimeOffset.UtcNow.AddDays(7) // Cookie expiration time
+            };
+
+            // Create the principal
+            var userIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Sign in the user
+            await _httpContextAccessor.HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(userIdentity),
+                authProperties);
+
+            // Return the authenticated user
             return user;
         }
 
