@@ -1,6 +1,7 @@
 ﻿using Application.DTOs.AccountDTOs;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Persistence.AuthService;
 using WebApp.Models;
 
 namespace WebApp.Controllers
@@ -20,6 +21,37 @@ namespace WebApp.Controllers
         public IActionResult Register()
         {
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var userLoginDTO = new UserLoginDTO
+                {
+                    Email = model.Email,
+                    Password = model.Password,
+                };
+
+                var result = await _authService.AuthenticateUserAsync(userLoginDTO);
+
+                if (result != null)
+                {
+                    _logger.LogInformation("User logged in successfully.");
+                    return RedirectToAction("Index", "Home");
+                }
+
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+            }
+
+            return View(model);
         }
 
         [HttpPost]

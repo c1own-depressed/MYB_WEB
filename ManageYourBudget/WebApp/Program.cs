@@ -16,7 +16,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
     .WriteTo.Seq("http://localhost:5341"));
 
-var connectionString = builder.Configuration.GetConnectionString("RomanConnection");
+var connectionString = builder.Configuration.GetConnectionString("AndriyConnection");
 
 if (connectionString != null)
 {
@@ -122,6 +122,11 @@ app.MapControllerRoute(
     name: "signup",
     pattern: "signup",
     defaults: new { controller = "Account", action = "Register" });
+
+app.MapControllerRoute(
+    name: "login",
+    pattern: "login",
+    defaults: new { controller = "Account", action = "Login" });
 
 // TODO: after the application is deployed
 // app.UseCors(options => options.WithOrigins("https://example.com")); // Adjust accordingly

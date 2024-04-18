@@ -44,6 +44,29 @@ namespace Persistence.AuthService
             return result;
         }
 
+        public async Task<User> AuthenticateUserAsync(UserLoginDTO userLoginDTO)
+        {
+            var user = await _userManager.FindByEmailAsync(userLoginDTO.Email);
+
+            if (user == null)
+            {
+                return null;
+            }
+
+            var result = await _userManager.CheckPasswordAsync(user, userLoginDTO.Password);
+
+            if (!result)
+            {
+                return null;
+            }
+
+            //if (!await _userManager.IsEmailConfirmedAsync(user))
+            //{
+            //    return null;
+            //}
+            return user;
+        }
+
         public async Task SendEmailConfirmationAsync(User user)
         {
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
