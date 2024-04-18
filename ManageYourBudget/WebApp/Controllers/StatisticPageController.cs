@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
 using WebApp.Models;
@@ -10,7 +11,7 @@ namespace WebApp.Controllers
         private readonly ILogger<StatisticPageController> _logger;
         private readonly IStatisticService _statisticService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private string _userId;
+
 
         public StatisticPageController(ILogger<StatisticPageController> logger, IStatisticService statisticService, IHttpContextAccessor httpContextAccessor)
         {
@@ -26,8 +27,8 @@ namespace WebApp.Controllers
             {
                 _logger.LogInformation("User accessed StatisticPage.");
 
-                _userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                var defaultStatistics = await _statisticService.GetAllData(DateTime.Now.AddMonths(-1), DateTime.Now, _userId);
+                string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var defaultStatistics = await _statisticService.GetAllData(DateTime.Now.AddMonths(-1), DateTime.Now, userId);
 
                 // Initialize the list to hold multiple StatisticViewModel instances
                 List<StatisticViewModel> statistics = new List<StatisticViewModel>();
@@ -78,7 +79,8 @@ namespace WebApp.Controllers
         {
             try
             {
-                var statistics = await _statisticService.GetAllData(startDate, endDate, _userId); // Replace '1' with actual userId
+                string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var statistics = await _statisticService.GetAllData(startDate, endDate, userId); // Replace '1' with actual userId
 
                 // Initialize the list to hold multiple StatisticViewModel instances
                 List<StatisticViewModel> viewModelList = new List<StatisticViewModel>();

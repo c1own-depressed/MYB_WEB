@@ -15,7 +15,6 @@ namespace WebApp.Controllers
         private bool selectedTheme;
         private string? selectedCurrency;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private string _userId;
 
         public SettingsPageController(ILogger<SettingsPageController> logger, ISettingsService settingsService, IHttpContextAccessor httpContextAccessor)
         {
@@ -26,9 +25,7 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            _userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            string userId = Guid.NewGuid().ToString();
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             try
             {
                 var userSettings = await _settingsService.GetUserSettingsAsync(userId);
@@ -68,11 +65,12 @@ namespace WebApp.Controllers
         {
             try
             {
+                string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 this.selectedLanguage = model.Language;
                 this.selectedTheme = model.IsLightTheme;
                 this.selectedCurrency = model.Currency;
 
-                string id = _userId;
+                string id = userId;
                 SettingsDTO settingsDTO = new SettingsDTO
                 {
                     Id = id,

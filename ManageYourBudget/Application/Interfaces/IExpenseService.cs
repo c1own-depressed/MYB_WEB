@@ -9,7 +9,7 @@ namespace Application.Interfaces
     {
         Task<IEnumerable<ExpenseDTO>> GetExpensesByCategoryIdAsync(string categoryId);
 
-        Task<ServiceResult> AddExpenseAsync(ExpenseDTO expense);
+        Task<ServiceResult> AddExpenseAsync(CreateExpenseDTO expense);
 
         Task<ServiceResult> RemoveExpenseAsync(string expenseId);
 

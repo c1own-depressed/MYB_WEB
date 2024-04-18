@@ -19,14 +19,14 @@ namespace WebApp.Controllers
         private readonly ISavingsService _savingsService;
         private readonly IExpenseService _expenseService;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private string _userId;
 
         public HomeController(
             ILogger<HomeController> logger,
             IExpenseCategoryService expenseCategoryService,
             IIncomeService incomeService,
             ISavingsService savingsService,
-            IExpenseService expenseService, IHttpContextAccessor httpContextAccessor)
+            IExpenseService expenseService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _expenseCategoryService = expenseCategoryService;
@@ -38,10 +38,10 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            _userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var categories = await _expenseCategoryService.GetExpenseCategoriesByUserIdAsync(_userId);
-            var incomes = await _incomeService.GetIncomesByUserIdAsync(_userId);
-            var savings = await _savingsService.GetSavingsByUserIdAsync(_userId);
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var categories = await _expenseCategoryService.GetExpenseCategoriesByUserIdAsync(userId);
+            var incomes = await _incomeService.GetIncomesByUserIdAsync(userId);
+            var savings = await _savingsService.GetSavingsByUserIdAsync(userId);
             var model = new HomeViewModel
             {
                 Categories = categories,
@@ -67,14 +67,14 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddExpenseCategory([FromBody] CreateExpenseCategoryDTO model)
         {
-
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!ModelState.IsValid)
             {
                 _logger.LogError("Invalid model state for AddExpenseCategory");
                 return BadRequest(ModelState);
             }
 
-            ServiceResult serviceResult = await _expenseCategoryService.AddExpenseCategoryAsync(model, _userId);
+            ServiceResult serviceResult = await _expenseCategoryService.AddExpenseCategoryAsync(model, userId);
 
             if (serviceResult.Success)
             {
@@ -132,15 +132,14 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddIncome([FromBody] IncomeDTO model)
+        public async Task<IActionResult> AddIncome([FromBody] CreateIncomeDTO model)
         {
-
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            ServiceResult serviceResult = await _incomeService.AddIncomeAsync(model, _userId);
+            ServiceResult serviceResult = await _incomeService.AddIncomeAsync(model, userId);
 
             if (serviceResult.Success)
             {
@@ -158,14 +157,13 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddSavings([FromBody] CreateSavingsDTO model)
         {
-
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!ModelState.IsValid)
             {
-                _logger.LogError("Invalid model state for AddSavings");
                 return BadRequest(ModelState);
             }
 
-            ServiceResult serviceResult = await _savingsService.AddSavingsAsync(model, _userId);
+            ServiceResult serviceResult = await _savingsService.AddSavingsAsync(model, userId);
 
             if (serviceResult.Success)
             {
@@ -263,7 +261,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddExpense([FromBody] ExpenseDTO model) // Add Expense action
+        public async Task<IActionResult> AddExpense([FromBody] CreateExpenseDTO model) // Add Expense action
         {
             if (!ModelState.IsValid)
             {

@@ -16,9 +16,9 @@ namespace Application.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ServiceResult> AddExpenseAsync(ExpenseDTO model)
+        public async Task<ServiceResult> AddExpenseAsync(CreateExpenseDTO model)
         {
-            var validator = new ExpenseDTOValidator();
+            var validator = new CreateExpenseDTOValidator();
             var validationResult = validator.Validate(model);
 
             if (!validationResult.IsValid)

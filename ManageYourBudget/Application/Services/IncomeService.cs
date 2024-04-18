@@ -16,9 +16,9 @@ namespace Application.Services
             this._unitOfWork = unitOfWork;
         }
 
-        public async Task<ServiceResult> AddIncomeAsync(IncomeDTO model, string userId)
+        public async Task<ServiceResult> AddIncomeAsync(CreateIncomeDTO model, string userId)
         {
-            var validator = new IncomeDTOValidator();
+            var validator = new CreateIncomeDTOValidator();
             var validationResult = validator.Validate(model);
 
             if (!validationResult.IsValid)
