@@ -13,13 +13,14 @@ namespace Application.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<SettingsDTO> GetUserSettingsAsync(int userId)
+        public async Task<SettingsDTO> GetUserSettingsAsync(string userId)
         {
             var userFromDb = await this._unitOfWork.Users.GetByIdAsync(userId);
             if (userFromDb != null)
             {
                 SettingsDTO dto = new SettingsDTO
                 {
+                    Id = userFromDb.Id,
                     Currency = userFromDb.Currency,
                     IsLightTheme = userFromDb.IsLightTheme,
                     Language = userFromDb.Language,
@@ -55,11 +56,13 @@ namespace Application.Services
             }
         }
 
+        // TODO: shouldn't be used
         private SettingsDTO GetDefaultSettings()
         {
             // Initialize with default values
             return new SettingsDTO
             {
+                Id = string.Empty,
                 Currency = "USD",
                 IsLightTheme = true,
                 Language = "English",

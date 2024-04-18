@@ -18,7 +18,7 @@ namespace Application.Services
             _expenseService = expenseService;
         }
 
-        public async Task<IEnumerable<ExpenseCategoryDTO>> GetExpenseCategoriesByUserIdAsync(int userId)
+        public async Task<IEnumerable<ExpenseCategoryDTO>> GetExpenseCategoriesByUserIdAsync(string userId)
         {
             var expenseCategories = _unitOfWork.ExpenseCategories.GetExpenseCategoriesByUserId(userId);
             var expenseCategoryDTOs = new List<ExpenseCategoryDTO>();
@@ -42,7 +42,7 @@ namespace Application.Services
             return expenseCategoryDTOs;
         }
 
-        public async Task<ServiceResult> AddExpenseCategoryAsync(CreateExpenseCategoryDTO model)
+        public async Task<ServiceResult> AddExpenseCategoryAsync(CreateExpenseCategoryDTO model, string userId)
         {
             var validator = new CreateExpenseCategoryDTOValidator();
             var validationResult = validator.Validate(model);
@@ -54,7 +54,8 @@ namespace Application.Services
 
             var expenseCategory = new ExpenseCategory
             {
-                UserId = 1, // TODO: Use actual user ID from session or request
+                Id = Guid.NewGuid().ToString(),
+                UserId = userId,
                 CategoryName = model.Title,
                 Amount = model.PlannedBudget,
             };
@@ -65,7 +66,7 @@ namespace Application.Services
             return new ServiceResult(success: true);
         }
 
-        public async Task<ServiceResult> RemoveExpenseCategoryAsync(int categoryId)
+        public async Task<ServiceResult> RemoveExpenseCategoryAsync(string categoryId)
         {
             var categoryToRemove = await _unitOfWork.ExpenseCategories.GetByIdAsync(categoryId);
 

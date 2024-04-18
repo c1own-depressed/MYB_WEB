@@ -2,7 +2,7 @@
 {
     public class Expense
     {
-        public int Id { get; set; }
+        required public string Id { get; set; }
 
         public string ExpenseName { get; set; } = string.Empty;
 
@@ -10,6 +10,6 @@
 
         public DateTime Date { get; set; }
 
-        public int CategoryId { get; set; }
+        required public string CategoryId { get; set; }
     }
 }

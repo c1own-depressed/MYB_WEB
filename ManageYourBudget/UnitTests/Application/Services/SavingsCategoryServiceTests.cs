@@ -23,9 +23,10 @@ namespace UnitTests.Application.Services
         {
             // Arrange
             var dto = new CreateSavingsDTO { SavingsName = "Negative Savings", Amount = -100 };
+            string userId = Guid.NewGuid().ToString();
 
             // Act
-            var serviceResult = await _service.AddSavingsAsync(dto);
+            var serviceResult = await _service.AddSavingsAsync(dto, userId);
 
             // Assert
             serviceResult.Should().NotBeNull();
@@ -38,9 +39,10 @@ namespace UnitTests.Application.Services
         {
             // Arrange
             var dto = new CreateSavingsDTO { SavingsName = "Zero Savings", Amount = 0 };
+            string userId = Guid.NewGuid().ToString();
 
             // Act
-            var serviceResult = await _service.AddSavingsAsync(dto);
+            var serviceResult = await _service.AddSavingsAsync(dto, userId);
 
             // Assert
             serviceResult.Should().NotBeNull();
@@ -56,9 +58,10 @@ namespace UnitTests.Application.Services
 
             _mockUnitOfWork.Setup(u => u.Savings.AddAsync(It.IsAny<Savings>()))
                            .Returns(Task.CompletedTask); // Simulate saving successfully
+            string userId = Guid.NewGuid().ToString();
 
             // Act
-            var serviceResult = await _service.AddSavingsAsync(dto);
+            var serviceResult = await _service.AddSavingsAsync(dto, userId);
 
             // Assert
             serviceResult.Should().NotBeNull();
@@ -70,8 +73,8 @@ namespace UnitTests.Application.Services
         public async Task RemoveSavingsAsync_ExistingSavings_RemovesSavings()
         {
             // Arrange
-            int savingsId = 1;
-            var savingsToRemove = new Savings { Id = savingsId };
+            string savingsId = Guid.NewGuid().ToString();
+            var savingsToRemove = new Savings { Id = savingsId, UserId = Guid.NewGuid().ToString() };
 
             _mockUnitOfWork.Setup(u => u.Savings.GetByIdAsync(savingsId))
                            .ReturnsAsync(savingsToRemove);
@@ -92,7 +95,7 @@ namespace UnitTests.Application.Services
         public async Task RemoveSavingsAsync_NonExistingSavings_ReturnsError()
         {
             // Arrange
-            int savingsId = 1;
+            string savingsId = Guid.NewGuid().ToString();
 
             _mockUnitOfWork.Setup(u => u.Savings.GetByIdAsync(savingsId))
                            .ReturnsAsync((Savings)null);
@@ -113,9 +116,9 @@ namespace UnitTests.Application.Services
         public async Task EditSavingsAsync_WithValidData_ReturnsSuccess()
         {
             // Arrange
-            int savingsId = 1;
+            string savingsId = Guid.NewGuid().ToString();
             var dto = new EditSavingsDTO { Id = savingsId, SavingsName = "Edited Savings", Amount = 1000 };
-            var savings = new Savings { Id = savingsId, SavingsName = "Original Savings", Amount = 500 };
+            var savings = new Savings { Id = savingsId, SavingsName = "Original Savings", Amount = 500, UserId = Guid.NewGuid().ToString() };
 
             _mockUnitOfWork.Setup(u => u.Savings.GetByIdAsync(savingsId))
                            .ReturnsAsync(savings);
@@ -137,7 +140,7 @@ namespace UnitTests.Application.Services
         public async Task EditSavingsAsync_NonExistingSavings_ReturnsError()
         {
             // Arrange
-            int savingsId = 1;
+            string savingsId = Guid.NewGuid().ToString();
             var dto = new EditSavingsDTO { Id = savingsId, SavingsName = "Edited Savings", Amount = 1000 };
 
             _mockUnitOfWork.Setup(u => u.Savings.GetByIdAsync(savingsId))

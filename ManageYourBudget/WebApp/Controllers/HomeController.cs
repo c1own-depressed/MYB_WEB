@@ -33,7 +33,7 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var userId = 1;
+            string userId = Guid.NewGuid().ToString();
             var categories = await _expenseCategoryService.GetExpenseCategoriesByUserIdAsync(userId);
             var incomes = await _incomeService.GetIncomesByUserIdAsync(userId);
             var savings = await _savingsService.GetSavingsByUserIdAsync(userId);
@@ -62,13 +62,15 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddExpenseCategory([FromBody] CreateExpenseCategoryDTO model)
         {
+            string userId = "88888888-8888-8888-8888-888888888888";
+
             if (!ModelState.IsValid)
             {
                 _logger.LogError("Invalid model state for AddExpenseCategory");
                 return BadRequest(ModelState);
             }
 
-            ServiceResult serviceResult = await _expenseCategoryService.AddExpenseCategoryAsync(model);
+            ServiceResult serviceResult = await _expenseCategoryService.AddExpenseCategoryAsync(model, userId);
 
             if (serviceResult.Success)
             {
@@ -84,7 +86,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveExpenseCategory(int categoryId)
+        public async Task<IActionResult> RemoveExpenseCategory(string categoryId)
         {
             ServiceResult serviceResult = await _expenseCategoryService.RemoveExpenseCategoryAsync(categoryId);
 
@@ -128,12 +130,14 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddIncome([FromBody] IncomeDTO model)
         {
+            string userId = "88888888-8888-8888-8888-888888888888";
+
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
 
-            ServiceResult serviceResult = await _incomeService.AddIncomeAsync(model);
+            ServiceResult serviceResult = await _incomeService.AddIncomeAsync(model, userId);
 
             if (serviceResult.Success)
             {
@@ -151,13 +155,15 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddSavings([FromBody] CreateSavingsDTO model)
         {
+            string userId = "88888888-8888-8888-8888-888888888888";
+
             if (!ModelState.IsValid)
             {
                 _logger.LogError("Invalid model state for AddSavings");
                 return BadRequest(ModelState);
             }
 
-            ServiceResult serviceResult = await _savingsService.AddSavingsAsync(model);
+            ServiceResult serviceResult = await _savingsService.AddSavingsAsync(model, userId);
 
             if (serviceResult.Success)
             {
@@ -173,7 +179,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveSavings(int savingsId)
+        public async Task<IActionResult> RemoveSavings(string savingsId)
         {
             ServiceResult serviceResult = await _savingsService.RemoveSavingsAsync(savingsId);
 
@@ -237,7 +243,7 @@ namespace WebApp.Controllers
             }
         }
 
-        public async Task<IActionResult> RemoveIncome(int incomeId)
+        public async Task<IActionResult> RemoveIncome(string incomeId)
         {
             ServiceResult serviceResult = await this._incomeService.RemoveIncomeAsync(incomeId);
 
@@ -278,7 +284,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveExpense(int expenseId) // Remove Expense action
+        public async Task<IActionResult> RemoveExpense(string expenseId) // Remove Expense action
         {
             ServiceResult serviceResult = await _expenseService.RemoveExpenseAsync(expenseId);
 

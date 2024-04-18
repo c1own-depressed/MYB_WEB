@@ -4,17 +4,14 @@ using Application.Interfaces;
 using Application.Utils;
 using Domain.Entities;
 using Domain.Interfaces;
-using System.Text.RegularExpressions;
-
 
 namespace Application.Services
 {
     public class StatisticService : IStatisticService
-
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public async Task<IEnumerable<IncomeStatisticDTO>> getIncomesByDate (DateTime startDate, DateTime endDate, int UserId)
+        public async Task<IEnumerable<IncomeStatisticDTO>> getIncomesByDate (DateTime startDate, DateTime endDate, string UserId)
         {
             var user = await this._unitOfWork.Users.GetByIdAsync(UserId);
             var incomes = await this._unitOfWork.Incomes.GetIncomesByUserIdAsync(UserId);
@@ -49,7 +46,7 @@ namespace Application.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<TotalExpensesDTO>> GetTotalExpensesByDate(DateTime from, DateTime to, int userId)
+        public async Task<IEnumerable<TotalExpensesDTO>> GetTotalExpensesByDate(DateTime from, DateTime to, string userId)
         {
             var categories = await _unitOfWork.ExpenseCategories.GetExpenseCategoriesByUserIdAsync(userId);
 
@@ -73,7 +70,8 @@ namespace Application.Services
 
             return groupedExpenses;
         }
-        public async Task<IEnumerable<SavedStatisticDTO>> CountSaved(DateTime from, DateTime to, int userId)
+
+        public async Task<IEnumerable<SavedStatisticDTO>> CountSaved(DateTime from, DateTime to, string userId)
         {
             var incomes = await getIncomesByDate(from, to, userId);
 
@@ -81,22 +79,23 @@ namespace Application.Services
 
             var savings = new List<SavedStatisticDTO>();
 
-            var combinedData = incomes.Join(expenses,
-                                            income => income.Month,
-                                            expense => expense.Month,
-                                            (income, expense) => new
-                                            {
-                                                Month = income.Month,
-                                                IncomeAmount = income.TotalAmount,
-                                                ExpenseAmount = expense.TotalAmount
-                                            });
+            var combinedData = incomes.Join(
+                expenses,
+                income => income.Month,
+                expense => expense.Month,
+                (income, expense) => new
+                {
+                    Month = income.Month,
+                    IncomeAmount = income.TotalAmount,
+                    ExpenseAmount = expense.TotalAmount,
+                });
 
             foreach (var data in combinedData)
             {
                 var savedAmount = new SavedStatisticDTO
                 {
                     Month = data.Month,
-                    TotalAmount = data.IncomeAmount - data.ExpenseAmount
+                    TotalAmount = data.IncomeAmount - data.ExpenseAmount,
                 };
                 savings.Add(savedAmount);
             }
@@ -104,7 +103,7 @@ namespace Application.Services
             return savings;
         }
 
-        public async Task<AllStatisticDataDTO> GetAllData(DateTime startDate, DateTime endDate, int userId)
+        public async Task<AllStatisticDataDTO> GetAllData(DateTime startDate, DateTime endDate, string userId)
         {
             try
             {
@@ -122,7 +121,7 @@ namespace Application.Services
                 {
                     IncomeStatistics = incomeStatistics.ToList(),
                     ExpensesStatistics = expensesStatistics.ToList(),
-                    SavingsStatistics = savingsStatistics.ToList()
+                    SavingsStatistics = savingsStatistics.ToList(),
                 };
 
                 return allData;
@@ -134,7 +133,5 @@ namespace Application.Services
                 throw; // Re-throw exception or return default value as needed
             }
         }
-
-
     }
 }

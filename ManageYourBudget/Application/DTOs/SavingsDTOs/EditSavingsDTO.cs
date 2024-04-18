@@ -2,7 +2,7 @@
 {
     public class EditSavingsDTO
     {
-        public int Id { get; set; }
+        required public string Id { get; set; }
 
         public string SavingsName { get; set; } = string.Empty;
 

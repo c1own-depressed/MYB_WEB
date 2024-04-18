@@ -5,11 +5,11 @@ namespace Application.Interfaces
 {
     public interface IIncomeService
     {
-        Task<IEnumerable<IncomeDTO>> GetIncomesByUserIdAsync(int userId);
+        Task<IEnumerable<IncomeDTO>> GetIncomesByUserIdAsync(string userId);
 
-        Task<ServiceResult> AddIncomeAsync(IncomeDTO income);
+        Task<ServiceResult> AddIncomeAsync(IncomeDTO income, string userId);
 
-        Task<ServiceResult> RemoveIncomeAsync(int incomeId);
+        Task<ServiceResult> RemoveIncomeAsync(string incomeId);
 
         Task<ServiceResult> EditIncomeAsync(EditIncomeDTO model);
     }

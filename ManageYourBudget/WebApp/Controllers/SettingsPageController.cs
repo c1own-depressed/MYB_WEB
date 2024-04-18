@@ -22,7 +22,7 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
-            int userId = 1;
+            string userId = Guid.NewGuid().ToString();
             try
             {
                 var userSettings = await _settingsService.GetUserSettingsAsync(userId);
@@ -66,14 +66,15 @@ namespace WebApp.Controllers
                 this.selectedTheme = model.IsLightTheme;
                 this.selectedCurrency = model.Currency;
 
+                string id = "88888888-8888-8888-8888-888888888888";  // Guid.NewGuid().ToString();
                 SettingsDTO settingsDTO = new SettingsDTO
                 {
+                    Id = id,
                     Language = this.selectedLanguage,
                     Currency = this.selectedCurrency,
                     IsLightTheme = this.selectedTheme,
                 };
 
-                settingsDTO.Id = 1;
                 await this._settingsService.SaveSettings(settingsDTO);
                 this._logger.LogInformation("User settings saved successfully.");
                 return this.RedirectToAction("Index");

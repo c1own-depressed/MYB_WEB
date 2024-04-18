@@ -1,8 +1,5 @@
 ﻿using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Threading.Tasks;
 using WebApp.Models;
 
 namespace WebApp.Controllers
@@ -24,8 +21,8 @@ namespace WebApp.Controllers
             {
                 _logger.LogInformation("User accessed StatisticPage.");
 
-                // Replace '1' with actual userId
-                var defaultStatistics = await _statisticService.GetAllData(DateTime.Now.AddMonths(-1), DateTime.Now, 1);
+                string userId = "88888888-8888-8888-8888-888888888888";  // Guid.NewGuid().ToString();
+                var defaultStatistics = await _statisticService.GetAllData(DateTime.Now.AddMonths(-1), DateTime.Now, userId);
 
                 // Initialize the list to hold multiple StatisticViewModel instances
                 List<StatisticViewModel> statistics = new List<StatisticViewModel>();
@@ -37,7 +34,6 @@ namespace WebApp.Controllers
                     {
                         Incomes = income.TotalAmount,
                         Date = income.Month,
-
                     };
 
                     statistics.Add(model);
@@ -47,7 +43,7 @@ namespace WebApp.Controllers
                 {
                     var model = new StatisticViewModel
                     {
-                        SummaryExpenses = expense.TotalAmount
+                        SummaryExpenses = expense.TotalAmount,
                     };
 
                     statistics.Add(model);
@@ -57,7 +53,7 @@ namespace WebApp.Controllers
                 {
                     var model = new StatisticViewModel
                     {
-                        Savings = savings.TotalAmount
+                        Savings = savings.TotalAmount,
                     };
 
                     statistics.Add(model);
@@ -77,10 +73,8 @@ namespace WebApp.Controllers
         {
             try
             {
-                // Assuming 'category' is used to filter statistics (e.g., expenses by category)
-                // You can adjust this logic based on your application's requirements
-
-                var statistics = await _statisticService.GetAllData(startDate, endDate, 1); // Replace '1' with actual userId
+                string userId = "88888888-8888-8888-8888-888888888888";  // Guid.NewGuid().ToString();
+                var statistics = await _statisticService.GetAllData(startDate, endDate, userId); // Replace '1' with actual userId
 
                 // Initialize the list to hold multiple StatisticViewModel instances
                 List<StatisticViewModel> viewModelList = new List<StatisticViewModel>();
@@ -90,7 +84,7 @@ namespace WebApp.Controllers
                 {
                     var model = new StatisticViewModel
                     {
-                        Incomes = income.TotalAmount
+                        Incomes = income.TotalAmount,
                     };
 
                     viewModelList.Add(model);
@@ -100,7 +94,7 @@ namespace WebApp.Controllers
                 {
                     var model = new StatisticViewModel
                     {
-                        SummaryExpenses = expense.TotalAmount
+                        SummaryExpenses = expense.TotalAmount,
                     };
 
                     viewModelList.Add(model);
@@ -110,7 +104,7 @@ namespace WebApp.Controllers
                 {
                     var model = new StatisticViewModel
                     {
-                        Savings = saving.TotalAmount
+                        Savings = saving.TotalAmount,
                     };
 
                     viewModelList.Add(model);
