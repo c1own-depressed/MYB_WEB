@@ -38,7 +38,7 @@ namespace WebApp.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User registered successfully.");
-                    return RedirectToAction("index", "home");
+                    return RedirectToAction("checkemail");
                 }
 
                 foreach (var error in result.Errors)
@@ -48,6 +48,16 @@ namespace WebApp.Controllers
             }
 
             return View(model);
+        }
+
+        public IActionResult CheckEmail()
+        {
+            return View();
+        }
+
+        public IActionResult ConfirmEmail()
+        {
+            return View();
         }
     }
 }

@@ -1,12 +1,12 @@
-﻿using Application.DTOs.AccountDTOs;
+﻿using System.Net;
+using System.Net.Mail;
+using Application.DTOs.AccountDTOs;
 using Application.Interfaces;
 using Azure.Core;
 using Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
-using System.Net;
-using System.Net.Mail;
 
 namespace Persistence.AuthService
 {
@@ -38,7 +38,7 @@ namespace Persistence.AuthService
             var result = await _userManager.CreateAsync(user, userRegistrationDTO.Password);
             if (result.Succeeded)
             {
-                //await SendEmailConfirmationAsync(user);
+                await SendEmailConfirmationAsync(user);
             }
 
             return result;
@@ -49,7 +49,9 @@ namespace Persistence.AuthService
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
             //var callbackUrl = $"https://yourdomain.com/account/confirmemail?userId={user.Id}&code={Uri.EscapeDataString(code)}";
             var callbackUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/account/confirmemail?userId={user.Id}&code={Uri.EscapeDataString(code)}";
-            await _emailSender.SendEmailAsync(user.Email, "Confirm your email",
+            //await _emailSender.SendEmailAsync(user.Email, "Confirm your email",
+            //    $"Please confirm your account by <a href='{callbackUrl}'>clicking here</a>.");
+            await SendEmailAsync(user.Email, "Confirm your email",
                 $"Please confirm your account by <a href='{callbackUrl}'>clicking here</a>.");
         }
 
@@ -58,18 +60,13 @@ namespace Persistence.AuthService
             try
             {
                 using (var mailMessage = new MailMessage())
-                using (var smtpClient = new SmtpClient("smtp.yourdomain.com", 587)) 
+                using (var smtpClient = new SmtpClient("localhost", 1025)) // Use MailHog's default port
                 {
-                    mailMessage.From = new MailAddress("noreply@myb.web", "MYB Web");
+                    mailMessage.From = new MailAddress("manageyourbudget@myb.com");
                     mailMessage.To.Add(new MailAddress(email));
                     mailMessage.Subject = subject;
-                    mailMessage.Body = htmlMessage;
                     mailMessage.IsBodyHtml = true;
-
-                    smtpClient.EnableSsl = true;
-                    smtpClient.UseDefaultCredentials = false;
-                    smtpClient.Credentials = new NetworkCredential("USERNAME", "PASSWORD"); // Get these from configuration
-                    smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    mailMessage.Body = htmlMessage;
 
                     await smtpClient.SendMailAsync(mailMessage);
                     return true;
@@ -77,8 +74,6 @@ namespace Persistence.AuthService
             }
             catch (Exception ex)
             {
-                // Log exception details here to understand what went wrong
-                // This is crucial for debugging and monitoring
                 return false;
             }
         }
