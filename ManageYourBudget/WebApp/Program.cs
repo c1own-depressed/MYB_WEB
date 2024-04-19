@@ -17,7 +17,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
     .WriteTo.Seq("http://localhost:5341"));
 
-var connectionString = builder.Configuration.GetConnectionString("RomanConnection");
+var connectionString = builder.Configuration.GetConnectionString("DimaConnection");
 
 if (connectionString != null)
 {
