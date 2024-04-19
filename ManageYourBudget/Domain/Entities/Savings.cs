@@ -2,7 +2,7 @@
 {
     public class Savings
     {
-        public int Id { get; set; }
+        required public string Id { get; set; }
 
         public string SavingsName { get; set; } = string.Empty;
 
@@ -10,6 +10,6 @@
 
         public DateTime Date { get; set; }
 
-        public int UserId { get; set; }
+        required public string UserId { get; set; }
     }
 }

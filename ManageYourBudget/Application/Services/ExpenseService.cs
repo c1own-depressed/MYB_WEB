@@ -16,9 +16,9 @@ namespace Application.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ServiceResult> AddExpenseAsync(ExpenseDTO model)
+        public async Task<ServiceResult> AddExpenseAsync(CreateExpenseDTO model)
         {
-            var validator = new ExpenseDTOValidator();
+            var validator = new CreateExpenseDTOValidator();
             var validationResult = validator.Validate(model);
 
             if (!validationResult.IsValid)
@@ -28,6 +28,7 @@ namespace Application.Services
 
             var expense = new Expense
             {
+                Id = Guid.NewGuid().ToString(),
                 ExpenseName = model.ExpenseName,
                 Amount = model.Amount,
                 Date = model.Date,
@@ -40,7 +41,7 @@ namespace Application.Services
             return new ServiceResult(success: true);
         }
 
-        public async Task<IEnumerable<ExpenseDTO>> GetExpensesByCategoryIdAsync(int categoryId)
+        public async Task<IEnumerable<ExpenseDTO>> GetExpensesByCategoryIdAsync(string categoryId)
         {
             var expenses = await _unitOfWork.Expenses.GetExpensesByCategoryIdAsync(categoryId);
 
@@ -82,7 +83,7 @@ namespace Application.Services
             return new ServiceResult(success: true);
         }
 
-        public async Task<ServiceResult> RemoveExpenseAsync(int expenseId)
+        public async Task<ServiceResult> RemoveExpenseAsync(string expenseId)
         {
             var expenseToRemove = await _unitOfWork.Expenses.GetByIdAsync(expenseId);
 

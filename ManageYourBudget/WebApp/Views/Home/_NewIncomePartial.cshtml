@@ -86,8 +86,18 @@
                             <label for="income-amount">Amount</label>
                             <input type="number" class="form-control" id="income-amount" name="amount" required>
                         </div>
+                        <div class="form-group">
+                            <label for="income-date">Date</label>
+                            <input type="datetime-local" class="form-control" id="income-date" name="date">
+                        </div>
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="income-regular" name="isRegular">
+                            <label class="form-check-label" for="income-regular">Regular Income</label>
+                        </div>
                     </form>
                 </div>
+
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-primary" form="add-income-form">Add</button>
@@ -106,7 +116,9 @@
                     contentType: 'application/json',
                     data: JSON.stringify({
                         IncomeName: $('#income-name').val(),
-                        Amount: $('#income-amount').val()
+                        Amount: parseFloat($('#income-amount').val()),
+                        Date: new Date($('#income-date').val()),
+                        IsRegular: $('#income-regular').prop('checked')
                     }),
                     success: function (response) {
                         $('#addIncomeModal').modal('hide');
@@ -118,6 +130,7 @@
                 });
             });
         });
+
     </script>
 
     <script>

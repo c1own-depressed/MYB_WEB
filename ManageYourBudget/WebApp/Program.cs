@@ -1,11 +1,15 @@
 using Application.Interfaces;
 using Application.Services;
 using Application.Validators;
+using Domain.Entities;
 using Domain.Interfaces;
 using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Serilog;
+using Persistence.AuthService;
+using FluentAssertions.Common;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,27 +36,42 @@ builder.Services.AddControllersWithViews();
 // Register your unit of work and repositories
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();  // TODO: check if should depend on IUnitOfWork from Domain Layer
 
-// If you have interfaces for your repositories, register them here
-// builder.Services.AddScoped<IExpenseCategoryRepository, ExpenseCategoryRepository>();
-
 // Register your application services
 builder.Services.AddScoped<IExpenseCategoryService, ExpenseCategoryService>();
 builder.Services.AddScoped<IExpenseService, ExpenseService>();
 builder.Services.AddScoped<IIncomeService, IncomeService>();
 builder.Services.AddScoped<ISavingsService, SavingsService>();
 builder.Services.AddScoped<IStatisticService, StatisticService>();
-builder.Services.AddControllersWithViews()
-        .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateExpenseCategoryDTOValidator>());
-builder.Services.AddControllersWithViews()
-        .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<EditExpenseCategoryDTOValidator>());
-builder.Services.AddControllersWithViews()
-        .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<CreateSavingsDTOValidator>());
-builder.Services.AddControllersWithViews()
-        .AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<EditSavingsDTOValidator>());
 builder.Services.AddScoped<ISettingsService, SettingsService>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddControllersWithViews()
+    .AddFluentValidation(fv =>
+    {
+        fv.RegisterValidatorsFromAssemblyContaining<CreateExpenseCategoryDTOValidator>();
+        fv.RegisterValidatorsFromAssemblyContaining<EditExpenseCategoryDTOValidator>();
+        fv.RegisterValidatorsFromAssemblyContaining<CreateSavingsDTOValidator>();
+        fv.RegisterValidatorsFromAssemblyContaining<EditSavingsDTOValidator>();
+    });
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.AddMvc().AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
 
+// Add Identity services and configure the options
+builder.Services.AddDefaultIdentity<User>(options => {
+    options.SignIn.RequireConfirmedAccount = true; // Depends on your requirements
+    options.Password.RequireDigit = true;
+    options.Password.RequireLowercase = true;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = true;
+    options.Password.RequiredLength = 6;
+    options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(30);
+    options.Lockout.MaxFailedAccessAttempts = 5;
+    options.User.RequireUniqueEmail = true;
+})
+.AddEntityFrameworkStores<MYBDbContext>(); // Link Identity to the EF Core store
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -69,6 +88,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication(); // This is essential for Identity
 app.UseAuthorization();
 
 var cultures = new[] { "en", "uk" };
@@ -101,4 +121,16 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.MapControllerRoute(
+    name: "signup",
+    pattern: "signup",
+    defaults: new { controller = "Account", action = "Register" });
+
+app.MapControllerRoute(
+    name: "login",
+    pattern: "login",
+    defaults: new { controller = "Account", action = "Login" });
+
+// TODO: after the application is deployed
+// app.UseCors(options => options.WithOrigins("https://example.com")); // Adjust accordingly
 app.Run();

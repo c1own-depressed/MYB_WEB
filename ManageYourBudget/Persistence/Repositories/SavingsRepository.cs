@@ -11,7 +11,7 @@ namespace Persistence.Repositories
         {
         }
 
-        public async Task<IEnumerable<Savings>> GetSavingsByUserIdAsync(int userId)
+        public async Task<IEnumerable<Savings>> GetSavingsByUserIdAsync(string userId)
         {
             return await _context.Set<Savings>().Where(savings => savings.UserId == userId).ToListAsync();
         }

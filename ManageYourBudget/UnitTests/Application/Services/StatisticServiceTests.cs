@@ -27,12 +27,12 @@ namespace UnitTests.Application.Services
         public async Task GetTotalExpensesByDate_NoExpenses_ReturnsZeroesForAllMonths()
         {
             // Arrange
-            var userId = 1;
+            string userId = Guid.NewGuid().ToString();
             var from = new DateTime(2023, 01, 01);
             var to = new DateTime(2023, 12, 31);
             _mockUnitOfWork.Setup(u => u.ExpenseCategories.GetExpenseCategoriesByUserIdAsync(userId))
                            .ReturnsAsync(new List<ExpenseCategory>());
-            _mockUnitOfWork.Setup(u => u.Expenses.GetAllExpensesByCategoryIdAndDateRangeAsync(It.IsAny<int>(), from, to))
+            _mockUnitOfWork.Setup(u => u.Expenses.GetAllExpensesByCategoryIdAndDateRangeAsync(Guid.NewGuid().ToString(), from, to))
                            .ReturnsAsync(new List<Expense>());
 
             // Act
@@ -48,26 +48,26 @@ namespace UnitTests.Application.Services
         public async Task GetTotalExpensesByDate_WithExpenses_ReturnsCorrectTotalsIncludingZeroMonths()
         {
             // Arrange
-            var userId = 1;
+            string userId = Guid.NewGuid().ToString();
             var from = new DateTime(2023, 01, 01);
             var to = new DateTime(2023, 12, 31);
             var categories = new List<ExpenseCategory>
             {
-                new ExpenseCategory { Id = 1, UserId = userId },
-                new ExpenseCategory { Id = 2, UserId = userId }
+                new ExpenseCategory { Id = Guid.NewGuid().ToString(), UserId = userId },
+                new ExpenseCategory { Id = Guid.NewGuid().ToString(), UserId = userId }
             };
 
             var expenses = new List<Expense>
             {
-                new Expense { CategoryId = 1, Amount = 100, Date = new DateTime(2023, 01, 15) },
-                new Expense { CategoryId = 2, Amount = 200, Date = new DateTime(2023, 01, 20) },
-                new Expense { CategoryId = 1, Amount = 150, Date = new DateTime(2023, 02, 10) }
+                new Expense { Id = Guid.NewGuid().ToString(), CategoryId = Guid.NewGuid().ToString(), Amount = 100, Date = new DateTime(2023, 01, 15) },
+                new Expense { Id = Guid.NewGuid().ToString(),  CategoryId = Guid.NewGuid().ToString(), Amount = 200, Date = new DateTime(2023, 01, 20) },
+                new Expense { Id = Guid.NewGuid().ToString(),  CategoryId = Guid.NewGuid().ToString(), Amount = 150, Date = new DateTime(2023, 02, 10) }
             };
 
             _mockUnitOfWork.Setup(u => u.ExpenseCategories.GetExpenseCategoriesByUserIdAsync(userId))
                            .ReturnsAsync(categories);
-            _mockUnitOfWork.Setup(u => u.Expenses.GetAllExpensesByCategoryIdAndDateRangeAsync(It.IsAny<int>(), from, to))
-                           .ReturnsAsync((int id, DateTime f, DateTime t) => expenses.Where(e => e.CategoryId == id).ToList());
+            _mockUnitOfWork.Setup(u => u.Expenses.GetAllExpensesByCategoryIdAndDateRangeAsync(Guid.NewGuid().ToString(), from, to))
+                           .ReturnsAsync((string id, DateTime f, DateTime t) => expenses.Where(e => e.CategoryId == id).ToList());
 
             // Act
             var result = await _service.GetTotalExpensesByDate(from, to, userId);
