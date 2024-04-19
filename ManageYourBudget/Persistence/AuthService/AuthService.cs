@@ -4,6 +4,8 @@ using Application.DTOs.AccountDTOs;
 using Application.Interfaces;
 using Azure.Core;
 using Domain.Entities;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -42,6 +44,48 @@ namespace Persistence.AuthService
             }
 
             return result;
+        }
+
+        public async Task<User> AuthenticateUserAsync(UserLoginDTO userLoginDTO)
+        {
+            var user = await _userManager.FindByEmailAsync(userLoginDTO.Email);
+
+            if (user == null)
+            {
+                return null; // User not found
+            }
+
+            var result = await _userManager.CheckPasswordAsync(user, userLoginDTO.Password);
+
+            if (!result)
+            {
+                return null; // Invalid password
+            }
+
+            // Create claims for the authenticated user
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+            };
+
+            // Create authentication properties
+            var authProperties = new AuthenticationProperties
+            {
+                IsPersistent = true, // Persist the cookie across browser sessions
+                ExpiresUtc = DateTimeOffset.UtcNow.AddDays(7) // Cookie expiration time
+            };
+
+            // Create the principal
+            var userIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            // Sign in the user
+            await _httpContextAccessor.HttpContext.SignInAsync(
+                CookieAuthenticationDefaults.AuthenticationScheme,
+                new ClaimsPrincipal(userIdentity),
+                authProperties);
+
+            // Return the authenticated user
+            return user;
         }
 
         public async Task SendEmailConfirmationAsync(User user)

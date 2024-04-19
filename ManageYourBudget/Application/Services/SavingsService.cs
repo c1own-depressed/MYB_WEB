@@ -48,6 +48,7 @@ namespace Application.Services
             {
                 Id = Guid.NewGuid().ToString(),
                 UserId = userId,
+                Date = model.Date,
                 SavingsName = model.SavingsName,
                 Amount = model.Amount,
             };

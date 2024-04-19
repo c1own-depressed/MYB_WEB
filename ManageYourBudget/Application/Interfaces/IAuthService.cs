@@ -9,5 +9,7 @@ namespace Application.Interfaces
         Task<IdentityResult> RegisterUserAsync(UserRegistrationDTO userRegistrationDTO);
 
         Task SendEmailConfirmationAsync(User user);
+
+        Task<User> AuthenticateUserAsync(UserLoginDTO userLoginDTO);
     }
 }

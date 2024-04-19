@@ -86,6 +86,10 @@
                             <label for="savings-amount">Amount</label>
                             <input type="number" class="form-control" id="savings-amount" name="amount" required>
                         </div>
+                        <div class="form-group">
+                            <label for="savings-date">Date</label>
+                            <input type="datetime-local" class="form-control" id="savings-date" name="date">
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -106,7 +110,8 @@
                     contentType: 'application/json',
                     data: JSON.stringify({
                         SavingsName: $('#savings-name').val(),
-                        Amount: $('#savings-amount').val()
+                        Amount: $('#savings-amount').val(),
+                        Date: new Date($('#savings-date').val()),
                     }),
                     success: function (response) {
                         $('#addSavingsModal').modal('hide');

@@ -1,9 +1,11 @@
 using System.Diagnostics;
+using System.Security.Claims;
 using Application.DTOs.ExpenseDTOs;
 using Application.DTOs.IncomeDTOs;
 using Application.DTOs.SavingsDTOs;
 using Application.Interfaces;
 using Application.Utils;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 
@@ -16,24 +18,27 @@ namespace WebApp.Controllers
         private readonly IIncomeService _incomeService;
         private readonly ISavingsService _savingsService;
         private readonly IExpenseService _expenseService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public HomeController(
             ILogger<HomeController> logger,
             IExpenseCategoryService expenseCategoryService,
             IIncomeService incomeService,
             ISavingsService savingsService,
-            IExpenseService expenseService)
+            IExpenseService expenseService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _expenseCategoryService = expenseCategoryService;
             _incomeService = incomeService;
             _savingsService = savingsService;
             _expenseService = expenseService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IActionResult> Index()
         {
-            string userId = Guid.NewGuid().ToString();
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var categories = await _expenseCategoryService.GetExpenseCategoriesByUserIdAsync(userId);
             var incomes = await _incomeService.GetIncomesByUserIdAsync(userId);
             var savings = await _savingsService.GetSavingsByUserIdAsync(userId);
@@ -62,8 +67,7 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddExpenseCategory([FromBody] CreateExpenseCategoryDTO model)
         {
-            string userId = "88888888-8888-8888-8888-888888888888";
-
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!ModelState.IsValid)
             {
                 _logger.LogError("Invalid model state for AddExpenseCategory");
@@ -128,15 +132,13 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddIncome([FromBody] IncomeDTO model)
+        public async Task<IActionResult> AddIncome([FromBody] CreateIncomeDTO model)
         {
-            string userId = "88888888-8888-8888-8888-888888888888";
-
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
             ServiceResult serviceResult = await _incomeService.AddIncomeAsync(model, userId);
 
             if (serviceResult.Success)
@@ -155,11 +157,9 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddSavings([FromBody] CreateSavingsDTO model)
         {
-            string userId = "88888888-8888-8888-8888-888888888888";
-
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!ModelState.IsValid)
             {
-                _logger.LogError("Invalid model state for AddSavings");
                 return BadRequest(ModelState);
             }
 
@@ -261,7 +261,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddExpense([FromBody] ExpenseDTO model) // Add Expense action
+        public async Task<IActionResult> AddExpense([FromBody] CreateExpenseDTO model) // Add Expense action
         {
             if (!ModelState.IsValid)
             {
