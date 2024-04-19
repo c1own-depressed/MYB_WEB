@@ -16,5 +16,7 @@ namespace Application.Interfaces
         Task<IdentityResult> ForgotPasswordAsync(string email);
 
         Task<IdentityResult> ResetPasswordAsync(ResetPasswordDTO resetPasswordDTO);
+
+        Task<IdentityResult> ConfirmEmailAsync(string userId, string token);
     }
 }

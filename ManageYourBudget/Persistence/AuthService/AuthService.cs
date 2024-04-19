@@ -143,7 +143,6 @@ namespace Persistence.AuthService
             return IdentityResult.Success;
         }
 
-
         public async Task<IdentityResult> ResetPasswordAsync(ResetPasswordDTO resetPasswordDTO)
         {
             if (resetPasswordDTO == null)
@@ -171,6 +170,20 @@ namespace Persistence.AuthService
 
             return IdentityResult.Success;
         }
+
+        public async Task<IdentityResult> ConfirmEmailAsync(string userId, string token)
+        {
+            if (userId == null || token == null)
+                return IdentityResult.Failed(new IdentityError { Description = "Invalid user ID or token." });
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return IdentityResult.Failed(new IdentityError { Description = "User not found." });
+
+            var result = await _userManager.ConfirmEmailAsync(user, token);
+            return result;
+        }
+
 
         private async Task<IdentityResult> SignInUser(User user)
         {

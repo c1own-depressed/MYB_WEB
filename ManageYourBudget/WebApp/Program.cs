@@ -168,7 +168,6 @@ app.MapControllerRoute(
     pattern: "resetpassword",
     defaults: new { controller = "Account", action = "ResetPassword" });
 
-
 // TODO: after the application is deployed
 // app.UseCors(options => options.WithOrigins("https://example.com")); // Adjust accordingly
 app.Run();

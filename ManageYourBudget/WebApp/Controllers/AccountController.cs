@@ -117,7 +117,7 @@ namespace WebApp.Controllers
                 Email = model.Email,
                 Password = model.Password,
                 ConfirmPassword = model.ConfirmPassword,
-                Token = model.Token
+                Token = model.Token,
             };
 
             var result = await _authService.ResetPasswordAsync(resetPasswordDTO);
@@ -141,9 +141,30 @@ namespace WebApp.Controllers
             return View();
         }
 
-        public IActionResult ConfirmEmail()
+        //public IActionResult ConfirmEmail()
+        //{
+        //    return View();
+        //}
+        [HttpGet]
+        public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
-            return View();
+            if (userId == null || code == null)
+            {
+                return RedirectToAction("Index", "Home"); // or redirect to an error page
+            }
+
+            var result = await _authService.ConfirmEmailAsync(userId, code);
+            if (result.Succeeded)
+            {
+                _logger.LogInformation($"User with ID {userId} confirmed their email.");
+                return View("ConfirmEmail"); // Show a confirmation success view
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+            return View("ConfirmEmailFailure"); // Show a confirmation failure view
         }
 
         [HttpGet]
