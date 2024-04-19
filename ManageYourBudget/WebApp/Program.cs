@@ -18,7 +18,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
     .WriteTo.Seq("http://localhost:5341"));
 
-var connectionString = builder.Configuration.GetConnectionString("RostikConnection");
+var connectionString = builder.Configuration.GetConnectionString("DimaConnection");
 
 if (connectionString != null)
 {
@@ -140,6 +140,21 @@ app.MapControllerRoute(
     name: "login",
     pattern: "login",
     defaults: new { controller = "Account", action = "Login" });
+
+app.MapControllerRoute(
+    name: "forgotpassword",
+    pattern: "forgotpassword",
+    defaults: new { controller = "Account", action = "ForgotPassword" });
+
+app.MapControllerRoute(
+    name: "resetpassword",
+    pattern: "resetpassword",
+    defaults: new { controller = "Account", action = "ResetPassword" });
+
+//app.MapControllerRoute(
+//    name: "resetpassword",
+//    pattern: "resetpassword",
+//    defaults: new { controller = "Account", action = "ResetPassword" });
 
 
 // TODO: after the application is deployed

@@ -1,6 +1,7 @@
 ﻿using Application.DTOs.AccountDTOs;
 using Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Application.Interfaces
 {
@@ -11,6 +12,8 @@ namespace Application.Interfaces
         Task SendEmailConfirmationAsync(User user);
 
         Task<User> AuthenticateUserAsync(UserLoginDTO userLoginDTO);
+
+        Task<IdentityResult> ForgotPasswordAsync(string email);
 
         Task<IdentityResult> ResetPasswordAsync(ResetPasswordDTO resetPasswordDTO);
     }
