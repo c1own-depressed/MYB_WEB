@@ -7,6 +7,5 @@ namespace Domain.Interfaces.Repositories
         Task<IEnumerable<Expense>> GetExpensesByCategoryIdAsync(string expenseCategoryId);
 
         Task<IEnumerable<Expense>> GetAllExpensesByCategoryIdAndDateRangeAsync(string categoryId, DateTime from, DateTime to);
-
     }
 }
