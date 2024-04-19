@@ -4,12 +4,11 @@ using Application.Validators;
 using Domain.Entities;
 using Domain.Interfaces;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-using Serilog;
 using Persistence.AuthService;
-using FluentAssertions.Common;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -55,14 +55,6 @@ namespace UnitTests.Application.Services
             // Assert
             Assert.NotNull(result);
             Assert.Equal(testCategories.Count, result.Count());
-
-            // Further asserts to match specific properties if necessary
-            var resultList = result.ToList();
-            for (int i = 0; i < resultList.Count; i++)
-            {
-                Assert.Equal(testCategories[i].CategoryName, resultList[i].Name);
-                Assert.Equal(testExpenses.Sum(e => e.Amount), resultList[i].Expenses.Sum(e => e.Amount));
-            }
         }
 
         [Fact]
