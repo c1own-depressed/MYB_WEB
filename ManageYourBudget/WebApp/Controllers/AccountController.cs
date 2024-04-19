@@ -1,8 +1,14 @@
 ﻿using Application.DTOs.AccountDTOs;
 using Application.Interfaces;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Persistence.AuthService;
+using System.Text.Encodings.Web;
 using WebApp.Models;
+using Domain.Entities;
+using NuGet.Common;
+using System.Security.Policy;
 
 namespace WebApp.Controllers
 {
@@ -82,6 +88,54 @@ namespace WebApp.Controllers
             return View(model);
         }
 
+
+        [HttpGet]
+        public IActionResult ResetPassword(string token, string email)
+        {
+            if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email))
+            {
+                // Display an error or redirect
+                ModelState.AddModelError(string.Empty, "Invalid password reset token or email.");
+                return View("Error"); // Or any appropriate view to display the error
+            }
+
+            var model = new ResetPasswordViewModel { Token = token, Email = email };
+            return View(model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken] // Helps prevent CSRF attacks
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var resetPasswordDTO = new ResetPasswordDTO
+            {
+                Email = model.Email,
+                Password = model.Password,
+                ConfirmPassword = model.ConfirmPassword,
+                Token = model.Token
+            };
+
+            var result = await _authService.ResetPasswordAsync(resetPasswordDTO);
+            if (result.Succeeded)
+            {
+                _logger.LogInformation("Password reset successfully.");
+                // Redirect to a confirmation page or login page
+                return RedirectToAction("Login");
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return View(model);
+        }
+
         public IActionResult CheckEmail()
         {
             return View();
@@ -90,6 +144,34 @@ namespace WebApp.Controllers
         public IActionResult ConfirmEmail()
         {
             return View();
+        }
+
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            var result = await _authService.ForgotPasswordAsync(model.Email);
+            if (result.Succeeded)
+            {
+                return RedirectToAction("CheckEmail");
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return View(model);
         }
     }
 }

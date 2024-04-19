@@ -1,6 +1,8 @@
 ﻿using System.Net;
 using System.Net.Mail;
 using System.Security.Claims;
+using System.Security.Policy;
+using System.Text.Encodings.Web;
 using Application.DTOs.AccountDTOs;
 using Application.Interfaces;
 using Domain.Entities;
@@ -9,6 +11,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Persistence.AuthService
 {
@@ -120,6 +123,64 @@ namespace Persistence.AuthService
                 // _logger.Error(ex);
                 return false;
             }
+        }
+
+        public async Task<IdentityResult> ForgotPasswordAsync(string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null || !(await _userManager.IsEmailConfirmedAsync(user)))
+            {
+                // Don't reveal that the user does not exist or is not confirmed for security reasons
+                return IdentityResult.Failed(new IdentityError { Description = "User not found or not confirmed." });
+            }
+
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var callbackUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/resetpassword?token={Uri.EscapeDataString(token)}&email={Uri.EscapeDataString(email)}";
+
+            // Send email
+            await SendEmailAsync(email, "Reset Password", $"Please reset your password by clicking <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>here</a>.");
+
+            return IdentityResult.Success;
+        }
+
+
+        public async Task<IdentityResult> ResetPasswordAsync(ResetPasswordDTO resetPasswordDTO)
+        {
+            if (resetPasswordDTO == null)
+                return IdentityResult.Failed(new IdentityError { Description = "ResetPasswordDTO cannot be null." });
+
+            var user = await _userManager.FindByEmailAsync(resetPasswordDTO.Email);
+            if (user == null)
+                return IdentityResult.Failed(new IdentityError { Description = "No user associated with this email." });
+
+            // Ensure the token is valid
+            if (!await _userManager.VerifyUserTokenAsync(user, _userManager.Options.Tokens.PasswordResetTokenProvider, "ResetPassword", resetPasswordDTO.Token))
+                return IdentityResult.Failed(new IdentityError { Description = "Invalid token for password reset." });
+
+            // Check password confirmation
+            if (resetPasswordDTO.Password != resetPasswordDTO.ConfirmPassword)
+                return IdentityResult.Failed(new IdentityError { Description = "Password and confirmation password do not match." });
+
+            // Attempt to reset the password
+            var result = await _userManager.ResetPasswordAsync(user, resetPasswordDTO.Token, resetPasswordDTO.Password);
+            if (!result.Succeeded)
+                return result;
+
+            // Optionally: Sign the user in directly after password reset
+            var signInResult = await SignInUser(user);
+
+            return IdentityResult.Success;
+        }
+
+        private async Task<IdentityResult> SignInUser(User user)
+        {
+            var claims = new List<Claim> { new Claim(ClaimTypes.NameIdentifier, user.Id) };
+            var identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+            var principal = new ClaimsPrincipal(identity);
+            var properties = new AuthenticationProperties { IsPersistent = true };
+
+            await _httpContextAccessor.HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal, properties);
+            return IdentityResult.Success;
         }
     }
 }
