@@ -1,0 +1,125 @@
+﻿@model WebApp.Models.SettingsViewModel
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
+@{
+    ViewData["Title"] = "SettingsPage";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Settings</title>
+    <style>
+        body {
+            background-color: #D9D9D9;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        h1 {
+            color: #000000;
+            font-size: 48px;
+            margin-top: 20px;
+            font-weight: bold;
+            margin-bottom: 7%;
+            margin-left: 42.5%;
+        }
+
+        .SelectOption {
+            display: flex;
+            align-items: center;
+            margin-top: 40px;
+            margin-left: 30%;  
+        }
+
+        .SelectOption label {
+            margin-right: 15%;
+            width: 20%;
+            margin-right: 10px;
+            text-align: center;
+            margin-right: 30px;
+            font-size: 20px;
+        }
+
+        .selection {
+            width: 30%;
+            height: 41px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        button {
+            width: 182px;
+            height: 42px;
+            background-color: #545454;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 0 auto;
+            display: block;
+            text-align: center;
+            margin-top: 60px;
+        }
+
+            button:hover {
+            background-color: white;
+            color: #545454;
+        }
+    </style>
+</head>
+<body>
+    <h1>@localizer["Settings"]</h1>
+    <form asp-controller="SettingsPage" asp-action="SaveSettings" method="post">
+        <!-- Додано форму тут -->
+        <div class="SelectOption">
+            <label for="language">@localizer["Language"]</label>
+            <select id="language" name="Language" class="selection">
+                <option value="en" id="enOption">@localizer["English"]</option>
+                <option value="ua" id="uaOption">@localizer["Ukrainian"]</option>
+            </select>
+        </div>
+        <div class="SelectOption">
+            <label for="theme">@localizer["ChooseTheme"]</label>
+            <select id="theme" name="IsLightTheme" class="selection">
+                <option value="true" id="lightThemeOption">@localizer["Light"]</option>
+                <option value="false" id="darkThemeOption">@localizer["Dark"]</option>
+            </select>
+        </div>
+        <div class="SelectOption">
+            <label for="currency">@localizer["ChooseCurency"]</label>
+            <select id="currency" name="Currency" class="selection">
+                <option value="usd" id="usdOption">USD</option>
+                <option value="uah" id="uahOption">UAH</option>
+            </select>
+        </div>
+        <button type="submit" >@localizer["Save"]</button>
+        <!-- Додано formaction -->
+    </form>
+    <script>
+        
+        var isLightTheme = '@Model.IsLightTheme.ToString().ToLower()';
+        var language = '@Model.Language.ToString().ToLower()';
+        var currency = '@Model.Currency.ToString().ToLower()';
+        if (currency === 'uah') {
+            document.getElementById('uahOption').setAttribute('selected', 'selected');
+        } else {
+            document.getElementById('usdOption').setAttribute('selected', 'selected');
+        }
+        if (language === 'en') {
+            document.getElementById('enOption').setAttribute('selected', 'selected');
+        } else {
+            document.getElementById('uaOption').setAttribute('selected', 'selected');
+        }
+        if (isLightTheme === 'true') {
+            document.getElementById('lightThemeOption').setAttribute('selected', 'selected');
+        } else {
+            document.getElementById('darkThemeOption').setAttribute('selected', 'selected');
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+﻿@using Application.DTOs.IncomeDTOs
+
+@model IEnumerable<IncomeDTO>
+
+<div class="incomes-wrapper">
+    <div class="category-wrapper">
+        <div class="category-content">
+            <div class="category-heading-wrapper">
+                <div class="category-heading-name-wrapper">
+                    <h2 class="category-heading">Incomes</h2>
+                </div>
+            </div>
+            <div class="expenses-wrapper">
+                @foreach (var income in Model)
+                {
+                    <p>Income: @income.IncomeName  (@income.Amount ₴)</p>
+                    <button class="btn btn-danger" onclick="removeIncome(@income.Id)">Remove</button>
+                    <button class="btn btn-primary" onclick="openEditIncomeModal('@income.Id', '@income.IncomeName', '@income.Amount')">Edit</button>
+                    <!-- Edit Income Modal -->
+                    <div class="modal fade" id="editIncomeModal_@income.Id" tabindex="-1" role="dialog" aria-labelledby="editIncomeModalLabel_@income.Id" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editIncomeModalLabel_@income.Id">Edit Category</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="editIncomeName">Income Name</label>
+                                        <input type="text" class="form-control" id="editIncomeName_@income.Id" value="@income.IncomeName">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="editAmount">Amount</label>
+                                        <input type="number" class="form-control" id="editAmount_@income.Id" value="@income.Amount">
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-primary" onclick="editIncome('@income.Id')">Save changes</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+
+        <button type="button" class="btn btn-primary add-income-button" data-toggle="modal" data-target="#addIncomeModal">
+            + Add Income
+        </button>
+    </div>
+
+    <div class="modal fade" id="addIncomeModal" tabindex="-1" role="dialog" aria-labelledby="addIncomeModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addIncomeModalLabel">Add Income</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="add-income-form">
+                        <div class="form-group">
+                            <label for="income-name">Income Name</label>
+                            <input type="text" class="form-control" id="income-name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="income-amount">Amount</label>
+                            <input type="number" class="form-control" id="income-amount" name="amount" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" form="add-income-form">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#add-income-form').on('submit', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '@Url.Action("AddIncome", "Home")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        IncomeName: $('#income-name').val(),
+                        Amount: $('#income-amount').val()
+                    }),
+                    success: function (response) {
+                        $('#addIncomeModal').modal('hide');
+                        location.reload();
+                    },
+                    error: function (error) {
+                        alert("Error adding income");
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        function removeIncome(incomeId) {
+            if (confirm("Are you sure you want to remove this income?")) {
+                $.ajax({
+                    url: '@Url.Action("RemoveIncome", "Home")' + '?incomeId=' + incomeId,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    success: function (response) {
+                        location.reload();
+                    },
+                    error: function (error) {
+                        alert("Failed to remove category");
+                    }
+                });
+            }
+        }
+    </script>
+
+    <script>
+        function openEditIncomeModal(incomeId, incomeName, Amount) {
+            $('#editIncomeName_' + incomeId).val(incomeName); // Set the category name in the input field
+            $('#editAmount_' + incomeId).val(Amount); // Set the planned budget in the input field
+            $('#editIncomeModal_' + incomeId).modal('show'); // Show the modal
+        }
+
+        function editIncome(incomeId) {
+            var newName = $('#editIncomeName_' + incomeId).val();
+            var newAmount = $('#editAmount_' + incomeId).val();
+
+            $.ajax({
+                url: '@Url.Action("EditIncome", "Home")',
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify({
+                    Id: incomeId,
+                    Name: newName,
+                    Amount: newAmount
+                }),
+                success: function (response) {
+                    $('#editIncomeModal_' + incomeId).modal('hide'); // Hide the modal
+                    location.reload(); // Reload the page or update UI as needed
+                },
+                error: function (error) {
+                    alert("Failed to edit income");
+                }
+            });
+        }
+    </script>
+</div>

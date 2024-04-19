@@ -1,0 +1,44 @@
+﻿@model Tuple<List<string>, List<string>>  
+
+@{
+    ViewData["Title"] = "Tips & Tricks";
+}
+
+<div style="display: flex;">
+    <div style="flex: 1;">
+        <h2>Tips</h2>
+
+        @if (Model.Item1 != null && Model.Item1.Count > 0)
+        {
+            <ul>
+                @foreach (var tip in Model.Item1)
+                {
+                    <li>@tip</li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No tips available at the moment. Please check back later.</p>
+        }
+    </div>
+
+    <div style="flex: 1;">
+        <h2>Tricks</h2>
+
+        @if (Model.Item2 != null && Model.Item2.Count > 0)
+        {
+            <ul>
+                @foreach (var trick in Model.Item2)
+                {
+                    <li><a href="@trick">@trick</a></li>
+                }
+            </ul>
+        }
+        else
+        {
+            <p>No tricks available at the moment. Please check back later.</p>
+        }
+    </div>
+</div>
+
