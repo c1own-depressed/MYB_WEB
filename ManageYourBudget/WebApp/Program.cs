@@ -4,11 +4,12 @@ using Application.Validators;
 using Domain.Entities;
 using Domain.Interfaces;
 using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-using Persistence.AuthService;
 using Serilog;
+using Persistence.AuthService;
+using FluentAssertions.Common;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
     .WriteTo.Seq("http://localhost:5341"));
 
-var connectionString = builder.Configuration.GetConnectionString("DimaConnection");
+var connectionString = builder.Configuration.GetConnectionString("AndriyConnection");
 
 if (connectionString != null)
 {
@@ -68,6 +69,15 @@ builder.Services.AddDefaultIdentity<User>(options => {
 })
 .AddEntityFrameworkStores<MYBDbContext>(); // Link Identity to the EF Core store
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireLoggedIn", policy =>
+        policy.RequireAuthenticatedUser());
+});
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/login";
+});
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie();
@@ -104,7 +114,8 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "settings",
     pattern: "settings",
-    defaults: new { controller = "SettingsPage", action = "Index" });
+    defaults: new { controller = "SettingsPage", action = "Index" })
+    .RequireAuthorization("RequireLoggedIn");
 
 app.MapControllerRoute(
     name: "tips",
@@ -114,11 +125,17 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "statistic",
     pattern: "statistic",
-    defaults: new { controller = "StatisticPage", action = "Index" });
+    defaults: new { controller = "StatisticPage", action = "Index" })
+    .RequireAuthorization("RequireLoggedIn");
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Tips}/{action=Index}");
+
+app.MapControllerRoute(
+    name: "home",
+    pattern: "{controller=Home}/{action=Index}")
+    .RequireAuthorization("RequireLoggedIn");
 
 app.MapControllerRoute(
     name: "signup",
@@ -139,7 +156,6 @@ app.MapControllerRoute(
     name: "login",
     pattern: "login",
     defaults: new { controller = "Account", action = "Login" });
-
 
 // TODO: after the application is deployed
 // app.UseCors(options => options.WithOrigins("https://example.com")); // Adjust accordingly
