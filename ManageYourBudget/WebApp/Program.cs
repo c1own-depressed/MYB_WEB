@@ -127,9 +127,20 @@ app.MapControllerRoute(
     defaults: new { controller = "Account", action = "Register" });
 
 app.MapControllerRoute(
+    name: "checkemail",
+    pattern: "checkemail",
+    defaults: new { controller = "Account", action = "CheckConfirm" });
+
+app.MapControllerRoute(
+    name: "confirmemail",
+    pattern: "confirmemail",
+    defaults: new { controller = "Account", action = "EmailConfirm" });
+
+app.MapControllerRoute(
     name: "login",
     pattern: "login",
     defaults: new { controller = "Account", action = "Login" });
+
 
 // TODO: after the application is deployed
 // app.UseCors(options => options.WithOrigins("https://example.com")); // Adjust accordingly
