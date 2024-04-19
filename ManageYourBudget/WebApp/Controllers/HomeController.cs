@@ -38,6 +38,12 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
+        if (!User.Identity.IsAuthenticated)
+        {
+            return RedirectToAction("Login", "Account"); // Перенаправлення на сторінку входу
+        }
+        else
+        {
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var categories = await _expenseCategoryService.GetExpenseCategoriesByUserIdAsync(userId);
             var incomes = await _incomeService.GetIncomesByUserIdAsync(userId);
@@ -51,6 +57,7 @@ namespace WebApp.Controllers
 
             _logger.LogError("Home page opened");
             return View(model);
+        }
         }
 
         public IActionResult Privacy()

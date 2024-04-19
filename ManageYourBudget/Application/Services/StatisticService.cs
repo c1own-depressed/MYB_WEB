@@ -11,10 +11,10 @@ namespace Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public async Task<IEnumerable<IncomeStatisticDTO>> GetIncomesByDate (DateTime startDate, DateTime endDate, string UserId)
+        public async Task<IEnumerable<IncomeStatisticDTO>> GetIncomesByDate (DateTime startDate, DateTime endDate, string userId)
         {
-            var user = await this._unitOfWork.Users.GetByIdAsync(UserId);
-            var incomes = await this._unitOfWork.Incomes.GetIncomesByUserIdAsync(UserId);
+            var user = await this._unitOfWork.Users.GetByIdAsync(userId);
+            var incomes = await this._unitOfWork.Incomes.GetIncomesByUserIdAsync(userId);
 
             string currencyRepresentation = CurrencyUtils.FormatCurrencyDisplay(user.Currency);
 

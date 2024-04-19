@@ -64,12 +64,12 @@ namespace UnitTests.Infrastructure.Services
         }
 
         [Fact]
-        public async Task AuthenticateUserAsync_InValidCredentials_NoUpperCaseLetterPassword_ReturnsUser()
+        public async Task AuthenticateUserAsync_InValidCredentials_FailsAuthentication()
         {
             // Arrange
             var user = new User { Email = "user@example.com" };
             _userManager.Setup(x => x.FindByEmailAsync("user@example.com")).ReturnsAsync(user);
-            _userManager.Setup(x => x.CheckPasswordAsync(user, "correctpassword123")).ReturnsAsync(false);
+            _userManager.Setup(x => x.CheckPasswordAsync(user, "correctpasswoRD123")).ReturnsAsync(false);
             _authService.Setup(x =>
                 x.SignInAsync(
                     It.IsAny<HttpContext>(),
@@ -80,7 +80,7 @@ namespace UnitTests.Infrastructure.Services
             ).Returns(Task.CompletedTask).Verifiable("SignIn was not called.");
 
             // Act
-            var result = await _service.AuthenticateUserAsync(new UserLoginDTO { Email = "user@example.com", Password = "correctpassword123" });
+            var result = await _service.AuthenticateUserAsync(new UserLoginDTO { Email = "user@example.com", Password = "wrongpassword" });
 
             // Assert
             Assert.Null(result);
@@ -97,102 +97,154 @@ namespace UnitTests.Infrastructure.Services
         }
 
         [Fact]
-        public async Task AuthenticateUserAsync_InValidCredentials_NoLowerCaseLetterPassword_ReturnsUser()
+        public async Task RegisterUserAsync_ValidCredentials_SuccessfulRegistration()
         {
             // Arrange
-            var user = new User { Email = "user@example.com" };
-            _userManager.Setup(x => x.FindByEmailAsync("user@example.com")).ReturnsAsync(user);
-            _userManager.Setup(x => x.CheckPasswordAsync(user, "CORRECTPASSWORD123")).ReturnsAsync(false);
-            _authService.Setup(x =>
-                x.SignInAsync(
-                    It.IsAny<HttpContext>(),
-                    It.IsAny<string>(),
-                    It.IsAny<ClaimsPrincipal>(),
-                    It.IsAny<AuthenticationProperties>()
-                )
-            ).Returns(Task.CompletedTask).Verifiable("SignIn was not called.");
+            var userRegistrationDTO = new UserRegistrationDTO
+            {
+                UserName = "newuser",
+                Email = "newuser@example.com",
+                Password = "Password123!"
+            };
+
+            var user = new User
+            {
+                Id = Guid.NewGuid().ToString(),
+                UserName = userRegistrationDTO.UserName,
+                Email = userRegistrationDTO.Email
+            };
+
+            _userManager.Setup(x => x.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
+                        .ReturnsAsync(IdentityResult.Success);
+            _userManager.Setup(x => x.FindByEmailAsync(user.Email))
+                        .ReturnsAsync(user);
+            _userManager.Setup(x => x.GenerateEmailConfirmationTokenAsync(It.IsAny<User>()))
+                        .ReturnsAsync("valid-token"); // Mock to return a valid token
+
+            _emailSender.Setup(x => x.SendEmailAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()))
+                        .Returns(Task.CompletedTask);
 
             // Act
-            var result = await _service.AuthenticateUserAsync(new UserLoginDTO { Email = "user@example.com", Password = "CORRECTPASSWORD123" });
+            var result = await _service.RegisterUserAsync(userRegistrationDTO);
 
             // Assert
-            Assert.Null(result);  
+            Assert.True(result.Succeeded);
+        }
 
-            _authService.Verify(
-                x => x.SignInAsync(
-                    It.IsAny<HttpContext>(),
-                    It.IsAny<string>(),
-                    It.IsAny<ClaimsPrincipal>(),
-                    It.IsAny<AuthenticationProperties>()
-                ),
-                Times.Never
-            );
+
+        [Fact]
+        public async Task RegisterUserAsync_DuplicateEmail_FailsRegistration()
+        {
+            // Arrange
+            var userRegistrationDTO = new UserRegistrationDTO
+            {
+                UserName = "existinguser",
+                Email = "existing@example.com",
+                Password = "Password123!"
+            };
+            var user = new User
+            {
+                Id = Guid.NewGuid().ToString(), // Ensure the user has an ID
+                UserName = userRegistrationDTO.UserName,
+                Email = userRegistrationDTO.Email
+            };
+            _userManager.Setup(x => x.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
+                        .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = "Duplicate email." }));
+            _userManager.Setup(x => x.FindByEmailAsync(It.IsAny<string>())).ReturnsAsync(user);
+            _userManager.Setup(x => x.GenerateEmailConfirmationTokenAsync(It.IsAny<User>()))
+                        .ReturnsAsync("dummy-token"); // Ensure a dummy token is returned
+
+            // Act
+            var result = await _service.RegisterUserAsync(userRegistrationDTO);
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.Contains(result.Errors, e => e.Description.Contains("Duplicate email"));
         }
 
         [Fact]
-        public async Task AuthenticateUserAsync_InValidCredentials_NoNumbersPassword_ReturnsUser()
+        public async Task RegisterUserAsync_PasswordWithoutDigit_FailsRegistration()
         {
             // Arrange
-            var user = new User { Email = "user@example.com" };
-            _userManager.Setup(x => x.FindByEmailAsync("user@example.com")).ReturnsAsync(user);
-            _userManager.Setup(x => x.CheckPasswordAsync(user, "correctpassword")).ReturnsAsync(false);
-            _authService.Setup(x =>
-                x.SignInAsync(
-                    It.IsAny<HttpContext>(),
-                    It.IsAny<string>(),
-                    It.IsAny<ClaimsPrincipal>(),
-                    It.IsAny<AuthenticationProperties>()
-                )
-            ).Returns(Task.CompletedTask).Verifiable("SignIn was not called.");
+            var userRegistrationDTO = new UserRegistrationDTO
+            {
+                UserName = "user",
+                Email = "user@example.com",
+                Password = "Password!" // No digit
+            };
+            _userManager.Setup(x => x.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
+                        .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = "Passwords must have at least one digit." }));
 
             // Act
-            var result = await _service.AuthenticateUserAsync(new UserLoginDTO { Email = "user@example.com", Password = "correctpassword" });
+            var result = await _service.RegisterUserAsync(userRegistrationDTO);
 
             // Assert
-            Assert.Null(result);  
-
-            _authService.Verify(
-                x => x.SignInAsync(
-                    It.IsAny<HttpContext>(),
-                    It.IsAny<string>(),
-                    It.IsAny<ClaimsPrincipal>(),
-                    It.IsAny<AuthenticationProperties>()
-                ),
-                Times.Never
-            );
+            Assert.False(result.Succeeded);
+            Assert.Contains(result.Errors, e => e.Description.Contains("digit"));
         }
 
         [Fact]
-        public async Task AuthenticateUserAsync_InValidCredentials_ShortPassword_ReturnsUser()
+        public async Task RegisterUserAsync_PasswordWithoutUppercase_FailsRegistration()
         {
             // Arrange
-            var user = new User { Email = "user@example.com" };
-            _userManager.Setup(x => x.FindByEmailAsync("user@example.com")).ReturnsAsync(user);
-            _userManager.Setup(x => x.CheckPasswordAsync(user, "corre")).ReturnsAsync(false);
-            _authService.Setup(x =>
-                x.SignInAsync(
-                    It.IsAny<HttpContext>(),
-                    It.IsAny<string>(),
-                    It.IsAny<ClaimsPrincipal>(),
-                    It.IsAny<AuthenticationProperties>()
-                )
-            ).Returns(Task.CompletedTask).Verifiable("SignIn was not called.");
+            var userRegistrationDTO = new UserRegistrationDTO
+            {
+                UserName = "user",
+                Email = "user@example.com",
+                Password = "password1!" // No uppercase letter
+            };
+            _userManager.Setup(x => x.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
+                        .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = "Passwords must have at least one uppercase ('A'-'Z')." }));
 
             // Act
-            var result = await _service.AuthenticateUserAsync(new UserLoginDTO { Email = "user@example.com", Password = "corre" });
+            var result = await _service.RegisterUserAsync(userRegistrationDTO);
 
             // Assert
-            Assert.Null(result);
-
-            _authService.Verify(
-                x => x.SignInAsync(
-                    It.IsAny<HttpContext>(),
-                    It.IsAny<string>(),
-                    It.IsAny<ClaimsPrincipal>(),
-                    It.IsAny<AuthenticationProperties>()
-                ),
-                Times.Never
-            );
+            Assert.False(result.Succeeded);
+            Assert.Contains(result.Errors, e => e.Description.Contains("uppercase"));
         }
+
+        [Fact]
+        public async Task RegisterUserAsync_PasswordWithoutLowercase_FailsRegistration()
+        {
+            // Arrange
+            var userRegistrationDTO = new UserRegistrationDTO
+            {
+                UserName = "user",
+                Email = "user@example.com",
+                Password = "PASSWORD1!" // No lowercase letter
+            };
+            _userManager.Setup(x => x.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
+                        .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = "Passwords must have at least one lowercase ('a'-'z')." }));
+
+            // Act
+            var result = await _service.RegisterUserAsync(userRegistrationDTO);
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.Contains(result.Errors, e => e.Description.Contains("lowercase"));
+        }
+
+        [Fact]
+        public async Task RegisterUserAsync_ShortPassword_FailsRegistration()
+        {
+            // Arrange
+            var userRegistrationDTO = new UserRegistrationDTO
+            {
+                UserName = "user",
+                Email = "user@example.com",
+                Password = "Pass1!" // Shorter than required length
+            };
+            _userManager.Setup(x => x.CreateAsync(It.IsAny<User>(), It.IsAny<string>()))
+                        .ReturnsAsync(IdentityResult.Failed(new IdentityError { Description = "Passwords must be at least 6 characters." }));
+
+            // Act
+            var result = await _service.RegisterUserAsync(userRegistrationDTO);
+
+            // Assert
+            Assert.False(result.Succeeded);
+            Assert.Contains(result.Errors, e => e.Description.Contains("6 characters"));
+        }
+
     }
 }

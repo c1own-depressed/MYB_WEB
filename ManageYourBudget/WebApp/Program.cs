@@ -20,6 +20,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
 
 var connectionString = builder.Configuration.GetConnectionString("DimaConnection");
 
+
 if (connectionString != null)
 {
     builder.Services.AddDbContext<MYBDbContext>(options =>
@@ -69,6 +70,15 @@ builder.Services.AddDefaultIdentity<User>(options => {
 })
 .AddEntityFrameworkStores<MYBDbContext>(); // Link Identity to the EF Core store
 
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireLoggedIn", policy =>
+        policy.RequireAuthenticatedUser());
+});
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/login";
+});
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie();
@@ -105,7 +115,8 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "settings",
     pattern: "settings",
-    defaults: new { controller = "SettingsPage", action = "Index" });
+    defaults: new { controller = "SettingsPage", action = "Index" })
+    .RequireAuthorization("RequireLoggedIn");
 
 app.MapControllerRoute(
     name: "tips",
@@ -115,11 +126,17 @@ app.MapControllerRoute(
 app.MapControllerRoute(
     name: "statistic",
     pattern: "statistic",
-    defaults: new { controller = "StatisticPage", action = "Index" });
+    defaults: new { controller = "StatisticPage", action = "Index" })
+    .RequireAuthorization("RequireLoggedIn");
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Tips}/{action=Index}");
+
+app.MapControllerRoute(
+    name: "home",
+    pattern: "{controller=Home}/{action=Index}")
+    .RequireAuthorization("RequireLoggedIn");
 
 app.MapControllerRoute(
     name: "signup",
@@ -150,11 +167,6 @@ app.MapControllerRoute(
     name: "resetpassword",
     pattern: "resetpassword",
     defaults: new { controller = "Account", action = "ResetPassword" });
-
-//app.MapControllerRoute(
-//    name: "resetpassword",
-//    pattern: "resetpassword",
-//    defaults: new { controller = "Account", action = "ResetPassword" });
 
 
 // TODO: after the application is deployed
