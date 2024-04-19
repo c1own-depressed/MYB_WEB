@@ -84,7 +84,7 @@ namespace UnitTests.Application.Services
         public async Task GetIncomesByDate_NoIncomes_ReturnsEmpty()
         {
             // Arrange
-            var userId = 1;
+            var userId = Guid.NewGuid().ToString();
             DateTime startDate = new DateTime(2023, 01, 01);
             DateTime endDate = new DateTime(2023, 12, 31);
             _mockUnitOfWork.Setup(u => u.Users.GetByIdAsync(userId)).ReturnsAsync(new User { Currency = "usd" });
@@ -101,13 +101,13 @@ namespace UnitTests.Application.Services
         public async Task GetIncomesByDate_RegularAndOneTimeIncomes_CorrectGroupingAndSumming()
         {
             // Arrange
-            var userId = 1;
+            var userId = Guid.NewGuid().ToString();
             DateTime startDate = new DateTime(2023, 01, 01);
             DateTime endDate = new DateTime(2023, 03, 01);
             var incomes = new List<Income>
             {
-                new Income { Id = 1, IncomeName = "Salary", Amount = 1000, Date = new DateTime(2023, 01, 10), IsRegular = true },
-                new Income { Id = 2, IncomeName = "Gift", Amount = 500, Date = new DateTime(2023, 01, 15), IsRegular = false }
+                new Income { Id = Guid.NewGuid().ToString(), IncomeName = "Salary", Amount = 1000, Date = new DateTime(2023, 01, 10), IsRegular = true, UserId = userId },
+                new Income { Id = Guid.NewGuid().ToString(), IncomeName = "Gift", Amount = 500, Date = new DateTime(2023, 01, 15), IsRegular = false, UserId = userId }
             };
             _mockUnitOfWork.Setup(u => u.Users.GetByIdAsync(userId)).ReturnsAsync(new User { Currency = "usd" });
             _mockUnitOfWork.Setup(u => u.Incomes.GetIncomesByUserIdAsync(userId)).ReturnsAsync(incomes);
@@ -127,7 +127,7 @@ namespace UnitTests.Application.Services
         public async Task CountSaved_NoIncomesOrExpenses_ReturnsEmpty()
         {
             // Arrange
-            var userId = 1;
+            var userId = Guid.NewGuid().ToString();
             DateTime from = new DateTime(2023, 01, 01);
             DateTime to = new DateTime(2023, 12, 31);
 
@@ -137,7 +137,7 @@ namespace UnitTests.Application.Services
                            .ReturnsAsync(new List<Income>());
             _mockUnitOfWork.Setup(u => u.ExpenseCategories.GetExpenseCategoriesByUserIdAsync(userId))
                           .ReturnsAsync(new List<ExpenseCategory>() { });
-            _mockUnitOfWork.Setup(u => u.Expenses.GetAllExpensesByCategoryIdAndDateRangeAsync(It.IsAny<int>(), from, to))
+            _mockUnitOfWork.Setup(u => u.Expenses.GetAllExpensesByCategoryIdAndDateRangeAsync(Guid.NewGuid().ToString(), from, to))
                            .ReturnsAsync(new List<Expense>());
 
             // Act
@@ -151,7 +151,7 @@ namespace UnitTests.Application.Services
         public async Task CountSaved_IncomesGreaterThanExpenses_ReturnsPositiveSavings()
         {
             // Arrange
-            var userId = 1;
+            var userId = Guid.NewGuid().ToString();
             DateTime from = new DateTime(2023, 05, 01);
             DateTime to = new DateTime(2023, 05, 31);
 
@@ -168,14 +168,14 @@ namespace UnitTests.Application.Services
             _mockUnitOfWork.Setup(u => u.Incomes.GetIncomesByUserIdAsync(userId))
                            .ReturnsAsync(new List<Income>
                            {
-                       new Income { IncomeName = "Salary", Amount = 2000, Date = new DateTime(2023, 05, 05), IsRegular = true }
+                       new Income { Id = Guid.NewGuid().ToString(), IncomeName = "Salary", Amount = 2000, Date = new DateTime(2023, 05, 05), IsRegular = true, UserId = userId }
                            });
             _mockUnitOfWork.Setup(u => u.ExpenseCategories.GetExpenseCategoriesByUserIdAsync(userId))
                           .ReturnsAsync(new List<ExpenseCategory>() { });
-            _mockUnitOfWork.Setup(u => u.Expenses.GetAllExpensesByCategoryIdAndDateRangeAsync(It.IsAny<int>(), from, to))
+            _mockUnitOfWork.Setup(u => u.Expenses.GetAllExpensesByCategoryIdAndDateRangeAsync(Guid.NewGuid().ToString(), from, to))
                            .ReturnsAsync(new List<Expense>
                            {
-                       new Expense { Amount = 1500, Date = new DateTime(2023, 05, 05) }
+                       new Expense { Id = Guid.NewGuid().ToString(), Amount = 1500, Date = new DateTime(2023, 05, 05), CategoryId = Guid.NewGuid().ToString() }
                            });
 
             // Act

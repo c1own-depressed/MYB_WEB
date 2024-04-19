@@ -11,7 +11,7 @@ namespace Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public async Task<IEnumerable<IncomeStatisticDTO>> getIncomesByDate (DateTime startDate, DateTime endDate, string UserId)
+        public async Task<IEnumerable<IncomeStatisticDTO>> GetIncomesByDate (DateTime startDate, DateTime endDate, string UserId)
         {
             var user = await this._unitOfWork.Users.GetByIdAsync(UserId);
             var incomes = await this._unitOfWork.Incomes.GetIncomesByUserIdAsync(UserId);
@@ -73,7 +73,7 @@ namespace Application.Services
 
         public async Task<IEnumerable<SavedStatisticDTO>> CountSaved(DateTime from, DateTime to, string userId)
         {
-            var incomes = await getIncomesByDate(from, to, userId);
+            var incomes = await GetIncomesByDate(from, to, userId);
 
             var expenses = await GetTotalExpensesByDate(from, to, userId);
 
@@ -108,7 +108,7 @@ namespace Application.Services
             try
             {
                 // Retrieve income statistics
-                var incomeStatistics = await getIncomesByDate(startDate, endDate, userId);
+                var incomeStatistics = await GetIncomesByDate(startDate, endDate, userId);
 
                 // Retrieve total expenses statistics
                 var expensesStatistics = await GetTotalExpensesByDate(startDate, endDate, userId);
