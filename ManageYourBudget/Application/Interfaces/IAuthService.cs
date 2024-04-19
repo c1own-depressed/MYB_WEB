@@ -11,5 +11,7 @@ namespace Application.Interfaces
         Task SendEmailConfirmationAsync(User user);
 
         Task<User> AuthenticateUserAsync(UserLoginDTO userLoginDTO);
+
+        Task<IdentityResult> ResetPasswordAsync(ResetPasswordDTO resetPasswordDTO);
     }
 }

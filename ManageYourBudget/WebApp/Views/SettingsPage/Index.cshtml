@@ -97,6 +97,10 @@
                 <option value="uah" id="uahOption">UAH</option>
             </select>
         </div>
+        <!-- Reset password button -->
+        <div class="SelectOption">
+            <button type="button" onclick="location.href='@Url.Action("ResetPassword", "Account")'">@localizer["ResetPassword"]</button>
+        </div>
         <button type="submit" >@localizer["Save"]</button>
         <!-- Додано formaction -->
     </form>

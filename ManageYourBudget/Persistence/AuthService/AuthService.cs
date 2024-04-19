@@ -98,6 +98,16 @@ namespace Persistence.AuthService
             _ = await SendEmailAsync(user.Email, "Confirm your email", htmlMessage);
         }
 
+        public async Task SendPasswordResetEmailAsync(User user, string resetToken)
+        {
+            var callbackUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/account/resetpassword?email={user.Email}&token={resetToken}";
+
+            string htmlMessage = $"To reset your password, please click <a href='{callbackUrl}'>here</a>.";
+
+            await SendEmailAsync(user.Email, "Reset your password", htmlMessage);
+        }
+
+
         private async Task<bool> SendEmailAsync(string email, string subject, string htmlMessage)
         {
             try
@@ -121,5 +131,28 @@ namespace Persistence.AuthService
                 return false;
             }
         }
+
+        public async Task<IdentityResult> ResetPasswordAsync(ResetPasswordDTO resetPasswordDTO)
+        {
+            var user = await _userManager.FindByEmailAsync(resetPasswordDTO.Email);
+
+            if (user == null)
+            {
+                // User not found
+                return IdentityResult.Failed(new IdentityError { Description = "User not found." });
+            }
+
+            var result = await _userManager.ResetPasswordAsync(user, resetPasswordDTO.Token, resetPasswordDTO.Password);
+
+            if (result.Succeeded)
+            {
+                // Send password reset confirmation email
+                await SendPasswordResetEmailAsync(user, resetPasswordDTO.Token);
+            }
+
+            return result;
+        }
+
+
     }
 }

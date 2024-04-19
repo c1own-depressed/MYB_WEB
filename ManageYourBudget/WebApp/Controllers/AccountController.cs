@@ -82,6 +82,42 @@ namespace WebApp.Controllers
             return View(model);
         }
 
+        [HttpGet]
+        public IActionResult ResetPassword(string token)
+        {
+            var model = new ResetPasswordViewModel { Token = token };
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var resetPasswordDTO = new ResetPasswordDTO
+                {
+                    Email = model.Email,
+                    Password = model.Password,
+                    ConfirmPassword = model.ConfirmPassword,
+                    Token = model.Token
+                };
+
+                var result = await _authService.ResetPasswordAsync(resetPasswordDTO);
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("Password reset successfully.");
+                    return RedirectToAction("Login");
+                }
+
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            return View(model);
+        }
+
         public IActionResult CheckEmail()
         {
             return View();
