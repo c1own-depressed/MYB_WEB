@@ -24,7 +24,7 @@ namespace UnitTests.Application.Services
         public async Task AddInomeAsync_WithNegativeAmount_ReturnsError()
         {
             // Arrange
-            var dto = new IncomeDTO { Id = Guid.NewGuid().ToString(), IncomeName = "Negative Income", Amount = -100 };
+            var dto = new CreateIncomeDTO { IncomeName = "Negative Income", Amount = -100 };
             string userId = Guid.NewGuid().ToString();
 
             // Act
@@ -40,7 +40,7 @@ namespace UnitTests.Application.Services
         public async Task AddIncomeAsync_WithZeroAmount_ReturnsError()
         {
             // Arrange
-            var dto = new IncomeDTO { Id = Guid.NewGuid().ToString(), IncomeName = "Zero  Income", Amount = 0 };
+            var dto = new CreateIncomeDTO { IncomeName = "Zero  Income", Amount = 0 };
             string userId = Guid.NewGuid().ToString();
 
             // Act
@@ -57,7 +57,7 @@ namespace UnitTests.Application.Services
         public async Task AddIncomeAsync_WithExtremelyHighAmount_ReturnsError()
         {
             // Arrange
-            var dto = new IncomeDTO { Id = Guid.NewGuid().ToString(), IncomeName = "High Budget Category", Amount = double.MaxValue };
+            var dto = new CreateIncomeDTO { IncomeName = "High Budget Category", Amount = double.MaxValue };
             string userId = Guid.NewGuid().ToString();
 
             // Act
@@ -73,7 +73,7 @@ namespace UnitTests.Application.Services
         public async Task AddIncomeAsync_WithShortTitle_ReturnsError()
         {
             // Arrange
-            var dto = new IncomeDTO { Id = Guid.NewGuid().ToString(), IncomeName = "Pub", Amount = 450 };
+            var dto = new CreateIncomeDTO { IncomeName = "Pub", Amount = 450 };
             string userId = Guid.NewGuid().ToString();
 
             // Act
@@ -89,7 +89,7 @@ namespace UnitTests.Application.Services
         public async Task AddIncomeAsync_WithLongTitle_ReturnsError()
         {
             // Arrange
-            var dto = new IncomeDTO { Id = Guid.NewGuid().ToString(), IncomeName = "Category New Category New Category New Category New Category New Category New Category New Category New Category New Category New", Amount = 450 };
+            var dto = new CreateIncomeDTO { IncomeName = "Category New Category New Category New Category New Category New Category New Category New Category New Category New Category New", Amount = 450 };
             string userId = Guid.NewGuid().ToString();
 
             // Act
@@ -105,7 +105,7 @@ namespace UnitTests.Application.Services
         public async Task AddIncomeAsync_WithValidData_ReturnsSuccess()
         {
             // Arrange
-            var dto = new IncomeDTO { Id = Guid.NewGuid().ToString(), IncomeName = "Valid Income", Amount = 5000 };
+            var dto = new CreateIncomeDTO { IncomeName = "Valid Income", Amount = 5000 };
             _mockUnitOfWork.Setup(u => u.Incomes.AddAsync(It.IsAny<Income>()))
                            .Returns(Task.CompletedTask)
                            .Verifiable("AddAsync was not called with an ExpenseCategory object.");

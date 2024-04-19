@@ -27,7 +27,7 @@ namespace UnitTests.Application.Services
         public async Task AddExpenseAsync_WithNegativeAmount_ReturnsError()
         {
             // Arrange
-            var dto = new ExpenseDTO { Id = Guid.NewGuid().ToString(), ExpenseName = "Negative Expense", Amount = -100, CategoryId = Guid.NewGuid().ToString() };
+            var dto = new CreateExpenseDTO { ExpenseName = "Negative Expense", Amount = -100, CategoryId = Guid.NewGuid().ToString() };
 
             // Act
             var serviceResult = await _service.AddExpenseAsync(dto);
@@ -42,7 +42,7 @@ namespace UnitTests.Application.Services
         public async Task AddExpenseAsync_WithZeroAmount_ReturnsError()
         {
             // Arrange
-            var dto = new ExpenseDTO { Id = Guid.NewGuid().ToString(), ExpenseName = "Zero Expense", Amount = 0, CategoryId = Guid.NewGuid().ToString() };
+            var dto = new CreateExpenseDTO { ExpenseName = "Zero Expense", Amount = 0, CategoryId = Guid.NewGuid().ToString() };
 
             // Act
             var serviceResult = await _service.AddExpenseAsync(dto);
@@ -57,7 +57,7 @@ namespace UnitTests.Application.Services
         public async Task AddExpenseAsync_WithValidData_ReturnsSuccess()
         {
             // Arrange
-            var dto = new ExpenseDTO { Id = Guid.NewGuid().ToString(), ExpenseName = "Valid Expense", Amount = 500, CategoryId = Guid.NewGuid().ToString() };
+            var dto = new CreateExpenseDTO { ExpenseName = "Valid Expense", Amount = 500, CategoryId = Guid.NewGuid().ToString() };
 
             _mockUnitOfWork.Setup(u => u.Expenses.AddAsync(It.IsAny<Expense>()))
                            .Returns(Task.CompletedTask); // Simulate saving successfully

@@ -1,11 +1,11 @@
 ﻿using System.Net;
 using System.Net.Mail;
+using System.Security.Claims;
 using Application.DTOs.AccountDTOs;
 using Application.Interfaces;
-using Azure.Core;
 using Domain.Entities;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -46,7 +46,7 @@ namespace Persistence.AuthService
             return result;
         }
 
-        public async Task<User> AuthenticateUserAsync(UserLoginDTO userLoginDTO)
+        public async Task<User?> AuthenticateUserAsync(UserLoginDTO userLoginDTO)
         {
             var user = await _userManager.FindByEmailAsync(userLoginDTO.Email);
 
@@ -72,7 +72,7 @@ namespace Persistence.AuthService
             var authProperties = new AuthenticationProperties
             {
                 IsPersistent = true, // Persist the cookie across browser sessions
-                ExpiresUtc = DateTimeOffset.UtcNow.AddDays(7) // Cookie expiration time
+                ExpiresUtc = DateTimeOffset.UtcNow.AddMinutes(30), // Cookie expiration time
             };
 
             // Create the principal
@@ -91,12 +91,11 @@ namespace Persistence.AuthService
         public async Task SendEmailConfirmationAsync(User user)
         {
             var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-            //var callbackUrl = $"https://yourdomain.com/account/confirmemail?userId={user.Id}&code={Uri.EscapeDataString(code)}";
+
             var callbackUrl = $"{_httpContextAccessor.HttpContext.Request.Scheme}://{_httpContextAccessor.HttpContext.Request.Host}/account/confirmemail?userId={user.Id}&code={Uri.EscapeDataString(code)}";
-            //await _emailSender.SendEmailAsync(user.Email, "Confirm your email",
-            //    $"Please confirm your account by <a href='{callbackUrl}'>clicking here</a>.");
-            await SendEmailAsync(user.Email, "Confirm your email",
-                $"Please confirm your account by <a href='{callbackUrl}'>clicking here</a>.");
+
+            string htmlMessage = $"Please confirm your account by <a href='{callbackUrl}'>clicking here</a>.";
+            _ = await SendEmailAsync(user.Email, "Confirm your email", htmlMessage);
         }
 
         private async Task<bool> SendEmailAsync(string email, string subject, string htmlMessage)
@@ -118,6 +117,7 @@ namespace Persistence.AuthService
             }
             catch (Exception ex)
             {
+                // _logger.Error(ex);
                 return false;
             }
         }
