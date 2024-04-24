@@ -18,7 +18,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
     .WriteTo.Seq("http://localhost:5341"));
 
-var connectionString = builder.Configuration.GetConnectionString("DimaConnection");
+var connectionString = builder.Configuration.GetConnectionString("AndriyConnection");
 
 
 if (connectionString != null)
@@ -167,6 +167,11 @@ app.MapControllerRoute(
     name: "resetpassword",
     pattern: "resetpassword",
     defaults: new { controller = "Account", action = "ResetPassword" });
+
+app.MapControllerRoute(
+    name: "logout",
+    pattern: "logout",
+    defaults: new { controller = "Account", action = "Logout" });
 
 // TODO: after the application is deployed
 // app.UseCors(options => options.WithOrigins("https://example.com")); // Adjust accordingly
