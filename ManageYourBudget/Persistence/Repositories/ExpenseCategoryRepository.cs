@@ -11,12 +11,12 @@ namespace Persistence.Repositories
         {
         }
 
-        public async Task<IEnumerable<ExpenseCategory>> GetExpenseCategoriesByUserIdAsync(int userId)
+        public async Task<IEnumerable<ExpenseCategory>> GetExpenseCategoriesByUserIdAsync(string userId)
         {
             return await _context.Set<ExpenseCategory>().Where(category => category.UserId == userId).ToListAsync();
         }
 
-        public IEnumerable<ExpenseCategory> GetExpenseCategoriesByUserId(int userId)
+        public IEnumerable<ExpenseCategory> GetExpenseCategoriesByUserId(string userId)
         {
             return _context.Set<ExpenseCategory>().Where(category => category.UserId == userId).ToList();
         }

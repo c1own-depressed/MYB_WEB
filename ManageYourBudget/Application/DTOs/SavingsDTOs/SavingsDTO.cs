@@ -2,7 +2,7 @@
 {
     public class SavingsDTO
     {
-        public int Id { get; set; }
+        required public string Id { get; set; }
 
         public string SavingsName { get; set; } = string.Empty;
 
@@ -12,6 +12,6 @@
 
         public string CurrencyEmblem { get; set; } = "$";
 
-        public int UserId { get; set; }
+        required public string UserId { get; set; }
     }
 }

@@ -1,9 +1,11 @@
 using System.Diagnostics;
+using System.Security.Claims;
 using Application.DTOs.ExpenseDTOs;
 using Application.DTOs.IncomeDTOs;
 using Application.DTOs.SavingsDTOs;
 using Application.Interfaces;
 using Application.Utils;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 
@@ -16,24 +18,33 @@ namespace WebApp.Controllers
         private readonly IIncomeService _incomeService;
         private readonly ISavingsService _savingsService;
         private readonly IExpenseService _expenseService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
         public HomeController(
             ILogger<HomeController> logger,
             IExpenseCategoryService expenseCategoryService,
             IIncomeService incomeService,
             ISavingsService savingsService,
-            IExpenseService expenseService)
+            IExpenseService expenseService,
+            IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
             _expenseCategoryService = expenseCategoryService;
             _incomeService = incomeService;
             _savingsService = savingsService;
             _expenseService = expenseService;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IActionResult> Index()
         {
-            var userId = 1;
+        if (!User.Identity.IsAuthenticated)
+        {
+            return RedirectToAction("Login", "Account"); // Перенаправлення на сторінку входу
+        }
+        else
+        {
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var categories = await _expenseCategoryService.GetExpenseCategoriesByUserIdAsync(userId);
             var incomes = await _incomeService.GetIncomesByUserIdAsync(userId);
             var savings = await _savingsService.GetSavingsByUserIdAsync(userId);
@@ -46,6 +57,7 @@ namespace WebApp.Controllers
 
             _logger.LogError("Home page opened");
             return View(model);
+        }
         }
 
         public IActionResult Privacy()
@@ -62,13 +74,14 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddExpenseCategory([FromBody] CreateExpenseCategoryDTO model)
         {
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!ModelState.IsValid)
             {
                 _logger.LogError("Invalid model state for AddExpenseCategory");
                 return BadRequest(ModelState);
             }
 
-            ServiceResult serviceResult = await _expenseCategoryService.AddExpenseCategoryAsync(model);
+            ServiceResult serviceResult = await _expenseCategoryService.AddExpenseCategoryAsync(model, userId);
 
             if (serviceResult.Success)
             {
@@ -84,7 +97,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveExpenseCategory(int categoryId)
+        public async Task<IActionResult> RemoveExpenseCategory(string categoryId)
         {
             ServiceResult serviceResult = await _expenseCategoryService.RemoveExpenseCategoryAsync(categoryId);
 
@@ -126,14 +139,14 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddIncome([FromBody] IncomeDTO model)
+        public async Task<IActionResult> AddIncome([FromBody] CreateIncomeDTO model)
         {
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!ModelState.IsValid)
             {
                 return BadRequest(ModelState);
             }
-
-            ServiceResult serviceResult = await _incomeService.AddIncomeAsync(model);
+            ServiceResult serviceResult = await _incomeService.AddIncomeAsync(model, userId);
 
             if (serviceResult.Success)
             {
@@ -151,13 +164,13 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddSavings([FromBody] CreateSavingsDTO model)
         {
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!ModelState.IsValid)
             {
-                _logger.LogError("Invalid model state for AddSavings");
                 return BadRequest(ModelState);
             }
 
-            ServiceResult serviceResult = await _savingsService.AddSavingsAsync(model);
+            ServiceResult serviceResult = await _savingsService.AddSavingsAsync(model, userId);
 
             if (serviceResult.Success)
             {
@@ -173,7 +186,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveSavings(int savingsId)
+        public async Task<IActionResult> RemoveSavings(string savingsId)
         {
             ServiceResult serviceResult = await _savingsService.RemoveSavingsAsync(savingsId);
 
@@ -237,7 +250,7 @@ namespace WebApp.Controllers
             }
         }
 
-        public async Task<IActionResult> RemoveIncome(int incomeId)
+        public async Task<IActionResult> RemoveIncome(string incomeId)
         {
             ServiceResult serviceResult = await this._incomeService.RemoveIncomeAsync(incomeId);
 
@@ -255,7 +268,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddExpense([FromBody] ExpenseDTO model) // Add Expense action
+        public async Task<IActionResult> AddExpense([FromBody] CreateExpenseDTO model) // Add Expense action
         {
             if (!ModelState.IsValid)
             {
@@ -278,7 +291,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveExpense(int expenseId) // Remove Expense action
+        public async Task<IActionResult> RemoveExpense(string expenseId) // Remove Expense action
         {
             ServiceResult serviceResult = await _expenseService.RemoveExpenseAsync(expenseId);
 

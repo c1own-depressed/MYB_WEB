@@ -8,7 +8,7 @@ namespace Application.DTOs.ExpenseDTOs
 {
     public class EditExpenseDTO
     {
-        public int Id { get; set; }
+        required public string Id { get; set; }
 
         public string ExpenseName { get; set; } = string.Empty;
 

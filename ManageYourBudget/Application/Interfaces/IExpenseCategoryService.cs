@@ -5,11 +5,11 @@ namespace Application.Interfaces
 {
     public interface IExpenseCategoryService
     {
-        Task<IEnumerable<ExpenseCategoryDTO>> GetExpenseCategoriesByUserIdAsync(int userId);
+        Task<IEnumerable<ExpenseCategoryDTO>> GetExpenseCategoriesByUserIdAsync(string userId);
 
-        Task<ServiceResult> AddExpenseCategoryAsync(CreateExpenseCategoryDTO model);
+        Task<ServiceResult> AddExpenseCategoryAsync(CreateExpenseCategoryDTO model, string userId);
 
-        Task<ServiceResult> RemoveExpenseCategoryAsync(int categoryId);
+        Task<ServiceResult> RemoveExpenseCategoryAsync(string categoryId);
 
         Task<ServiceResult> EditExpenseCategoryAsync(EditExpenseCategoryDTO model);
     }

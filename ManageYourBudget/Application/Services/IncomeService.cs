@@ -16,9 +16,9 @@ namespace Application.Services
             this._unitOfWork = unitOfWork;
         }
 
-        public async Task<ServiceResult> AddIncomeAsync(IncomeDTO model)
+        public async Task<ServiceResult> AddIncomeAsync(CreateIncomeDTO model, string userId)
         {
-            var validator = new IncomeDTOValidator();
+            var validator = new CreateIncomeDTOValidator();
             var validationResult = validator.Validate(model);
 
             if (!validationResult.IsValid)
@@ -28,11 +28,12 @@ namespace Application.Services
 
             var income = new Income
             {
-                UserId = 1, // TODO: Use actual user ID from session or request
+                Id = Guid.NewGuid().ToString(),
                 IncomeName = model.IncomeName,
                 Amount = model.Amount,
                 IsRegular = model.IsRegular,
                 Date = model.Date,
+                UserId = userId,
             };
 
             await this._unitOfWork.Incomes.AddAsync(income);
@@ -41,7 +42,7 @@ namespace Application.Services
             return new ServiceResult(success: true);
         }
 
-        public async Task<IEnumerable<IncomeDTO>> GetIncomesByUserIdAsync(int userId)
+        public async Task<IEnumerable<IncomeDTO>> GetIncomesByUserIdAsync(string userId)
         {
             var user = await this._unitOfWork.Users.GetByIdAsync(userId);
             var incomes = await this._unitOfWork.Incomes.GetIncomesByUserIdAsync(userId);
@@ -87,7 +88,7 @@ namespace Application.Services
             return new ServiceResult(success: true);
         }
 
-        public async Task<ServiceResult> RemoveIncomeAsync(int incomeId)
+        public async Task<ServiceResult> RemoveIncomeAsync(string incomeId)
         {
             var incomeToRemove = await _unitOfWork.Incomes.GetByIdAsync(incomeId);
 

@@ -1,0 +1,16 @@
+﻿@{
+    ViewData["Title"] = "Email Confirmation";
+}
+
+<h2>Check Your Email</h2>
+<div class="alert alert-info" role="alert">
+    You email is successfully verified!
+</div>
+
+@section Scripts {
+    <script>
+        setTimeout(function () {
+            window.location.href = '@Url.Action("login")'; // Redirect to Home/Index after 2 seconds
+        }, 2000);
+    </script>
+}

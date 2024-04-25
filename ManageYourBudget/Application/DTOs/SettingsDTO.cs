@@ -2,7 +2,7 @@
 {
     public class SettingsDTO
     {
-        public int Id { get; set; }
+        required public string Id { get; set; }
 
         public bool IsLightTheme { get; set; }
 

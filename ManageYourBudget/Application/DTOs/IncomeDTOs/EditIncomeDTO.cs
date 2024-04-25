@@ -8,7 +8,7 @@ namespace Application.DTOs.IncomeDTOs
 {
     public class EditIncomeDTO
     {
-        public int Id { get; set; }
+        required public string Id { get; set; }
 
         public string Name { get; set; } = string.Empty;
 

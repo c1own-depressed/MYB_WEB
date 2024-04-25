@@ -1,17 +1,25 @@
-﻿using Application.DTOs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
+﻿using Application.DTOs.AccountDTOs;
+using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Application.Interfaces
 {
     public interface IAuthService
     {
-        Task<string> LoginAsync(LoginDTO loginDTO);
+        Task<IdentityResult> RegisterUserAsync(UserRegistrationDTO userRegistrationDTO);
 
-        Task<string> RegisterAsync(RegisterDTO registerDTO);
+        Task SendEmailConfirmationAsync(User user);
 
+        Task<User> AuthenticateUserAsync(UserLoginDTO userLoginDTO);
+
+        Task<IdentityResult> ForgotPasswordAsync(string email);
+
+        Task LogoutAsync();
+
+        Task<IdentityResult> ResetPasswordAsync(ResetPasswordDTO resetPasswordDTO);
+
+        Task<IdentityResult> ConfirmEmailAsync(string userId, string token);
     }
 }

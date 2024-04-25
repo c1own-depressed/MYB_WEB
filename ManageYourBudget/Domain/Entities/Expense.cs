@@ -2,16 +2,14 @@
 {
     public class Expense
     {
-        public int Id { get; set; }
+        required public string Id { get; set; }
 
         public string ExpenseName { get; set; } = string.Empty;
 
         public double Amount { get; set; }
 
         public DateTime Date { get; set; }
-
-        public int CategoryId { get; set; }
-        public DateTime Month { get; set; }
-        public int TotalAmount { get; set; }
+      
+        required public string CategoryId { get; set; }
     }
 }

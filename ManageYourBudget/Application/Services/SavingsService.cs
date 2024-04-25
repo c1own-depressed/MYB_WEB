@@ -16,7 +16,7 @@ namespace Application.Services
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IEnumerable<SavingsDTO>> GetSavingsByUserIdAsync(int userId)
+        public async Task<IEnumerable<SavingsDTO>> GetSavingsByUserIdAsync(string userId)
         {
             var user = await _unitOfWork.Users.GetByIdAsync(userId);
             var savings = await _unitOfWork.Savings.GetSavingsByUserIdAsync(userId);
@@ -29,11 +29,12 @@ namespace Application.Services
                 SavingsName = s.SavingsName,
                 Amount = s.Amount,
                 CurrencyEmblem = currencyRepresentation,
+                UserId = userId,
             });
             return savingsDTOs;
         }
 
-        public async Task<ServiceResult> AddSavingsAsync(CreateSavingsDTO model)
+        public async Task<ServiceResult> AddSavingsAsync(CreateSavingsDTO model, string userId)
         {
             var validator = new CreateSavingsDTOValidator();
             var validationResult = validator.Validate(model);
@@ -45,7 +46,9 @@ namespace Application.Services
 
             var savings = new Savings
             {
-                UserId = 1, // TODO: Use actual user ID from session or request
+                Id = Guid.NewGuid().ToString(),
+                UserId = userId,
+                Date = model.Date,
                 SavingsName = model.SavingsName,
                 Amount = model.Amount,
             };
@@ -56,7 +59,7 @@ namespace Application.Services
             return new ServiceResult(success: true);
         }
 
-        public async Task<ServiceResult> RemoveSavingsAsync(int savingsId)
+        public async Task<ServiceResult> RemoveSavingsAsync(string savingsId)
         {
             var savingsToRemove = await _unitOfWork.Savings.GetByIdAsync(savingsId);
 
