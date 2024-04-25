@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Services;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -11,23 +12,27 @@ namespace WebApp.Controllers
         private readonly ILogger<StatisticPageController> _logger;
         private readonly IStatisticService _statisticService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ISettingsService _settingsService;
 
-
-        public StatisticPageController(ILogger<StatisticPageController> logger, IStatisticService statisticService, IHttpContextAccessor httpContextAccessor)
+        public StatisticPageController(ILogger<StatisticPageController> logger, IStatisticService statisticService, IHttpContextAccessor httpContextAccessor, ISettingsService settingsService)
         {
             _logger = logger;
             _statisticService = statisticService;
             _httpContextAccessor = httpContextAccessor;
+            _settingsService = settingsService;
         }
 
         public async Task<IActionResult> Index()
         {
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var temp = await _settingsService.GetUserSettingsAsync(userId);
+            bool IsLight_Theme = temp.IsLightTheme;
+            ViewBag.Theme = IsLight_Theme ? "Light" : "Dark";
             string aspNetCoreCookiesValue = _httpContextAccessor.HttpContext.Request.Cookies[".AspNetCore.Cookies"];
             try
             {
                 _logger.LogInformation("User accessed StatisticPage.");
 
-                string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
                 var defaultStatistics = await _statisticService.GetAllData(DateTime.Now.AddMonths(-1), DateTime.Now, userId);
 
                 // Initialize the list to hold multiple StatisticViewModel instances

@@ -4,6 +4,7 @@ using Application.DTOs.ExpenseDTOs;
 using Application.DTOs.IncomeDTOs;
 using Application.DTOs.SavingsDTOs;
 using Application.Interfaces;
+using Application.Services;
 using Application.Utils;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
@@ -19,6 +20,7 @@ namespace WebApp.Controllers
         private readonly ISavingsService _savingsService;
         private readonly IExpenseService _expenseService;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ISettingsService _settingsService;
 
         public HomeController(
             ILogger<HomeController> logger,
@@ -26,7 +28,8 @@ namespace WebApp.Controllers
             IIncomeService incomeService,
             ISavingsService savingsService,
             IExpenseService expenseService,
-            IHttpContextAccessor httpContextAccessor)
+            IHttpContextAccessor httpContextAccessor,
+            ISettingsService settingsService)
         {
             _logger = logger;
             _expenseCategoryService = expenseCategoryService;
@@ -34,6 +37,7 @@ namespace WebApp.Controllers
             _savingsService = savingsService;
             _expenseService = expenseService;
             _httpContextAccessor = httpContextAccessor;
+            _settingsService = settingsService;
         }
 
         public async Task<IActionResult> Index()
@@ -45,6 +49,9 @@ namespace WebApp.Controllers
         else
         {
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var temp = await _settingsService.GetUserSettingsAsync(userId);
+            bool IsLight_Theme = temp.IsLightTheme;
+            ViewBag.Theme = IsLight_Theme ? "Light" : "Dark";
             var categories = await _expenseCategoryService.GetExpenseCategoriesByUserIdAsync(userId);
             var incomes = await _incomeService.GetIncomesByUserIdAsync(userId);
             var savings = await _savingsService.GetSavingsByUserIdAsync(userId);
