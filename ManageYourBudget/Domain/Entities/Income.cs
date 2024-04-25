@@ -13,7 +13,5 @@
         public bool IsRegular { get; set; } = true;
 
         public DateTime Date { get; set; }
-        public DateTime Month { get; set; }
-        public int TotalAmount { get; set; }
     }
 }
