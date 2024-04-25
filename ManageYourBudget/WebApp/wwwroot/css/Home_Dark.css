@@ -1,0 +1,154 @@
+﻿body {
+    background-color: #2C2C2C;
+    color: white;
+}
+
+html {
+    font-size: 16px;
+}
+
+.category-wrapper {
+    margin: 1rem;
+    color: white;
+}
+
+.category-heading-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.category-heading-name-wrapper {
+    background-color: #424242;
+    border-radius: 0.3125rem;
+    padding: 1rem 1.5rem;
+    display: inline-block;
+}
+
+.category-heading {
+    font-size: 2.25rem;
+}
+
+.category-heading-details-wrapper {
+    color: burlywood;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.expenses-wrapper {
+    color: burlywood;
+}
+
+.add-category-button {
+    margin: 1rem;
+    color: #1C25FF;
+}
+
+/* card item styles */
+.card {
+    background-color: #2C2C2C;
+}
+
+.card-wrapper {
+    margin: 1rem;
+}
+
+    .card-wrapper .card-header {
+        background-color: #424242;
+        color: white;
+        border-radius: 30px 30px 0px 0px;
+    }
+
+.card-header-button-content {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.category-details {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.card-wrapper .card {
+    border: none;
+}
+
+.card-body {
+    color: white;
+    background-color: #424242;
+    border-radius: 0px 0px 30px 30px;
+}
+
+.card-wrapper .btn-link {
+    color: white;
+    text-decoration: none;
+    text-align: left;
+}
+
+.card-content, .card-details, .card-interaction {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.card-amount, .card-name {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.card-edit, .card-delete {
+    color: #7B7B7B;
+}
+
+    .card-edit:hover, .card-delete:hover {
+        color: white;
+    }
+
+/* Style for the Add Income button */
+.add-btn {
+    font-weight: bold;
+    color: #1C25FF;
+    margin-top: 10px;
+}
+
+/* Apply a top border to all income-content elements instead of a bottom border */
+.card-content {
+    padding-left: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    padding-top: 5px;
+    margin-top: 5px;
+}
+
+    /* Use the first-child pseudo-class to remove the top border from the first element */
+    .card-content:first-child {
+        border-top: none;
+        padding-top: 0;
+        margin-top: 0;
+    }
+
+.separator-line {
+    background-color: rgba(255, 255, 255, 0.9);
+    height: 2px;
+}
+
+.btn-outline-primary:hover {
+    background-color: #1C25FF;
+    color: white;
+}
+
+/* Remove the focus outline from buttons */
+.btn:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Specifically for your income button, if it has a unique class */
+.add-income-button:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}

@@ -3,7 +3,16 @@
 @{
     ViewData["Title"] = "Tips & Tricks";
 }
+<head>
+    <title>@ViewBag.Title</title>
+    @{
+        string theme = ViewBag.Theme ?? "Dark"; // За замовчуванням використовується темна тема
+        string cssFileName = $"OtherPages_{theme}.css";
+    }
 
+    <link rel="stylesheet" href="~/css/@cssFileName">
+</head>
+<body>
 <div style="display: flex;">
     <div style="flex: 1;">
         <h2>Tips</h2>
@@ -41,4 +50,4 @@
         }
     </div>
 </div>
-
+</body>

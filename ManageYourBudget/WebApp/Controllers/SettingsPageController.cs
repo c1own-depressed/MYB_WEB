@@ -15,7 +15,6 @@ namespace WebApp.Controllers
         private bool selectedTheme;
         private string? selectedCurrency;
         private readonly IHttpContextAccessor _httpContextAccessor;
-
         public SettingsPageController(ILogger<SettingsPageController> logger, ISettingsService settingsService, IHttpContextAccessor httpContextAccessor)
         {
             _logger = logger;
@@ -25,7 +24,11 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
+
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var temp = await _settingsService.GetUserSettingsAsync(userId);
+            bool IsLight_Theme = temp.IsLightTheme;
+            ViewBag.Theme = IsLight_Theme ? "Light" : "Dark";
             try
             {
                 var userSettings = await _settingsService.GetUserSettingsAsync(userId);

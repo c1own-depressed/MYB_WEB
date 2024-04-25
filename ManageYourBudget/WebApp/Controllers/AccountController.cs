@@ -16,11 +16,12 @@ namespace WebApp.Controllers
     {
         private readonly ILogger<AccountController> _logger;
         private readonly IAuthService _authService;
-
-        public AccountController(ILogger<AccountController> logger, IAuthService authService)
+        private readonly ISettingsService _settingsService;
+        public AccountController(ILogger<AccountController> logger, IAuthService authService, ISettingsService settingsService)
         {
             _logger = logger;
             _authService = authService;
+            _settingsService = settingsService;
         }
 
         [HttpGet]
