@@ -9,6 +9,9 @@ using Persistence.AuthService;
 using Xunit;
 using Microsoft.Extensions.DependencyInjection;
 using Application.DTOs.AccountDTOs;
+using Microsoft.AspNetCore.Mvc;
+using Application.Interfaces;
+using WebApp.Controllers;
 
 namespace UnitTests.Infrastructure.Services
 {
@@ -20,6 +23,8 @@ namespace UnitTests.Infrastructure.Services
         private readonly Mock<IAuthenticationService> _authService; // Ensure this is declared
         private HttpContext _mockHttpContext; // Ensure this is declared
         private readonly AuthService _service;
+        private readonly Mock<IAuthService> _mockAuthService;
+        private readonly AccountController _controller;
 
         public AuthServiceTests()
         {
@@ -37,6 +42,9 @@ namespace UnitTests.Infrastructure.Services
                 .BuildServiceProvider();
 
             _service = new AuthService(_userManager.Object, _emailSender.Object, _httpContextAccessor.Object);
+
+            _mockAuthService = new Mock<IAuthService>();
+            _controller = new AccountController(null, _mockAuthService.Object, null);
         }
 
         [Fact]
@@ -246,5 +254,17 @@ namespace UnitTests.Infrastructure.Services
             Assert.Contains(result.Errors, e => e.Description.Contains("6 characters"));
         }
 
+        [Fact]
+        public async Task Logout_RedirectsToHomeIndex()
+        {
+            // Arrange
+            _mockAuthService.Setup(s => s.LogoutAsync()).Returns(Task.CompletedTask);
+
+            // Act
+            var result = await _controller.Logout();
+
+            // Assert
+            _mockAuthService.Verify(u => u.LogoutAsync(), Times.Once);
+        }
     }
 }
