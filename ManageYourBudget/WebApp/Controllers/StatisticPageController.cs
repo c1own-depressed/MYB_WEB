@@ -75,7 +75,7 @@ namespace WebApp.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpGet]
         public async Task<IActionResult> GetStatistics(DateTime startDate, DateTime endDate, string category)
         {
             try

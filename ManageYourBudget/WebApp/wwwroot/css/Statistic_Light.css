@@ -6,9 +6,13 @@ body {
 
 .statistic {
     display: flex;
-    justify-content: space-between;
+    gap: 2em;
 }
 
+.statistic-manipulation {
+    display: flex;
+    flex-direction: column;
+}
 
 table {
     margin-top: 10%;

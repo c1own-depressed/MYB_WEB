@@ -2,9 +2,15 @@
     background-color: #2C2C2C;
     color: white;
 }
+
 .statistic {
     display: flex;
-    justify-content: space-between;
+    gap: 2em;
+}
+
+.statistic-manipulation {
+    display: flex;
+    flex-direction: column;
 }
 
 table {

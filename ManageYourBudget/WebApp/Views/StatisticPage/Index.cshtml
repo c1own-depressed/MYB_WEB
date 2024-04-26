@@ -21,84 +21,57 @@
     </style>
 </head>
 <body>
- <div class="statistic">
-     @* <form method="post" action="@Url.Action("GetStatistics", "StatisticPage")">
-            <div class="choose-options">
-                <div class="date-pick">
-                    <label>Pick a period:</label>
-                    <div class="form-group">
-                        <label for="startDate">Start Date:</label>
-                        <input type="date" class="form-control" id="startDate" name="startDate" />
-                    </div>
-                    <div class="form-group">
-                        <label for="endDate">End Date:</label>
-                        <input type="date" class="form-control" id="endDate" name="endDate" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="category">Category:</label>
-                    <select class="form-control" id="category" name="category">
-                        <option value="category1">Category 1</option>
-                        <option value="category2">Category 2</option>
-                        <option value="category3">Category 3</option>
-                    </select>
-                </div>
-                <div class="buttons">
-                    <button type="submit">Submit</button>
-                    <button type="submit">
-                        <a href="@Url.Action("GetFileStatistic", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today })" class="btn btn-default">Export</a>
-                    </button>
-                </div>
+    <div class="statistic">
+        <div class="statistic-manipulation">
+            <div class="form-group">
+                <label for="startDate">Start Date:</label>
+                <input type="date" class="form-control" id="startDate" name="startDate" />
             </div>
-        </form> *@
-
-        <div class="form-group">
-            <label for="startDate">Start Date:</label>
-            <input type="date" class="form-control" id="startDate" name="startDate" />
+            <div class="form-group">
+                <label for="endDate">End Date:</label>
+                <input type="date" class="form-control" id="endDate" name="endDate" />
+            </div>
+            <a id="getStatistics" class="btn btn-default" href="@Url.Action("GetStatistics", "StatisticPage", new { startDate=DateTime.Today.AddMonths(-1), endDate=DateTime.Today, format="CSV" })">Show statistic</a>
+            <a id="exportCsvLink" class="btn btn-default" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "CSV" })">Export CSV</a>
+            <a id="exportXmlLink" class="btn btn-default" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "XML" })">Export XML</a>
+            <a id="exportXlsxLink" class="btn btn-default" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "XLSX" })">Export XLSX</a>
         </div>
-        <div class="form-group">
-            <label for="endDate">End Date:</label>
-            <input type="date" class="form-control" id="endDate" name="endDate" />
-        </div>
-        <a id="exportCsvLink" class="btn btn-default" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "CSV" })">Export CSV</a>
-        <a id="exportXmlLink" class="btn btn-default" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "XML" })">Export XML</a>
-        <a id="exportXlsxLink" class="btn btn-default" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "XLSX" })">Export XLSX</a>
-
 
         <div class="table">
-        <table id="statisticsTable">
-            <thead>
-                <tr>
-                    <th>Income</th>
-                    <th>Summary Expenses</th>
-                    <th>Saved</th>
-                    <th>Month</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var statistic in Model)
-                {
+            <table id="statisticsTable">
+                <thead>
                     <tr>
-                        <td>@statistic.Incomes</td>
-                        <td>@statistic.SummaryExpenses</td>
-                        <td>@statistic.Savings</td>
-                        <td>@statistic.Date.ToString("MMMM, yyyy")</td>
+                        <th>Income</th>
+                        <th>Summary Expenses</th>
+                        <th>Saved</th>
+                        <th>Month</th>
                     </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-    
+                </thead>
+                <tbody>
+                    @foreach (var statistic in Model)
+                    {
+                        <tr>
+                            <td>@statistic.Incomes</td>
+                            <td>@statistic.SummaryExpenses</td>
+                            <td>@statistic.Savings</td>
+                            <td>@statistic.Date.ToString("MMMM, yyyy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
     </div>
     <script>
         function updateExportLinks() {
             var startDate = document.getElementById('startDate').value;
             var endDate = document.getElementById('endDate').value;
             var baseUrl = '@Url.Action("ExportStatistics", "StatisticPage")';
-
+            
             document.getElementById('exportCsvLink').href = `${baseUrl}?startDate=${startDate}&endDate=${endDate}&format=CSV`;
             document.getElementById('exportXmlLink').href = `${baseUrl}?startDate=${startDate}&endDate=${endDate}&format=XML`;
             document.getElementById('exportXlsxLink').href = `${baseUrl}?startDate=${startDate}&endDate=${endDate}&format=XLSX`;
+            
+            document.getElementById('getStatistics').href = `@Url.Action("GetStatistics", "StatisticPage")?startDate=${startDate}&endDate=${endDate}`;
         }
 
         document.getElementById('startDate').addEventListener('change', updateExportLinks);
