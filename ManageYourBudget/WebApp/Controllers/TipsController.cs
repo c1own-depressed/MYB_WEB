@@ -16,16 +16,27 @@ namespace WebApp.Controllers
             _settingsService = settingsService;
             _httpContextAccessor = httpContextAccessor;
         }
+
         public async Task<IActionResult> Index()
         {
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var temp = await _settingsService.GetUserSettingsAsync(userId);
-            bool IsLight_Theme = temp.IsLightTheme;
-            ViewBag.Theme = IsLight_Theme ? "Light" : "Dark";
-            var tips = GetTipsFromSomewhere();
-            var tricks = GetTricksFromSomewhere();
-            var model = new Tuple<List<string>, List<string>>(tips, tricks);
-            return View("~/Views/TipsTricksPage/Index.cshtml", model);
+            if (userId != null)
+            {
+                var temp = await _settingsService.GetUserSettingsAsync(userId);
+                bool IsLight_Theme = temp.IsLightTheme;
+                ViewBag.Theme = IsLight_Theme ? "Light" : "Dark";
+                var tips = GetTipsFromSomewhere();
+                var tricks = GetTricksFromSomewhere();
+                var model = new Tuple<List<string>, List<string>>(tips, tricks);
+                return View("~/Views/TipsTricksPage/Index.cshtml", model);
+            }
+            else
+            {
+                var tips = GetTipsFromSomewhere();
+                var tricks = GetTricksFromSomewhere();
+                var model = new Tuple<List<string>, List<string>>(tips, tricks);
+                return View("~/Views/TipsTricksPage/Index.cshtml", model);
+            }
         }
 
         private List<string> GetTipsFromSomewhere()
