@@ -80,7 +80,7 @@
             <label for="language">@localizer["Language"]</label>
             <select id="language" name="Language" class="selection">
                 <option value="en" id="enOption">@localizer["English"]</option>
-                <option value="ua" id="uaOption">@localizer["Ukrainian"]</option>
+                <option value="uk" id="ukOption">@localizer["Ukrainian"]</option>
             </select>
         </div>
         <div class="SelectOption">
@@ -98,9 +98,7 @@
             </select>
         </div>
         <!-- Reset password button -->
-        <div class="SelectOption">
-            <button type="button" onclick="location.href='@Url.Action("ResetPassword", "Account")'">@localizer["ResetPassword"]</button>
-        </div>
+        <button type="button" onclick="location.href='@Url.Action("ResetPassword", "Account")'">@localizer["ResetPassword"]</button>
         <button type="submit" >@localizer["Save"]</button>
         <!-- Додано formaction -->
     </form>

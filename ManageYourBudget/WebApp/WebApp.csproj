@@ -47,6 +47,11 @@
 
   <ItemGroup>
     <Folder Include="Resources\Controllers\SettingsPageController\" />
+    <Folder Include="Resources\Views\FAQPage\NewFolder1\" />
+    <Folder Include="Resources\Views\FAQPage\NewFolder2\" />
+    <Folder Include="Resources\Views\FAQPage\NewFolder\" />
+    <Folder Include="Resources\Views\Home\NewFolder\" />
+    <Folder Include="Resources\Views\Shared\NewFolder\" />
   </ItemGroup>
 
 </Project>

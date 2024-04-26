@@ -1,8 +1,9 @@
-﻿@{
-    ViewData["Title"] = "Check Your Email";
+﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["CheckYourEmailTitle"];
 }
 
-<h2>Check Your Email</h2>
+<h2>@Localizer["CheckYourEmailHeader"]</h2>
 <div class="alert alert-info" role="alert">
-    Please check your email to verify your account and complete the registration process.
+    @Localizer["CheckYourEmailMessage"]
 </div>
