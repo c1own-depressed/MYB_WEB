@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using System.Xml.Linq;
 using Application.DTOs.StatisticDTO;
 using Application.Interfaces;
 using Application.Services;
-using Domain.Interfaces;
-using ClosedXML;
 using ClosedXML.Excel;
+using Domain.Interfaces;
 
 namespace Persistence.Services
 {
@@ -18,10 +13,10 @@ namespace Persistence.Services
         private IUnitOfWork _unitOfWork;
         private IStatisticService _statisticService;
 
-        public ExportDataService(IUnitOfWork unitOfWork)
+        public ExportDataService(IUnitOfWork unitOfWork, IStatisticService statisticService)
         {
             _unitOfWork = unitOfWork;
-            _statisticService = new StatisticService(_unitOfWork);
+            _statisticService = statisticService;
         }
 
         public async Task<string> ExportDataToCSV(DateTime startDate, DateTime endDate, string userId)
