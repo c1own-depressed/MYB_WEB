@@ -101,7 +101,7 @@ app.UseRouting();
 app.UseAuthentication(); // This is essential for Identity
 app.UseAuthorization();
 
-var cultures = new[] { "en", "uk" };
+var cultures = new[] { "en-US", "uk-UA" };
 var localizationOptions = new RequestLocalizationOptions().SetDefaultCulture(cultures[0])
     .AddSupportedCultures(cultures)
     .AddSupportedUICultures(cultures);
