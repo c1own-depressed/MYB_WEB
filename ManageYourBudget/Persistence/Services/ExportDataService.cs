@@ -25,22 +25,18 @@ namespace Persistence.Services
 
             StringBuilder stringBuilder = new StringBuilder();
 
-            // Adding header to CSV
             stringBuilder.AppendLine("Month,Total Income,Total Expenses,Total Savings");
 
-            // Ensure all lists have data to avoid null reference exceptions
             data.IncomeStatistics ??= new List<IncomeStatisticDTO>();
             data.ExpensesStatistics ??= new List<TotalExpensesDTO>();
             data.SavingsStatistics ??= new List<SavedStatisticDTO>();
 
-            // Assuming data is synced by months across all statistics
             for (int i = 0; i < data.IncomeStatistics.Count; i++)
             {
                 var income = data.IncomeStatistics[i];
                 var expense = data.ExpensesStatistics.ElementAtOrDefault(i);
                 var saving = data.SavingsStatistics.ElementAtOrDefault(i);
 
-                // If no data for expenses or savings, use zero
                 double totalExpenses = expense?.TotalAmount ?? 0;
                 double totalSavings = saving?.TotalAmount ?? 0;
                 string formattedMonth = income.Month.ToString("MMMM yyyy");
@@ -54,39 +50,30 @@ namespace Persistence.Services
         public async Task<byte[]> ExportDataToXML(DateTime startDate, DateTime endDate, string userId)
         {
             var data = await _statisticService.GetAllData(startDate, endDate, userId);
-            var xDocument = new XDocument(
-                new XElement("Statistics",
-                    new XElement("Incomes",
-                        data.IncomeStatistics.Select(income =>
-                            new XElement("Income",
-                                new XElement("Month", income.Month.ToString("MMMM yyyy")),
-                                new XElement("TotalAmount", income.TotalAmount)
-                            )
-                        )
-                    ),
-                    new XElement("Expenses",
-                        data.ExpensesStatistics.Select(expense =>
-                            new XElement("Expense",
-                                new XElement("Month", expense.Month.ToString("MMMM yyyy")),
-                                new XElement("TotalAmount", expense.TotalAmount)
-                            )
-                        )
-                    ),
-                    new XElement("Savings",
-                        data.SavingsStatistics.Select(saving =>
-                            new XElement("Saving",
-                                new XElement("Month", saving.Month.ToString("MMMM yyyy")),
-                                new XElement("TotalAmount", saving.TotalAmount)
-                            )
-                        )
-                    )
-                )
-            );
+            var xDocument = new XDocument(new XElement(
+                "Statistics",
+                new XElement(
+                    "Incomes",
+                    data.IncomeStatistics.Select(income => new XElement(
+                         "Income",
+                         new XElement("Month", income.Month.ToString("MMMM yyyy")),
+                         new XElement("TotalAmount", income.TotalAmount)))),
+                new XElement(
+                    "Expenses",
+                    data.ExpensesStatistics.Select(expense => new XElement(
+                        "Expense",
+                        new XElement("Month", expense.Month.ToString("MMMM yyyy")),
+                        new XElement("TotalAmount", expense.TotalAmount)))),
+                new XElement("Savings",
+                    data.SavingsStatistics.Select(saving => new XElement(
+                        "Saving",
+                        new XElement("Month", saving.Month.ToString("MMMM yyyy")),
+                        new XElement("TotalAmount", saving.TotalAmount))))));
 
             using (var memoryStream = new MemoryStream())
             {
                 xDocument.Save(memoryStream);
-                return memoryStream.ToArray(); // Returns the XML content as a byte array
+                return memoryStream.ToArray();
             }
         }
 
@@ -105,8 +92,8 @@ namespace Persistence.Services
                 int row = 2;
                 foreach (var income in data.IncomeStatistics)
                 {
-                    var expense = data.ExpensesStatistics.FirstOrDefault(e => e.Month == income.Month);
-                    var saving = data.SavingsStatistics.FirstOrDefault(s => s.Month == income.Month);
+                    var expense = data?.ExpensesStatistics?.FirstOrDefault(e => e.Month == income.Month);
+                    var saving = data?.SavingsStatistics?.FirstOrDefault(s => s.Month == income.Month);
 
                     worksheet.Cell(row, 1).Value = income.Month.ToString("MMMM yyyy");
                     worksheet.Cell(row, 2).Value = income.TotalAmount;

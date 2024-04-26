@@ -1,10 +1,8 @@
-﻿using Application.Interfaces;
-using Application.Services;
-using Domain.Entities;
-using Microsoft.AspNetCore.Mvc;
-using Persistence.Services;
-using System.Security.Claims;
+﻿using System.Security.Claims;
 using System.Text;
+using Application.DTOs.StatisticDTO;
+using Application.Interfaces;
+using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 
 namespace WebApp.Controllers
@@ -55,6 +53,10 @@ namespace WebApp.Controllers
                     var expense = defaultStatistics?.ExpensesStatistics?[i];
                     var saving = defaultStatistics?.SavingsStatistics?[i];
 
+                    income ??= new IncomeStatisticDTO();
+                    expense ??= new TotalExpensesDTO();
+                    saving ??= new SavedStatisticDTO();
+
                     var model = new StatisticViewModel
                     {
                         Incomes = income.TotalAmount,
@@ -81,9 +83,8 @@ namespace WebApp.Controllers
             try
             {
                 string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                var statistics = await _statisticService.GetAllData(startDate, endDate, userId); // Replace '1' with actual userId
+                var statistics = await _statisticService.GetAllData(startDate, endDate, userId);
 
-                // Initialize the list to hold multiple StatisticViewModel instances
                 List<StatisticViewModel> viewModelList = new List<StatisticViewModel>();
 
                 for (int i = 0; i < statistics?.ExpensesStatistics?.Count; i++)
@@ -91,6 +92,10 @@ namespace WebApp.Controllers
                     var income = statistics?.IncomeStatistics?[i];
                     var expense = statistics?.ExpensesStatistics?[i];
                     var saving = statistics?.SavingsStatistics?[i];
+
+                    income ??= new IncomeStatisticDTO();
+                    expense ??= new TotalExpensesDTO();
+                    saving ??= new SavedStatisticDTO();
 
                     var model = new StatisticViewModel
                     {
