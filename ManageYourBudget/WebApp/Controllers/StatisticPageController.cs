@@ -2,7 +2,9 @@
 using Application.Services;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using Persistence.Services;
 using System.Security.Claims;
+using System.Text;
 using WebApp.Models;
 
 namespace WebApp.Controllers
@@ -11,23 +13,32 @@ namespace WebApp.Controllers
     {
         private readonly ILogger<StatisticPageController> _logger;
         private readonly IStatisticService _statisticService;
+        private readonly IExportDataService _exportDataService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ISettingsService _settingsService;
 
-        public StatisticPageController(ILogger<StatisticPageController> logger, IStatisticService statisticService, IHttpContextAccessor httpContextAccessor, ISettingsService settingsService)
+        public StatisticPageController(ILogger<StatisticPageController> logger, IStatisticService statisticService, IHttpContextAccessor httpContextAccessor, ISettingsService settingsService, IExportDataService exportDataService)
         {
             _logger = logger;
             _statisticService = statisticService;
             _httpContextAccessor = httpContextAccessor;
             _settingsService = settingsService;
+            _exportDataService = exportDataService;
+        }
+
+        public enum ExportFormat
+        {
+            CSV,
+            XML,
+            XLSX
         }
 
         public async Task<IActionResult> Index()
         {
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var temp = await _settingsService.GetUserSettingsAsync(userId);
-            bool IsLight_Theme = temp.IsLightTheme;
-            ViewBag.Theme = IsLight_Theme ? "Light" : "Dark";
+            bool isLightTheme = temp.IsLightTheme;
+            ViewBag.Theme = isLightTheme ? "Light" : "Dark";
             string aspNetCoreCookiesValue = _httpContextAccessor.HttpContext.Request.Cookies[".AspNetCore.Cookies"];
             try
             {
@@ -38,33 +49,18 @@ namespace WebApp.Controllers
                 // Initialize the list to hold multiple StatisticViewModel instances
                 List<StatisticViewModel> statistics = new List<StatisticViewModel>();
 
-                // Populate view models from defaultStatistics
-                foreach (var income in defaultStatistics.IncomeStatistics)
+                for (int i = 0; i < defaultStatistics?.ExpensesStatistics?.Count; i++)
                 {
+                    var income = defaultStatistics?.IncomeStatistics?[i];
+                    var expense = defaultStatistics?.ExpensesStatistics?[i];
+                    var saving = defaultStatistics?.SavingsStatistics?[i];
+
                     var model = new StatisticViewModel
                     {
                         Incomes = income.TotalAmount,
-                        Date = income.Month,
-                    };
-
-                    statistics.Add(model);
-                }
-
-                foreach (var expense in defaultStatistics.ExpensesStatistics)
-                {
-                    var model = new StatisticViewModel
-                    {
                         SummaryExpenses = expense.TotalAmount,
-                    };
-
-                    statistics.Add(model);
-                }
-
-                foreach (var savings in defaultStatistics.SavingsStatistics)
-                {
-                    var model = new StatisticViewModel
-                    {
-                        Savings = savings.TotalAmount,
+                        Savings = saving.TotalAmount,
+                        Date = income.Month,
                     };
 
                     statistics.Add(model);
@@ -90,32 +86,18 @@ namespace WebApp.Controllers
                 // Initialize the list to hold multiple StatisticViewModel instances
                 List<StatisticViewModel> viewModelList = new List<StatisticViewModel>();
 
-                // Populate view models from statistics
-                foreach (var income in statistics.IncomeStatistics)
+                for (int i = 0; i < statistics?.ExpensesStatistics?.Count; i++)
                 {
+                    var income = statistics?.IncomeStatistics?[i];
+                    var expense = statistics?.ExpensesStatistics?[i];
+                    var saving = statistics?.SavingsStatistics?[i];
+
                     var model = new StatisticViewModel
                     {
                         Incomes = income.TotalAmount,
-                    };
-
-                    viewModelList.Add(model);
-                }
-
-                foreach (var expense in statistics.ExpensesStatistics)
-                {
-                    var model = new StatisticViewModel
-                    {
                         SummaryExpenses = expense.TotalAmount,
-                    };
-
-                    viewModelList.Add(model);
-                }
-
-                foreach (var saving in statistics.SavingsStatistics)
-                {
-                    var model = new StatisticViewModel
-                    {
                         Savings = saving.TotalAmount,
+                        Date = income.Month,
                     };
 
                     viewModelList.Add(model);
@@ -126,6 +108,47 @@ namespace WebApp.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, $"Failed to retrieve statistics: {ex.Message}");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExportStatistics(DateTime startDate, DateTime endDate, ExportFormat format)
+        {
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            try
+            {
+                byte[] fileContents;
+                string contentType;
+                string fileName;
+
+                switch (format)
+                {
+                    case ExportFormat.CSV:
+                        var csvData = await _exportDataService.ExportDataToCSV(startDate, endDate, userId);
+                        fileContents = Encoding.UTF8.GetBytes(csvData);
+                        contentType = "text/csv";
+                        fileName = "statistics.csv";
+                        break;
+                    case ExportFormat.XML:
+                        fileContents = await _exportDataService.ExportDataToXML(startDate, endDate, userId);
+                        contentType = "application/xml";
+                        fileName = "statistics.xml";
+                        break;
+                    case ExportFormat.XLSX:
+                        fileContents = await _exportDataService.ExportDataToXLSX(startDate, endDate, userId);
+                        contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                        fileName = "statistics.xlsx";
+                        break;
+                    default:
+                        return BadRequest("Unsupported format");
+                }
+
+                return File(fileContents, contentType, fileName);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to export data.");
+                return StatusCode(500, "Failed to export data.");
             }
         }
     }
