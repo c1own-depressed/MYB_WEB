@@ -1,12 +1,13 @@
-﻿@model Tuple<List<string>, List<string>>  
+﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@model Tuple<List<string>, List<string>>
 
 @{
-    ViewData["Title"] = "Tips & Tricks";
+    ViewData["Title"] = Localizer["TipsTricksTitle"];
 }
 
 <div style="display: flex;">
     <div style="flex: 1;">
-        <h2>Tips</h2>
+        <h2>@Localizer["TipsHeading"]</h2>
 
         @if (Model.Item1 != null && Model.Item1.Count > 0)
         {
@@ -19,12 +20,12 @@
         }
         else
         {
-            <p>No tips available at the moment. Please check back later.</p>
+            <p>@Localizer["NoTipsMessage"]</p>
         }
     </div>
 
     <div style="flex: 1;">
-        <h2>Tricks</h2>
+        <h2>@Localizer["TricksHeading"]</h2>
 
         @if (Model.Item2 != null && Model.Item2.Count > 0)
         {
@@ -37,8 +38,7 @@
         }
         else
         {
-            <p>No tricks available at the moment. Please check back later.</p>
+            <p>@Localizer["NoTricksMessage"]</p>
         }
     </div>
 </div>
-
