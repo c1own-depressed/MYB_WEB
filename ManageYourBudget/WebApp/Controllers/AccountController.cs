@@ -89,7 +89,6 @@ namespace WebApp.Controllers
             return View(model);
         }
 
-
         [HttpGet]
         public IActionResult ResetPassword(string token, string email)
         {

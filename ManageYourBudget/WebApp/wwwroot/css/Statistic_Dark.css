@@ -2,9 +2,15 @@
     background-color: #2C2C2C;
     color: white;
 }
+
 .statistic {
     display: flex;
-    justify-content: space-between;
+    gap: 2em;
+}
+
+.statistic-manipulation {
+    display: flex;
+    flex-direction: column;
 }
 
 table {
@@ -29,14 +35,11 @@ th, td {
     color: white; /* Змінено колір тексту на білий */
 }
 
-.form-group {
-    width: 50%;
-}
-
 .buttons {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1em;
 }
 
 button {

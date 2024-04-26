@@ -21,15 +21,15 @@ h1 {
     margin-left: 30%;
 }
 
-    .SelectOption label {
-        margin-right: 15%;
-        width: 20%;
-        margin-right: 10px;
-        text-align: center;
-        margin-right: 30px;
-        font-size: 20px;
-        color: #FFFFFF; /* Змінено колір тексту на білий */
-    }
+.SelectOption label {
+    margin-right: 15%;
+    width: 20%;
+    margin-right: 10px;
+    text-align: center;
+    margin-right: 30px;
+    font-size: 20px;
+    color: #FFFFFF; /* Змінено колір тексту на білий */
+}
 
 .selection {
     width: 30%;
@@ -57,7 +57,7 @@ button {
     margin-top: 60px;
 }
 
-    button:hover {
-        background-color: white;
-        color: #545454;
-    }
+button:hover {
+    background-color: white;
+    color: #545454;
+}
