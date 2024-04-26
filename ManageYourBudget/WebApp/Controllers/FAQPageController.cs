@@ -21,13 +21,22 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Index()
         {
+            
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var temp = await _settingsService.GetUserSettingsAsync(userId);
-            bool IsLight_Theme = temp.IsLightTheme;
-            ViewBag.Theme = IsLight_Theme ? "Light" : "Dark";
+            if (userId != null)
+            {
+                var temp = await _settingsService.GetUserSettingsAsync(userId);
+                bool IsLight_Theme = temp.IsLightTheme;
+                ViewBag.Theme = IsLight_Theme ? "Light" : "Dark";
 
-            _logger.LogInformation("User accessed FAQPage.");
-            return View("~/Views/FAQPage/Index.cshtml");
+                _logger.LogInformation("User accessed FAQPage.");
+                return View("~/Views/FAQPage/Index.cshtml");
+            }
+            else
+            {
+                _logger.LogInformation("User accessed FAQPage.");
+                return View("~/Views/FAQPage/Index.cshtml");
+            }
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
