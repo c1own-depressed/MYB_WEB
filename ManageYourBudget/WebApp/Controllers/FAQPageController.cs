@@ -8,20 +8,17 @@ namespace WebApp.Controllers
 {
     public class FAQPageController : Controller
     {
-        private readonly ILogger<FAQPageController> _logger;
         private readonly ISettingsService _settingsService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public FAQPageController(ILogger<FAQPageController> logger, ISettingsService settingsService, IHttpContextAccessor httpContextAccessor)
+        public FAQPageController(ISettingsService settingsService, IHttpContextAccessor httpContextAccessor)
         {
-            _logger = logger;
             _settingsService = settingsService;
             _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IActionResult> Index()
         {
-            
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (userId != null)
             {
@@ -29,12 +26,10 @@ namespace WebApp.Controllers
                 bool IsLight_Theme = temp.IsLightTheme;
                 ViewBag.Theme = IsLight_Theme ? "Light" : "Dark";
 
-                _logger.LogInformation("User accessed FAQPage.");
                 return View("~/Views/FAQPage/Index.cshtml");
             }
             else
             {
-                _logger.LogInformation("User accessed FAQPage.");
                 return View("~/Views/FAQPage/Index.cshtml");
             }
         }

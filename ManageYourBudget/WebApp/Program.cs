@@ -14,12 +14,18 @@ using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var logDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
+if (!Directory.Exists(logDirectory))
+{
+    Directory.CreateDirectory(logDirectory);
+}
 // Configure Serilog
 builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
+    .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
     .WriteTo.Seq("http://localhost:5341"));
 
-var connectionString = builder.Configuration.GetConnectionString("RomanConnection");
+var connectionString = builder.Configuration.GetConnectionString("AndriyConnection");
 
 if (connectionString != null)
 {
@@ -30,6 +36,8 @@ else
 {
     Log.Error("Connection string is null.");
 }
+
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
