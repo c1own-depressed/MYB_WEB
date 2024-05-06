@@ -34,9 +34,6 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var temp = await _settingsService.GetUserSettingsAsync(userId);
-            bool isLightTheme = temp.IsLightTheme;
-            ViewBag.Theme = isLightTheme ? "Light" : "Dark";
             string aspNetCoreCookiesValue = _httpContextAccessor.HttpContext.Request.Cookies[".AspNetCore.Cookies"];
             try
             {
@@ -44,7 +41,6 @@ namespace WebApp.Controllers
 
                 var defaultStatistics = await _statisticService.GetAllData(DateTime.Now.AddMonths(-1), DateTime.Now, userId);
 
-                // Initialize the list to hold multiple StatisticViewModel instances
                 List<StatisticViewModel> statistics = new List<StatisticViewModel>();
 
                 for (int i = 0; i < defaultStatistics?.ExpensesStatistics?.Count; i++)

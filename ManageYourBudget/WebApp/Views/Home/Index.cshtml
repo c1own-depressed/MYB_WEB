@@ -25,19 +25,30 @@
 </head>
 <body>
     <div class="content">
-
         <div>
-            @Html.Partial("_NewSavingsPartial", Model.Savings)
-        </div>
-        
-        <div>
-            @Html.Partial("_NewIncomePartial", Model.Incomes)
-        </div>
-
-        <div>
-            @Html.Partial("_NewExpenseCategoryPartial", Model.Categories)
+            @if (Model.Data != null && Model.Data.Any())
+            {
+                var firstHomeData = Model.Data.FirstOrDefault();
+                @Html.Partial("_NewSavingsPartial", firstHomeData.Savings)
+            }
         </div>
 
+        <div>
+            @if (Model.Data != null && Model.Data.Any())
+            {
+                var firstHomeData = Model.Data.FirstOrDefault();
+                @Html.Partial("_NewIncomePartial", firstHomeData.Incomes)
+            }
+        </div>
+
+        <div>
+            @if (Model.Data != null && Model.Data.Any())
+            {
+                var firstHomeData = Model.Data.FirstOrDefault();
+                @Html.Partial("_NewExpenseCategoryPartial", firstHomeData.Categories)
+            }
+        </div>
     </div>
+
 </body>
 </html>
