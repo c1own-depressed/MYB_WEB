@@ -26,9 +26,6 @@ namespace WebApp.Controllers
         {
 
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var temp = await _settingsService.GetUserSettingsAsync(userId);
-            bool IsLight_Theme = temp.IsLightTheme;
-            ViewBag.Theme = IsLight_Theme ? "Light" : "Dark";
             try
             {
                 var userSettings = await _settingsService.GetUserSettingsAsync(userId);
