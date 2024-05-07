@@ -1,19 +1,22 @@
-﻿@{
-    ViewData["Title"] = "Email Confirmation";
+﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["EmailConfirmationTitle"];
 }
+
 <head>
     <link rel="stylesheet" href="~/css/OtherPages_Light.css">
 </head>
 <body>
-<h2>Check Your Email</h2>
+<h2>@Localizer["EmailConfirmationHeader"]</h2>
+
 <div class="alert alert-info" role="alert">
-    You email is successfully verified!
+    @Localizer["EmailVerificationSuccessMessage"]
 </div>
 </body>
 @section Scripts {
     <script>
         setTimeout(function () {
-            window.location.href = '@Url.Action("login")'; // Redirect to Home/Index after 2 seconds
+            window.location.href = '@Url.Action("Login", "Account")'; // Corrected for clarity
         }, 2000);
     </script>
 }

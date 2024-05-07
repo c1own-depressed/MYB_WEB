@@ -2,43 +2,45 @@
 
 @model IEnumerable<IncomeDTO>
 
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+
 <div class="incomes-wrapper">
     <div class="category-wrapper">
         <div class="category-content">
             <div class="category-heading-wrapper">
                 <div class="category-heading-name-wrapper">
-                    <h2 class="category-heading">Incomes</h2>
+                    <h2 class="category-heading">@Localizer["Incomes"]</h2>
                 </div>
             </div>
             <div class="expenses-wrapper">
                 @foreach (var income in Model)
                 {
-                    <p>Income: @income.IncomeName  (@income.Amount ₴)</p>
-                    <button class="btn btn-danger" onclick="removeIncome(@income.Id)">Remove</button>
-                    <button class="btn btn-primary" onclick="openEditIncomeModal('@income.Id', '@income.IncomeName', '@income.Amount')">Edit</button>
+                    <p>@Localizer["Income:"] @income.IncomeName  (@income.Amount ₴)</p>
+                    <button class="btn btn-danger" onclick="removeIncome(@income.Id)">@Localizer["Remove"]</button>
+                    <button class="btn btn-primary" onclick="openEditIncomeModal('@income.Id', '@income.IncomeName', '@income.Amount')">@Localizer["Edit"]</button>
                     <!-- Edit Income Modal -->
                     <div class="modal fade" id="editIncomeModal_@income.Id" tabindex="-1" role="dialog" aria-labelledby="editIncomeModalLabel_@income.Id" aria-hidden="true">
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <h5 class="modal-title" id="editIncomeModalLabel_@income.Id">Edit Category</h5>
+                                    <h5 class="modal-title" id="editIncomeModalLabel_@income.Id">@Localizer["Edit Income"]</h5>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="form-group">
-                                        <label for="editIncomeName">Income Name</label>
+                                        <label for="editIncomeName">@Localizer["Income Name"]</label>
                                         <input type="text" class="form-control" id="editIncomeName_@income.Id" value="@income.IncomeName">
                                     </div>
                                     <div class="form-group">
-                                        <label for="editAmount">Amount</label>
+                                        <label for="editAmount">@Localizer["Amount"]</label>
                                         <input type="number" class="form-control" id="editAmount_@income.Id" value="@income.Amount">
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                    <button type="button" class="btn btn-primary" onclick="editIncome('@income.Id')">Save changes</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["Close"]</button>
+                                    <button type="button" class="btn btn-primary" onclick="editIncome('@income.Id')">@Localizer["Save changes"]</button>
                                 </div>
                             </div>
                         </div>
@@ -48,7 +50,7 @@
         </div>
 
         <button type="button" class="btn btn-primary add-income-button" data-toggle="modal" data-target="#addIncomeModal">
-            + Add Income
+            + @Localizer["Add Income"]
         </button>
     </div>
 
@@ -56,7 +58,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addIncomeModalLabel">Add Income</h5>
+                    <h5 class="modal-title" id="addIncomeModalLabel">@Localizer["Add Income"]</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -64,22 +66,24 @@
                 <div class="modal-body">
                     <form id="add-income-form">
                         <div class="form-group">
-                            <label for="income-name">Income Name</label>
+                            <label for="income-name">@Localizer["Income Name"]</label>
                             <input type="text" class="form-control" id="income-name" name="name" required>
                         </div>
                         <div class="form-group">
-                            <label for="income-amount">Amount</label>
+                            <label for="income-amount">@Localizer["Amount"]</label>
                             <input type="number" class="form-control" id="income-amount" name="amount" required>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" form="add-income-form">Add</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["Close"]</button>
+                    <button type="submit" class="btn btn-primary" form="add-income-form">@Localizer["Add"]</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
+
 
     <script>
         $(document).ready(function () {

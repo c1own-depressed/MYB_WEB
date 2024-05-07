@@ -1,4 +1,5 @@
 ﻿@using Application.DTOs.SavingsDTOs
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 @model IEnumerable<SavingsDTO>
 
@@ -7,17 +8,17 @@
         <div class="category-content">
             <div class="category-heading-wrapper">
                 <div class="category-heading-name-wrapper">
-                    <h2 class="category-heading">Savings</h2>
+                    <h2 class="category-heading">@Localizer["SavingsHeading"]</h2>
                 </div>
             </div>
             <div class="expenses-wrapper">
                 @foreach (var saving in Model)
                 {
                     <div class="saving-item">
-                        <p>Savings: @saving.SavingsName  (@saving.Amount ₴)</p>
+                        <p>@Localizer["SavingsLabel"]: @saving.SavingsName  (@saving.Amount ₴)</p>
                         <div class="saving-item-buttons">
-                            <button class="btn btn-primary edit-savings-button" data-id="@saving.Id">Edit</button>
-                            <button class="btn btn-danger delete-savings-button" data-id="@saving.Id">Delete</button>
+                            <button class="btn btn-primary edit-savings-button" data-id="@saving.Id">@Localizer["EditButton"]</button>
+                            <button class="btn btn-danger delete-savings-button" data-id="@saving.Id">@Localizer["DeleteButton"]</button>
                         </div>
                     </div>
                 }
@@ -25,14 +26,14 @@
         </div>
 
         <button type="button" class="btn btn-primary add-savings-button" data-toggle="modal" data-target="#addSavingsModal">
-            + Add Savings
+            + @Localizer["AddSavingsButton"]
         </button>
     </div>
     <div class="modal fade" id="addSavingsModal" tabindex="-1" role="dialog" aria-labelledby="addSavingsModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addSavingsModalLabel">Add Savings</h5>
+                    <h5 class="modal-title" id="addSavingsModalLabel">@Localizer["AddSavingsModalTitle"]</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -40,22 +41,22 @@
                 <div class="modal-body">
                     <form id="add-savings-form">
                         <div class="form-group">
-                            <label for="savings-name">Savings Name</label>
+                            <label for="savings-name">@Localizer["SavingsNameLabel"]</label>
                             <input type="text" class="form-control" id="savings-name" name="name" required>
                         </div>
                         <div class="form-group">
-                            <label for="savings-amount"></label>
+                            <label for="savings-amount">@Localizer["AmountLabel"]</label>
                             <input type="number" class="form-control" id="savings-amount" name="amount" required>
                         </div>
                         <div class="form-group">
-                            <label for="savings-date">Date</label>
+                            <label for="savings-date">@Localizer["DateLabel"]</label>
                             <input type="datetime-local" class="form-control" id="savings-date" name="date" required>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="addSavingsButton">Add</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["CloseButton"]</button>
+                    <button type="button" class="btn btn-primary" id="addSavingsButton">@Localizer["AddButton"]</button>
                 </div>
             </div>
         </div>
@@ -66,30 +67,31 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editSavingsModalLabel">Edit Savings</h5>
+                    <h5 class="modal-title" id="editSavingsModalLabel">@Localizer["EditSavingsModalTitle"]</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="editSavingsName">Savings Name</label>
+                        <label for="editSavingsName">@Localizer["SavingsNameLabel"]</label>
                         <input type="text" class="form-control" id="editSavingsName">
                     </div>
                     <div class="form-group">
-                        <label for="editSavingsAmount">Amount</label>
+                        <label for="editSavingsAmount">@Localizer["AmountLabel"]</label>
                         <input type="number" class="form-control" id="editSavingsAmount">
                     </div>
-                    
+
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="saveEditSavingsButton">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["CloseButton"]</button>
+                    <button type="button" class="btn btn-primary" id="saveEditSavingsButton">@Localizer["SaveChangesButton"]</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 
 <script>
     $(document).ready(function () {

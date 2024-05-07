@@ -21,7 +21,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
     .WriteTo.Seq("http://localhost:5341"));
 
-var connectionString = builder.Configuration.GetConnectionString("DimaConnection");
+var connectionString = builder.Configuration.GetConnectionString("RostikConnection");
 
 if (connectionString != null)
 {
@@ -49,6 +49,9 @@ builder.Services.AddScoped<ISettingsService, SettingsService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IExportDataService, ExportDataService>();
 builder.Services.AddScoped<IHomeService, HomeService>();
+builder.Services.AddScoped<ICultureService, CultureService>();
+
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 builder.Services.AddControllersWithViews()
     .AddFluentValidation(fv =>
@@ -119,11 +122,18 @@ app.UseRouting();
 app.UseAuthentication(); // This is essential for Identity
 app.UseAuthorization();
 
-var cultures = new[] { "en", "uk" };
-var localizationOptions = new RequestLocalizationOptions().SetDefaultCulture(cultures[0])
-    .AddSupportedCultures(cultures)
-    .AddSupportedUICultures(cultures);
-app.UseRequestLocalization(localizationOptions);
+var supportedCultures = new[] { "en-US", "uk-UA" };
+var requestLocalizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture("en-US")
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
+
+// Configure the custom RequestCultureProvider using IServiceScopeFactory
+requestLocalizationOptions.RequestCultureProviders.Insert(0,
+    new DbRequestCultureProvider(app.Services.GetRequiredService<IServiceScopeFactory>()));
+
+// Apply the localization settings to the application
+app.UseRequestLocalization(requestLocalizationOptions);
 
 app.MapControllerRoute(
     name: "faq",
