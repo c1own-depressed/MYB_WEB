@@ -117,34 +117,52 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ChooseCurency" xml:space="preserve">
-    <value>Choose currency:</value>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
   </data>
-  <data name="ChooseTheme" xml:space="preserve">
-    <value>Choose theme:</value>
+  <data name="Add Income" xml:space="preserve">
+    <value>Add Income</value>
   </data>
-  <data name="Dark" xml:space="preserve">
-    <value>Dark</value>
+  <data name="Amount" xml:space="preserve">
+    <value>Amount</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>English</value>
+  <data name="Are you sure you want to remove this income?" xml:space="preserve">
+    <value>Are you sure you want to remove this income?</value>
   </data>
-  <data name="Language" xml:space="preserve">
-    <value>Language:</value>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
   </data>
-  <data name="Light" xml:space="preserve">
-    <value>Light</value>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
   </data>
-  <data name="ResetPassword" xml:space="preserve">
-    <value>Reset password</value>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
   </data>
-  <data name="Save" xml:space="preserve">
-    <value>Save</value>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
   </data>
-  <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+  <data name="Edit Income" xml:space="preserve">
+    <value>Edit Income</value>
   </data>
-  <data name="Ukrainian" xml:space="preserve">
-    <value>Ukrainian</value>
+  <data name="Error adding income" xml:space="preserve">
+    <value>Error adding income</value>
+  </data>
+  <data name="Failed to edit income" xml:space="preserve">
+    <value>Failed to edit income</value>
+  </data>
+  <data name="Failed to remove income" xml:space="preserve">
+    <value>Failed to remove income</value>
+  </data>
+  <data name="Income" xml:space="preserve">
+    <value>Income</value>
+  </data>
+  <data name="Income Name" xml:space="preserve">
+    <value>Income Name</value>
+  </data>
+  <data name="Regular Income" xml:space="preserve">
+    <value>Regular Income</value>
+  </data>
+  <data name="Save changes" xml:space="preserve">
+    <value>Save changes</value>
   </data>
 </root>

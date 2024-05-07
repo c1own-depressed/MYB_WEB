@@ -117,34 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ChooseCurency" xml:space="preserve">
-    <value>Choose currency:</value>
+  <data name="Add" xml:space="preserve">
+    <value>Add</value>
   </data>
-  <data name="ChooseTheme" xml:space="preserve">
-    <value>Choose theme:</value>
+  <data name="Add Category" xml:space="preserve">
+    <value>Add Category</value>
   </data>
-  <data name="Dark" xml:space="preserve">
-    <value>Dark</value>
+  <data name="Add Expense" xml:space="preserve">
+    <value>Add Expense</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>English</value>
+  <data name="Add Expense Category" xml:space="preserve">
+    <value>Add Expense Category</value>
   </data>
-  <data name="Language" xml:space="preserve">
-    <value>Language:</value>
+  <data name="Amount" xml:space="preserve">
+    <value>Amount</value>
   </data>
-  <data name="Light" xml:space="preserve">
-    <value>Light</value>
+  <data name="Category Name" xml:space="preserve">
+    <value>Category Name</value>
   </data>
-  <data name="ResetPassword" xml:space="preserve">
-    <value>Reset password</value>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
   </data>
-  <data name="Save" xml:space="preserve">
-    <value>Save</value>
+  <data name="Date" xml:space="preserve">
+    <value>Date</value>
   </data>
-  <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
   </data>
-  <data name="Ukrainian" xml:space="preserve">
-    <value>Ukrainian</value>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Edit Category" xml:space="preserve">
+    <value>Edit Category</value>
+  </data>
+  <data name="Edit Expense" xml:space="preserve">
+    <value>Edit Expense</value>
+  </data>
+  <data name="Expense Name" xml:space="preserve">
+    <value>Expense Name</value>
+  </data>
+  <data name="Planned Budget" xml:space="preserve">
+    <value>Planned Budget</value>
+  </data>
+  <data name="Planned:" xml:space="preserve">
+    <value>Planned:</value>
+  </data>
+  <data name="Remaining:" xml:space="preserve">
+    <value>Remaining:</value>
+  </data>
+  <data name="Save changes" xml:space="preserve">
+    <value>Save changes</value>
+  </data>
+  <data name="Title of Expense Category" xml:space="preserve">
+    <value>Title of Expense Category</value>
   </data>
 </root>

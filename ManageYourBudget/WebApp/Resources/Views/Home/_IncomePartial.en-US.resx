@@ -117,34 +117,34 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ChooseCurency" xml:space="preserve">
-    <value>Choose currency:</value>
+  <data name="Add Income" xml:space="preserve">
+    <value>Add Income</value>
   </data>
-  <data name="ChooseTheme" xml:space="preserve">
-    <value>Choose theme:</value>
+  <data name="Amount" xml:space="preserve">
+    <value>Amount</value>
   </data>
-  <data name="Dark" xml:space="preserve">
-    <value>Dark</value>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>English</value>
+  <data name="Edit" xml:space="preserve">
+    <value>Edit</value>
   </data>
-  <data name="Language" xml:space="preserve">
-    <value>Language:</value>
+  <data name="Edit Income" xml:space="preserve">
+    <value>Edit Income</value>
   </data>
-  <data name="Light" xml:space="preserve">
-    <value>Light</value>
+  <data name="Income Name" xml:space="preserve">
+    <value>Income Name</value>
   </data>
-  <data name="ResetPassword" xml:space="preserve">
-    <value>Reset password</value>
+  <data name="Income:" xml:space="preserve">
+    <value>Income:</value>
   </data>
-  <data name="Save" xml:space="preserve">
-    <value>Save</value>
+  <data name="Incomes" xml:space="preserve">
+    <value>Incomes</value>
   </data>
-  <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+  <data name="Remove" xml:space="preserve">
+    <value>Remove</value>
   </data>
-  <data name="Ukrainian" xml:space="preserve">
-    <value>Ukrainian</value>
+  <data name="Save changes" xml:space="preserve">
+    <value>Save changes</value>
   </data>
 </root>

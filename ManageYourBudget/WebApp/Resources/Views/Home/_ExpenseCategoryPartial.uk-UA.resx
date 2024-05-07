@@ -117,34 +117,58 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ChooseCurency" xml:space="preserve">
-    <value>Choose currency:</value>
+  <data name="Add" xml:space="preserve">
+    <value>Додати</value>
   </data>
-  <data name="ChooseTheme" xml:space="preserve">
-    <value>Choose theme:</value>
+  <data name="Add Category" xml:space="preserve">
+    <value>Додати категорію</value>
   </data>
-  <data name="Dark" xml:space="preserve">
-    <value>Dark</value>
+  <data name="Add Expense" xml:space="preserve">
+    <value>Додати витрату</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>English</value>
+  <data name="Add Expense Category" xml:space="preserve">
+    <value>Додати категорію витрат</value>
   </data>
-  <data name="Language" xml:space="preserve">
-    <value>Language:</value>
+  <data name="Amount" xml:space="preserve">
+    <value>Сума</value>
   </data>
-  <data name="Light" xml:space="preserve">
-    <value>Light</value>
+  <data name="Category Name" xml:space="preserve">
+    <value>Назва категорії</value>
   </data>
-  <data name="ResetPassword" xml:space="preserve">
-    <value>Reset password</value>
+  <data name="Close" xml:space="preserve">
+    <value>Закрити</value>
   </data>
-  <data name="Save" xml:space="preserve">
-    <value>Save</value>
+  <data name="Date" xml:space="preserve">
+    <value>Дата</value>
   </data>
-  <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+  <data name="Edit" xml:space="preserve">
+    <value>Редагувати</value>
   </data>
-  <data name="Ukrainian" xml:space="preserve">
-    <value>Ukrainian</value>
+  <data name="Edit Category" xml:space="preserve">
+    <value>Редагувати категорію</value>
+  </data>
+  <data name="Edit Expense" xml:space="preserve">
+    <value>Редагувати витрату</value>
+  </data>
+  <data name="Expense Name" xml:space="preserve">
+    <value>Назва витрати</value>
+  </data>
+  <data name="Expense:" xml:space="preserve">
+    <value>Витрата:</value>
+  </data>
+  <data name="Planned budget:" xml:space="preserve">
+    <value>Планований бюджет:</value>
+  </data>
+  <data name="Remaining budget:" xml:space="preserve">
+    <value>Залишок бюджету:</value>
+  </data>
+  <data name="Remove" xml:space="preserve">
+    <value>Видалити</value>
+  </data>
+  <data name="Save Changes" xml:space="preserve">
+    <value>Зберегти зміни</value>
+  </data>
+  <data name="Title of Expense Category" xml:space="preserve">
+    <value>Назва категорії витрат</value>
   </data>
 </root>

@@ -135,6 +135,9 @@
   <data name="Light" xml:space="preserve">
     <value>Світла</value>
   </data>
+  <data name="ResetPassword" xml:space="preserve">
+    <value>Скинути пароль</value>
+  </data>
   <data name="Save" xml:space="preserve">
     <value>Зберегти</value>
   </data>
