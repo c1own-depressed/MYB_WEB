@@ -12,181 +12,44 @@
     <title>@Localizer["Home"]</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    @{
+        string theme = ViewBag.Theme ?? "Dark"; // За замовчуванням використовується темна тема
+        string cssFileName = $"Home_{theme}.css";
+    }
+
+    <link rel="stylesheet" href="~/css/@cssFileName">
 
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <style>
-        body{
-            background-color: #D9D9D9;
-        }
-        html {
-            font-size: 16px;
-        }
 
-        .category-wrapper {
-            margin: 1rem;
-            color: white;
-        }
-
-        .category-heading-wrapper {
-            display: flex;
-            flex-direction: row;
-            justify-content: space-between;
-        }
-
-        .category-heading-name-wrapper {
-            background-color: #7B7B7B;
-            border-radius: 0.3125rem;
-            padding: 1rem 1.5rem;
-            display: inline-block;
-        }
-
-        .category-heading {
-            font-size: 2.25rem;
-        }
-
-        .category-heading-details-wrapper {
-            color: burlywood;
-            display: flex;
-            flex-direction: row;
-            align-items: center;
-            justify-content: center;
-            gap: 1rem;
-        }
-
-        .expenses-wrapper {
-            color: burlywood;
-        }
-
-        .add-category-button {
-            margin: 1rem;
-            color: #1C25FF;
-        }
-
-        /* card item styles */
-        .card {
-            background-color: #D9D9D9;
-        } 
-
-        .card-wrapper {
-            margin: 1rem;
-        }
-
-        .card-wrapper .card-header {
-            background-color: #7B7B7B;
-            color: white;
-            border-radius: 30px 30px 0px 0px;
-        }
-
-        .card-header-button-content {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .category-details {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .card-wrapper .card {
-            border: none;
-        }
-
-        .card-body {
-            color:white;
-            background-color: #A8A8A8;
-            border-radius: 0px 0px 30px 30px;
-        } 
-
-        .card-wrapper .btn-link {
-            color: white;
-            text-decoration: none;
-            text-align: left;
-        }
-
-        .card-content, .card-details, .card-interaction {
-            display: flex;
-            justify-content: space-between;
-            gap: 20px;
-        }
-
-        .card-amount, .card-name {
-            margin-top: auto;
-            margin-bottom: auto;
-        }
-
-        .card-edit, .card-delete {
-            color: #7B7B7B;
-        }
-
-        .card-edit:hover, .card-delete:hover {
-            color: black;
-        }
-
-        /* Style for the Add Income button */
-        .add-btn {
-            font-weight: bold;
-            color: #1C25FF;
-            margin-top: 10px;
-        }
-
-        /* Apply a top border to all income-content elements instead of a bottom border */
-        .card-content {
-            padding-left: 16px;
-            border-top: 1px solid rgba(0, 0, 0, 0.5);
-            padding-top: 5px;
-            margin-top: 5px;
-        }
-
-        /* Use the first-child pseudo-class to remove the top border from the first element */
-        .card-content:first-child {
-            border-top: none;
-            padding-top: 0;
-            margin-top: 0;
-        }
-
-        .separator-line {
-            background-color: rgba(0, 0, 0, 0.9);
-            height: 2px;
-        }
-
-        .btn-outline-primary:hover {
-            background-color: #1C25FF;
-            color: white;
-        }
-
-        /* Remove the focus outline from buttons */
-        .btn:focus {
-            outline: none !important;
-            box-shadow: none !important;
-        }
-
-        /* Specifically for your income button, if it has a unique class */
-        .add-income-button:focus {
-            outline: none !important;
-            box-shadow: none !important;
-        }
-
-    </style>
 </head>
 <body>
     <div class="content">
-
         <div>
-            @Html.Partial("_NewSavingsPartial", Model.Savings)
-        </div>
-        
-        <div>
-            @Html.Partial("_NewIncomePartial", Model.Incomes)
-        </div>
-
-        <div>
-            @Html.Partial("_NewExpenseCategoryPartial", Model.Categories)
+            @if (Model.Data != null && Model.Data.Any())
+            {
+                var firstHomeData = Model.Data.FirstOrDefault();
+                @Html.Partial("_NewSavingsPartial", firstHomeData.Savings)
+            }
         </div>
 
+        <div>
+            @if (Model.Data != null && Model.Data.Any())
+            {
+                var firstHomeData = Model.Data.FirstOrDefault();
+                @Html.Partial("_NewIncomePartial", firstHomeData.Incomes)
+            }
+        </div>
+
+        <div>
+            @if (Model.Data != null && Model.Data.Any())
+            {
+                var firstHomeData = Model.Data.FirstOrDefault();
+                @Html.Partial("_NewExpenseCategoryPartial", firstHomeData.Categories)
+            }
+        </div>
     </div>
+
 </body>
 </html>

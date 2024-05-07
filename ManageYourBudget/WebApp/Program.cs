@@ -3,13 +3,16 @@ using Application.Services;
 using Application.Validators;
 using Domain.Entities;
 using Domain.Interfaces;
+using FluentAssertions.Common;
 using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
-using Serilog;
 using Persistence.AuthService;
-using FluentAssertions.Common;
-using Microsoft.AspNetCore.Authentication.Cookies;
+using Persistence.Services;
+using Serilog;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +22,6 @@ builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Seq("http://localhost:5341"));
 
 var connectionString = builder.Configuration.GetConnectionString("RostikConnection");
-
 
 if (connectionString != null)
 {
@@ -45,8 +47,12 @@ builder.Services.AddScoped<ISavingsService, SavingsService>();
 builder.Services.AddScoped<IStatisticService, StatisticService>();
 builder.Services.AddScoped<ISettingsService, SettingsService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IExportDataService, ExportDataService>();
+builder.Services.AddScoped<IHomeService, HomeService>();
 builder.Services.AddScoped<ICultureService, CultureService>();
+
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
 builder.Services.AddControllersWithViews()
     .AddFluentValidation(fv =>
     {
@@ -97,7 +103,20 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseExceptionHandler(
+    options => {
+        options.Run(
+            async context => {
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                var ex = context.Features.Get<IExceptionHandlerFeature>();
+                if (ex != null)
+                {
+                    await context.Response.WriteAsync(ex.Error.Message);
+                }
+            }
+            );
+    }
+    );
 app.UseRouting();
 
 app.UseAuthentication(); // This is essential for Identity
@@ -176,6 +195,11 @@ app.MapControllerRoute(
     name: "resetpassword",
     pattern: "resetpassword",
     defaults: new { controller = "Account", action = "ResetPassword" });
+
+app.MapControllerRoute(
+    name: "logout",
+    pattern: "logout",
+    defaults: new { controller = "Account", action = "Logout" });
 
 // TODO: after the application is deployed
 // app.UseCors(options => options.WithOrigins("https://example.com")); // Adjust accordingly

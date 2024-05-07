@@ -16,11 +16,12 @@ namespace WebApp.Controllers
     {
         private readonly ILogger<AccountController> _logger;
         private readonly IAuthService _authService;
-
-        public AccountController(ILogger<AccountController> logger, IAuthService authService)
+        private readonly ISettingsService _settingsService;
+        public AccountController(ILogger<AccountController> logger, IAuthService authService, ISettingsService settingsService)
         {
             _logger = logger;
             _authService = authService;
+            _settingsService = settingsService;
         }
 
         [HttpGet]
@@ -87,7 +88,6 @@ namespace WebApp.Controllers
 
             return View(model);
         }
-
 
         [HttpGet]
         public IActionResult ResetPassword(string token, string email)
@@ -171,6 +171,13 @@ namespace WebApp.Controllers
         public IActionResult ForgotPassword()
         {
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await _authService.LogoutAsync();
+            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]

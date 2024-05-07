@@ -2,6 +2,16 @@
 
 @using Application.DTOs.SavingsDTOs
 @model IEnumerable<SavingsDTO>
+<head>
+    @{
+        string theme = ViewBag.Theme ?? "Dark"; // За замовчуванням використовується темна тема
+        string cssFileName = $"Modal_{theme}.css";
+    }
+
+
+    <link rel="stylesheet" href="~/css/@cssFileName">
+</head>
+
 
 <div class="card-wrapper" id="card-wrapper">
     <div class="card">

@@ -3,11 +3,16 @@
     ViewData["Title"] = Localizer["EmailConfirmationTitle"];
 }
 
+<head>
+    <link rel="stylesheet" href="~/css/OtherPages_Light.css">
+</head>
+<body>
 <h2>@Localizer["EmailConfirmationHeader"]</h2>
+
 <div class="alert alert-info" role="alert">
     @Localizer["EmailVerificationSuccessMessage"]
 </div>
-
+</body>
 @section Scripts {
     <script>
         setTimeout(function () {

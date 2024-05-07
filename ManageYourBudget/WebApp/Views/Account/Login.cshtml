@@ -1,6 +1,10 @@
 ﻿@model WebApp.Models.LoginViewModel
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
+<head>
+    <link rel="stylesheet" href="~/css/OtherPages_Light.css">
+</head>
+<body>
 <h2>@Localizer["LoginHeader"]</h2>
 
 <form asp-action="Login" method="post">
@@ -20,7 +24,7 @@
 
     <button type="submit" class="btn btn-primary">@Localizer["LoginButton"]</button>
 </form>
-
+</body>
 @section Scripts {
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

@@ -7,26 +7,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>@ViewData["Title"]</title>
-    <style>
-        body {
-            background-color: #D9D9D9;
-        }
 
-        .faq-section p {
-            display: none;
-        }
+    <title>@ViewBag.Title</title>
+    @{
+        string theme = ViewBag.Theme ?? "Light"; // За замовчуванням використовується темна тема
+        string cssFileName = $"OtherPages_{theme}.css";
+    }
 
-        .toggle-button {
-            cursor: pointer;
-            background-color: #007BFF;
-            color: #FFF;
-            padding: 5px 10px;
-            border: none;
-            border-radius: 5px;
-            margin-bottom: 10px;
-        }
-    </style>
+
+    <link rel="stylesheet" href="~/css/@cssFileName">
 </head>
 <body>
 

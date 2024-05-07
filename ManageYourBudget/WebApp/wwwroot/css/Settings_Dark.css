@@ -1,0 +1,63 @@
+﻿body {
+    background-color: #2C2C2C; /* Змінено колір фону на темну тему */
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    color: #FFFFFF; /* Змінено колір тексту на білий */
+    font-size: 48px;
+    margin-top: 20px;
+    font-weight: bold;
+    margin-bottom: 7%;
+    margin-left: 42.5%;
+}
+
+.SelectOption {
+    display: flex;
+    align-items: center;
+    margin-top: 40px;
+    margin-left: 30%;
+}
+
+.SelectOption label {
+    margin-right: 15%;
+    width: 20%;
+    margin-right: 10px;
+    text-align: center;
+    margin-right: 30px;
+    font-size: 20px;
+    color: #FFFFFF; /* Змінено колір тексту на білий */
+}
+
+.selection {
+    width: 30%;
+    height: 41px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 16px;
+    color: #000000; /* Змінено колір тексту на чорний */
+    background-color: #FFFFFF; /* Змінено колір фону на білий */
+}
+
+button {
+    width: 182px;
+    height: 42px;
+    background-color: #545454;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 auto;
+    display: block;
+    text-align: center;
+    margin-top: 60px;
+}
+
+button:hover {
+    background-color: white;
+    color: #545454;
+}

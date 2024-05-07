@@ -7,8 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - @Localizer["WebApp"]</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/WebApp.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/Site_Dark.css">
 </head>
 <body>
     <header>
@@ -36,12 +35,24 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="statistic" asp-action="Index">@Localizer["Statistic"]</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="login" asp-action="">@Localizer["Login"]</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="signup" asp-action="">@Localizer["Signup"]</a>
-                        </li>
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <form method="post" asp-area="" asp-controller="Account" asp-action="Logout" id="logoutForm" class="form-inline">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="logout" asp-action="">Logout</a>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="login" asp-action="">@Localizer["Login"]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="signup" asp-action="">@Localizer["Signup"]</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

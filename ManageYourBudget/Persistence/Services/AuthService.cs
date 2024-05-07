@@ -143,6 +143,12 @@ namespace Persistence.AuthService
             return IdentityResult.Success;
         }
 
+        public async Task LogoutAsync()
+        {
+            // Sign out the current user
+            await _httpContextAccessor.HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
+        }
+
         public async Task<IdentityResult> ResetPasswordAsync(ResetPasswordDTO resetPasswordDTO)
         {
             if (resetPasswordDTO == null)

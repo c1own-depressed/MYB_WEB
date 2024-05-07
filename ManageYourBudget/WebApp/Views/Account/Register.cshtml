@@ -1,7 +1,12 @@
 ﻿@model WebApp.Models.RegisterViewModel
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
+<head>
+    <link rel="stylesheet" href="~/css/OtherPages_Light.css">
+</head>
+<body>
 <h2>@Localizer["RegisterHeader"]</h2>
+
 
 <form asp-action="Register" method="post">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -30,8 +35,9 @@
         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
     </div>
 
-    <button type="submit" class="btn btn-default">@Localizer["RegisterButton"]</button>
+        <button type="submit" class="btn btn-primary">@Localizer["RegisterButton"]</button>
 </form>
+</body>
 
 @section Scripts {
     @{

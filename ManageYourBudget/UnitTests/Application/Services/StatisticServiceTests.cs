@@ -23,26 +23,26 @@ namespace UnitTests.Application.Services
             _service = new StatisticService(_mockUnitOfWork.Object);
         }
 
-        //[Fact]
-        //public async Task GetTotalExpensesByDate_NoExpenses_ReturnsZeroesForAllMonths()
-        //{
-        //    // Arrange
-        //    string userId = Guid.NewGuid().ToString();
-        //    var from = new DateTime(2023, 01, 01);
-        //    var to = new DateTime(2023, 12, 31);
-        //    _mockUnitOfWork.Setup(u => u.ExpenseCategories.GetExpenseCategoriesByUserIdAsync(userId))
-        //                   .ReturnsAsync(new List<ExpenseCategory>());
-        //    _mockUnitOfWork.Setup(u => u.Expenses.GetAllExpensesByCategoryIdAndDateRangeAsync(Guid.NewGuid().ToString(), from, to))
-        //                   .ReturnsAsync(new List<Expense>());
+        [Fact]
+        public async Task GetTotalExpensesByDate_NoExpenses_ReturnsZeroesForAllMonths()
+        {
+            // Arrange
+            string userId = Guid.NewGuid().ToString();
+            var from = new DateTime(2023, 01, 01);
+            var to = new DateTime(2023, 12, 31);
+            _mockUnitOfWork.Setup(u => u.ExpenseCategories.GetExpenseCategoriesByUserIdAsync(userId))
+                           .ReturnsAsync(new List<ExpenseCategory>());
+            _mockUnitOfWork.Setup(u => u.Expenses.GetAllExpensesByCategoryIdAndDateRangeAsync(Guid.NewGuid().ToString(), from, to))
+                           .ReturnsAsync(new List<Expense>());
 
-        //    // Act
-        //    var result = await _service.GetTotalExpensesByDate(from, to, userId);
+            // Act
+            var result = await _service.GetTotalExpensesByDate(from, to, userId);
 
-        //    // Assert
-        //    var expectedMonthsCount = 12; // January to December
-        //    Assert.Equal(expectedMonthsCount, result.Count());
-        //    Assert.True(result.All(r => r.TotalAmount == 0));
-        //}
+            // Assert
+            var expectedMonthsCount = 12; // January to December
+            Assert.Equal(expectedMonthsCount, result.Count());
+            Assert.True(result.All(r => r.TotalAmount == 0));
+        }
 
         //[Fact]
         //public async Task GetTotalExpensesByDate_WithExpenses_ReturnsCorrectTotalsIncludingZeroMonths()
@@ -97,31 +97,31 @@ namespace UnitTests.Application.Services
             Assert.Empty(result);
         }
 
-        //[Fact]
-        //public async Task GetIncomesByDate_RegularAndOneTimeIncomes_CorrectGroupingAndSumming()
-        //{
-        //    // Arrange
-        //    var userId = Guid.NewGuid().ToString();
-        //    DateTime startDate = new DateTime(2023, 01, 01);
-        //    DateTime endDate = new DateTime(2023, 03, 01);
-        //    var incomes = new List<Income>
-        //    {
-        //        new Income { Id = Guid.NewGuid().ToString(), IncomeName = "Salary", Amount = 1000, Date = new DateTime(2023, 01, 10), IsRegular = true, UserId = userId },
-        //        new Income { Id = Guid.NewGuid().ToString(), IncomeName = "Gift", Amount = 500, Date = new DateTime(2023, 01, 15), IsRegular = false, UserId = userId }
-        //    };
-        //    _mockUnitOfWork.Setup(u => u.Users.GetByIdAsync(userId)).ReturnsAsync(new User { Currency = "usd" });
-        //    _mockUnitOfWork.Setup(u => u.Incomes.GetIncomesByUserIdAsync(userId)).ReturnsAsync(incomes);
+        [Fact]
+        public async Task GetIncomesByDate_RegularAndOneTimeIncomes_CorrectGroupingAndSumming()
+        {
+            // Arrange
+            var userId = Guid.NewGuid().ToString();
+            DateTime startDate = new DateTime(2023, 01, 01);
+            DateTime endDate = new DateTime(2023, 03, 01);
+            var incomes = new List<Income>
+            {
+                new Income { Id = Guid.NewGuid().ToString(), IncomeName = "Salary", Amount = 1000, Date = new DateTime(2023, 01, 10), IsRegular = true, UserId = userId },
+                new Income { Id = Guid.NewGuid().ToString(), IncomeName = "Gift", Amount = 500, Date = new DateTime(2023, 01, 15), IsRegular = false, UserId = userId }
+            };
+            _mockUnitOfWork.Setup(u => u.Users.GetByIdAsync(userId)).ReturnsAsync(new User { Currency = "usd" });
+            _mockUnitOfWork.Setup(u => u.Incomes.GetIncomesByUserIdAsync(userId)).ReturnsAsync(incomes);
 
-        //    // Act
-        //    var result = await _service.GetIncomesByDate(startDate, endDate, userId);
-        //    var resultList = new List<IncomeStatisticDTO>(result);
+            // Act
+            var result = await _service.GetIncomesByDate(startDate, endDate, userId);
+            var resultList = new List<IncomeStatisticDTO>(result);
 
-        //    // Assert
-        //    Assert.Equal(3, resultList.Count); // Checking if all months are accounted for
-        //    Assert.Equal(1500, resultList.Find(i => i.Month == new DateTime(2023, 01, 01)).TotalAmount);
-        //    Assert.Equal(1000, resultList.Find(i => i.Month == new DateTime(2023, 02, 01)).TotalAmount);
-        //    Assert.Equal(1000, resultList.Find(i => i.Month == new DateTime(2023, 03, 01)).TotalAmount); // Regular income continues
-        //}
+            // Assert
+            Assert.Equal(3, resultList.Count); // Checking if all months are accounted for
+            Assert.Equal(1500, resultList.Find(i => i.Month == new DateTime(2023, 01, 01)).TotalAmount);
+            Assert.Equal(1000, resultList.Find(i => i.Month == new DateTime(2023, 02, 01)).TotalAmount);
+            Assert.Equal(1000, resultList.Find(i => i.Month == new DateTime(2023, 03, 01)).TotalAmount); // Regular income continues
+        }
 
         [Fact]
         public async Task CountSaved_NoIncomesOrExpenses_ReturnsEmpty()
