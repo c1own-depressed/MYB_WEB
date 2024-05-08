@@ -1,52 +1,55 @@
-﻿@{
-    ViewData["Title"] = "FAQ";
+﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+
+@{
+    ViewData["Title"] = Localizer["FAQTitle"];
 }
 
 <!DOCTYPE html>
 <html>
 <head>
+
     <title>@ViewBag.Title</title>
     @{
         string theme = ViewBag.Theme ?? "Light"; // За замовчуванням використовується темна тема
         string cssFileName = $"OtherPages_{theme}.css";
     }
 
+
     <link rel="stylesheet" href="~/css/@cssFileName">
 </head>
 <body>
 
-    <h1>FAQ</h1>
+    <h1>@Localizer["FAQ"]</h1>
 
     <div class="faq-section">
-        <h2>Чи будуть змінені цифрові значення моїх доходів та розходів після зміни валюти в налаштуваннях??</h2>
-        <button class="toggle-button" onclick="toggleVisibility(this)">Показати відповідь</button>
-        <p>- Ні, цифрові значення автоматично не змінюються.</p>
+        <h2>@Localizer["Question1"]</h2>
+        <button class="toggle-button" onclick="toggleVisibility(this, '@Localizer["ShowAnswer"]', '@Localizer["HideAnswer"]')">@(Localizer["ShowAnswer"])</button>
+        <p>@Localizer["Answer1"]</p>
     </div>
 
     <div class="faq-section">
-        <h2>Чи можна створити декілька облікових записів використовуючи одну пошту?</h2>
-        <button class="toggle-button" onclick="toggleVisibility(this)">Показати відповідь</button>
-        <p>- Ні, використовуючи одну пошту можна створити лише один обліковий запис.</p>
+        <h2>@Localizer["Question2"]</h2>
+        <button class="toggle-button" onclick="toggleVisibility(this, '@Localizer["ShowAnswer"]', '@Localizer["HideAnswer"]')">@(Localizer["ShowAnswer"])</button>
+        <p>@Localizer["Answer2"]</p>
     </div>
 
     <div class="faq-section">
-        <h2>Чи можна завантажити імпортувати дані у система?</h2>
-        <button class="toggle-button" onclick="toggleVisibility(this)">Показати відповідь</button>
-        <p>- На даний момент не можна, наша команда працює над реалізацією цієї функції.</p>
+        <h2>@Localizer["Question3"]</h2>
+        <button class="toggle-button" onclick="toggleVisibility(this, '@Localizer["ShowAnswer"]', '@Localizer["HideAnswer"]')">@(Localizer["ShowAnswer"])</button>
+        <p>@Localizer["Answer3"]</p>
     </div>
     <script>
-        function toggleVisibility(button) {
-            var paragraph = button.nextElementSibling; // Отримати наступний елемент, який є <p>
+        function toggleVisibility(button, showText, hideText) {
+            var paragraph = button.nextElementSibling;
             if (paragraph.style.display === 'none' || paragraph.style.display === '') {
-                paragraph.style.display = 'block'; // Показати <p> блок
-                button.textContent = 'Приховати відповідь';
+                paragraph.style.display = 'block';
+                button.textContent = hideText;
             } else {
-                paragraph.style.display = 'none'; // Сховати <p> блок
-                button.textContent = 'Показати відповідь';
+                paragraph.style.display = 'none';
+                button.textContent = showText;
             }
         }
     </script>
 
 </body>
-
 </html>

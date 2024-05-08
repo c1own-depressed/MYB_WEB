@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using System.Security.Claims;
+using Application.DTOs;
 using Application.DTOs.ExpenseDTOs;
 using Application.DTOs.IncomeDTOs;
 using Application.DTOs.SavingsDTOs;
@@ -21,6 +22,7 @@ namespace WebApp.Controllers
         private readonly IExpenseService _expenseService;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ISettingsService _settingsService;
+        private readonly IHomeService _homeService;
 
         public HomeController(
             IExpenseCategoryService expenseCategoryService,
@@ -28,7 +30,8 @@ namespace WebApp.Controllers
             ISavingsService savingsService,
             IExpenseService expenseService,
             IHttpContextAccessor httpContextAccessor,
-            ISettingsService settingsService)
+            ISettingsService settingsService,
+            IHomeService homeService)
         {
             _expenseCategoryService = expenseCategoryService;
             _incomeService = incomeService;
@@ -36,32 +39,32 @@ namespace WebApp.Controllers
             _expenseService = expenseService;
             _httpContextAccessor = httpContextAccessor;
             _settingsService = settingsService;
+            _homeService = homeService;
         }
 
         public async Task<IActionResult> Index()
         {
-        if (!User.Identity.IsAuthenticated)
-        {
-            return RedirectToAction("Login", "Account"); // Перенаправлення на сторінку входу
-        }
-        else
-        {
-            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            var temp = await _settingsService.GetUserSettingsAsync(userId);
-            bool IsLight_Theme = temp.IsLightTheme;
-            ViewBag.Theme = IsLight_Theme ? "Light" : "Dark";
-            var categories = await _expenseCategoryService.GetExpenseCategoriesByUserIdAsync(userId);
-            var incomes = await _incomeService.GetIncomesByUserIdAsync(userId);
-            var savings = await _savingsService.GetSavingsByUserIdAsync(userId);
-            var model = new HomeViewModel
+            if (!User.Identity.IsAuthenticated)
             {
-                Categories = categories,
-                Incomes = incomes,
-                Savings = savings,
-            };
-            return View(model);
+                return RedirectToAction("Login", "Account"); // Перенаправлення на сторінку входу
+            }
+            else
+            {
+                var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+                // Отримання об'єкта HomeDTO з сервісу
+                var homeData = await _homeService.GetHomeDataAsync(userId);
+
+                // Створення об'єкта HomeViewModel та заповнення його даними з HomeDTO
+                var viewModel = new HomeViewModel
+                {
+                    Data = new List<HomeDTO> { homeData }
+                };
+
+                return View(viewModel);
+            }
         }
-        }
+
 
         public IActionResult Privacy()
         {

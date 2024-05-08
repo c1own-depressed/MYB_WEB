@@ -24,6 +24,7 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            
             var userSettings = await _settingsService.GetUserSettingsAsync(userId);
 
             if (userSettings != null)

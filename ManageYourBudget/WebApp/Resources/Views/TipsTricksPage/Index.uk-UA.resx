@@ -117,31 +117,19 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ChooseCurency" xml:space="preserve">
-    <value>Оберіть валюту:</value>
+  <data name="NoTipsMessage" xml:space="preserve">
+    <value>Порад наразі немає. Будь ласка, перевірте пізніше.</value>
   </data>
-  <data name="ChooseTheme" xml:space="preserve">
-    <value>Оберіть тему:</value>
+  <data name="NoTricksMessage" xml:space="preserve">
+    <value>Хитрощів наразі немає. Будь ласка, перевірте пізніше.</value>
   </data>
-  <data name="Dark" xml:space="preserve">
-    <value>Темна</value>
+  <data name="TipsHeading" xml:space="preserve">
+    <value>Поради</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>Англійська</value>
+  <data name="TipsTricksTitle" xml:space="preserve">
+    <value>Поради та Хитрощі</value>
   </data>
-  <data name="Language" xml:space="preserve">
-    <value>Мова:</value>
-  </data>
-  <data name="Light" xml:space="preserve">
-    <value>Світла</value>
-  </data>
-  <data name="Save" xml:space="preserve">
-    <value>Зберегти</value>
-  </data>
-  <data name="Settings" xml:space="preserve">
-    <value>Налаштування</value>
-  </data>
-  <data name="Ukrainian" xml:space="preserve">
-    <value>Українська</value>
+  <data name="TricksHeading" xml:space="preserve">
+    <value>Хитрощі</value>
   </data>
 </root>
