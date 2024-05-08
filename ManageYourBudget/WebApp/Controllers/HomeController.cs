@@ -25,7 +25,6 @@ namespace WebApp.Controllers
         private readonly IHomeService _homeService;
 
         public HomeController(
-            ILogger<HomeController> logger,
             IExpenseCategoryService expenseCategoryService,
             IIncomeService incomeService,
             ISavingsService savingsService,
@@ -34,7 +33,6 @@ namespace WebApp.Controllers
             ISettingsService settingsService,
             IHomeService homeService)
         {
-            _logger = logger;
             _expenseCategoryService = expenseCategoryService;
             _incomeService = incomeService;
             _savingsService = savingsService;
@@ -63,8 +61,6 @@ namespace WebApp.Controllers
                     Data = new List<HomeDTO> { homeData }
                 };
 
-
-                _logger.LogError("Home page opened");
                 return View(viewModel);
             }
         }
@@ -87,7 +83,7 @@ namespace WebApp.Controllers
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!ModelState.IsValid)
             {
-                _logger.LogError("Invalid model state for AddExpenseCategory");
+
                 return BadRequest(ModelState);
             }
 
@@ -95,13 +91,12 @@ namespace WebApp.Controllers
 
             if (serviceResult.Success)
             {
-                _logger.LogInformation($"Category added: {model.Title} with budget {model.PlannedBudget}");
+
                 return Ok();
             }
             else
             {
                 var errorMessages = string.Join("; ", serviceResult.Errors);
-                _logger.LogError($"Failed to add category: {errorMessages}");
                 return BadRequest(errorMessages);
             }
         }
@@ -113,13 +108,13 @@ namespace WebApp.Controllers
 
             if (serviceResult.Success)
             {
-                _logger.LogInformation($"Category with ID {categoryId} removed.");
+
                 return Ok();
             }
             else
             {
                 var errorMessages = string.Join("; ", serviceResult.Errors);
-                _logger.LogError($"Failed to remove category: {errorMessages}");
+
                 return BadRequest(errorMessages);
             }
         }
@@ -129,7 +124,7 @@ namespace WebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                _logger.LogError("Invalid model state for EditExpenseCategory");
+
                 return BadRequest(ModelState);
             }
 
@@ -137,13 +132,13 @@ namespace WebApp.Controllers
 
             if (serviceResult.Success)
             {
-                _logger.LogInformation($"Category edited: ID {model.Id}, Name: {model.Name}, Planned Budget: {model.PlannedBudget}");
+
                 return Ok();
             }
             else
             {
                 var errorMessages = string.Join("; ", serviceResult.Errors);
-                _logger.LogError($"Failed to edit category: {errorMessages}");
+
                 return BadRequest(errorMessages);
             }
         }
@@ -160,13 +155,12 @@ namespace WebApp.Controllers
 
             if (serviceResult.Success)
             {
-                _logger.LogError($"Income added: {model.IncomeName} with budget {model.Amount}");
                 return Ok();
             }
             else
             {
                 var errorMessages = string.Join("; ", serviceResult.Errors);
-                _logger.LogError($"Failed to add income: {errorMessages}");
+
                 return BadRequest(errorMessages);
             }
         }
@@ -184,13 +178,13 @@ namespace WebApp.Controllers
 
             if (serviceResult.Success)
             {
-                _logger.LogInformation($"Savings added: {model.SavingsName} with amount {model.Amount}");
+
                 return Ok();
             }
             else
             {
                 var errorMessages = string.Join("; ", serviceResult.Errors);
-                _logger.LogError($"Failed to add savings: {errorMessages}");
+
                 return BadRequest(errorMessages);
             }
         }
@@ -202,13 +196,13 @@ namespace WebApp.Controllers
 
             if (serviceResult.Success)
             {
-                _logger.LogInformation($"Savings with ID {savingsId} removed.");
+
                 return Ok();
             }
             else
             {
                 var errorMessages = string.Join("; ", serviceResult.Errors);
-                _logger.LogError($"Failed to remove savings: {errorMessages}");
+
                 return BadRequest(errorMessages);
             }
         }
@@ -218,7 +212,7 @@ namespace WebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                _logger.LogError("Invalid model state for EditSavings");
+
                 return BadRequest(ModelState);
             }
 
@@ -226,13 +220,13 @@ namespace WebApp.Controllers
 
             if (serviceResult.Success)
             {
-                _logger.LogInformation($"Savings edited: ID {model.Id}, Name: {model.SavingsName}, Amount: {model.Amount}");
+
                 return Ok();
             }
             else
             {
                 var errorMessages = string.Join("; ", serviceResult.Errors);
-                _logger.LogError($"Failed to edit savings: {errorMessages}");
+
                 return BadRequest(errorMessages);
             }
         }
@@ -241,7 +235,7 @@ namespace WebApp.Controllers
         {
             if (!this.ModelState.IsValid)
             {
-                this._logger.LogError("Invalid model state for EditIncome");
+
                 return this.BadRequest(this.ModelState);
             }
 
@@ -249,13 +243,13 @@ namespace WebApp.Controllers
 
             if (serviceResult.Success)
             {
-                this._logger.LogInformation($"Income edited: ID {model.Id}, Name: {model.Name}, Amount: {model.Amount}");
+
                 return this.Ok();
             }
             else
             {
                 var errorMessages = string.Join("; ", serviceResult.Errors);
-                this._logger.LogError($"Failed to edit income: {errorMessages}");
+
                 return this.BadRequest(errorMessages);
             }
         }
@@ -266,13 +260,13 @@ namespace WebApp.Controllers
 
             if (serviceResult.Success)
             {
-                this._logger.LogInformation($"Income with ID {incomeId} removed.");
+
                 return this.Ok();
             }
             else
             {
                 var errorMessages = string.Join("; ", serviceResult.Errors);
-                this._logger.LogError($"Failed to remove income: {errorMessages}");
+
                 return this.BadRequest(errorMessages);
             }
         }
@@ -289,13 +283,13 @@ namespace WebApp.Controllers
 
             if (serviceResult.Success)
             {
-                _logger.LogError($"Expense added: {model.ExpenseName} with amount {model.Amount}");
+
                 return Ok();
             }
             else
             {
                 var errorMessages = string.Join("; ", serviceResult.Errors);
-                _logger.LogError($"Failed to add expense: {errorMessages}");
+
                 return BadRequest(errorMessages);
             }
         }
@@ -307,13 +301,12 @@ namespace WebApp.Controllers
 
             if (serviceResult.Success)
             {
-                _logger.LogInformation($"Expense with ID {expenseId} removed.");
+
                 return Ok();
             }
             else
             {
                 var errorMessages = string.Join("; ", serviceResult.Errors);
-                _logger.LogError($"Failed to remove expense: {errorMessages}");
                 return BadRequest(errorMessages);
             }
         }
@@ -323,7 +316,6 @@ namespace WebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                _logger.LogError("Invalid model state for EditExpense");
                 return BadRequest(ModelState);
             }
 
@@ -331,13 +323,11 @@ namespace WebApp.Controllers
 
             if (serviceResult.Success)
             {
-                _logger.LogInformation($"Expense edited: ID {model.Id}, Name: {model.ExpenseName}, Amount: {model.Amount}");
                 return Ok();
             }
             else
             {
                 var errorMessages = string.Join("; ", serviceResult.Errors);
-                _logger.LogError($"Failed to edit expense: {errorMessages}");
                 return BadRequest(errorMessages);
             }
         }

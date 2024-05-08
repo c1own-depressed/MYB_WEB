@@ -3,23 +3,17 @@ using Application.Interfaces;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Persistence.AuthService;
-using System.Text.Encodings.Web;
 using WebApp.Models;
-using Domain.Entities;
-using NuGet.Common;
-using System.Security.Policy;
 
 namespace WebApp.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly ILogger<AccountController> _logger;
         private readonly IAuthService _authService;
         private readonly ISettingsService _settingsService;
-        public AccountController(ILogger<AccountController> logger, IAuthService authService, ISettingsService settingsService)
+
+        public AccountController(IAuthService authService, ISettingsService settingsService)
         {
-            _logger = logger;
             _authService = authService;
             _settingsService = settingsService;
         }
@@ -51,7 +45,6 @@ namespace WebApp.Controllers
 
                 if (result != null)
                 {
-                    _logger.LogInformation("User logged in successfully.");
                     return RedirectToAction("Index", "Home");
                 }
 
@@ -76,8 +69,7 @@ namespace WebApp.Controllers
                 var result = await _authService.RegisterUserAsync(userRegisterationDTO);
                 if (result.Succeeded)
                 {
-                    _logger.LogInformation("User registered successfully.");
-                    return RedirectToAction("checkemail");
+                    return RedirectToAction("CheckEmail");
                 }
 
                 foreach (var error in result.Errors)
@@ -94,9 +86,8 @@ namespace WebApp.Controllers
         {
             if (string.IsNullOrEmpty(token) || string.IsNullOrEmpty(email))
             {
-                // Display an error or redirect
                 ModelState.AddModelError(string.Empty, "Invalid password reset token or email.");
-                return View("Error"); // Or any appropriate view to display the error
+                return View("Error");
             }
 
             var model = new ResetPasswordViewModel { Token = token, Email = email };
@@ -104,7 +95,7 @@ namespace WebApp.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken] // Helps prevent CSRF attacks
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
         {
             if (!ModelState.IsValid)
@@ -123,8 +114,6 @@ namespace WebApp.Controllers
             var result = await _authService.ResetPasswordAsync(resetPasswordDTO);
             if (result.Succeeded)
             {
-                _logger.LogInformation("Password reset successfully.");
-                // Redirect to a confirmation page or login page
                 return RedirectToAction("Login");
             }
 
@@ -141,43 +130,31 @@ namespace WebApp.Controllers
             return View();
         }
 
-        //public IActionResult ConfirmEmail()
-        //{
-        //    return View();
-        //}
         [HttpGet]
         public async Task<IActionResult> ConfirmEmail(string userId, string code)
         {
             if (userId == null || code == null)
             {
-                return RedirectToAction("Index", "Home"); // or redirect to an error page
+                return RedirectToAction("Index", "Home");
             }
 
             var result = await _authService.ConfirmEmailAsync(userId, code);
             if (result.Succeeded)
             {
-                _logger.LogInformation($"User with ID {userId} confirmed their email.");
-                return View("ConfirmEmail"); // Show a confirmation success view
+                return View("ConfirmEmail");
             }
 
             foreach (var error in result.Errors)
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
-            return View("ConfirmEmailFailure"); // Show a confirmation failure view
+            return View("ConfirmEmailFailure");
         }
 
         [HttpGet]
         public IActionResult ForgotPassword()
         {
             return View();
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> Logout()
-        {
-            await _authService.LogoutAsync();
-            return RedirectToAction("Index", "Home");
         }
 
         [HttpPost]
@@ -200,6 +177,13 @@ namespace WebApp.Controllers
             }
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await _authService.LogoutAsync();
+            return RedirectToAction("Index", "Home");
         }
     }
 }

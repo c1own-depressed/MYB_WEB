@@ -9,55 +9,43 @@ namespace WebApp.Controllers
 {
     public class SettingsPageController : Controller
     {
-        private readonly ILogger<SettingsPageController> _logger;
         private readonly ISettingsService _settingsService;
         private string? selectedLanguage;
         private bool selectedTheme;
         private string? selectedCurrency;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public SettingsPageController(ILogger<SettingsPageController> logger, ISettingsService settingsService, IHttpContextAccessor httpContextAccessor)
+
+        public SettingsPageController(ISettingsService settingsService, IHttpContextAccessor httpContextAccessor)
         {
-            _logger = logger;
             _settingsService = settingsService;
             _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<IActionResult> Index()
         {
-
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            try
-            {
-                var userSettings = await _settingsService.GetUserSettingsAsync(userId);
+            
+            var userSettings = await _settingsService.GetUserSettingsAsync(userId);
 
-                if (userSettings != null)
+            if (userSettings != null)
+            {
+                var model = new SettingsViewModel
                 {
-                    var model = new SettingsViewModel
-                    {
-                        Language = userSettings.Language,
-                        IsLightTheme = userSettings.IsLightTheme,
-                        Currency = userSettings.Currency,
-                    };
+                    Language = userSettings.Language,
+                    IsLightTheme = userSettings.IsLightTheme,
+                    Currency = userSettings.Currency,
+                };
 
-                    this._logger.LogInformation($"User accessed SettingsPage with pre-filled settings. Currency: {model.Currency}");
-
-                    return this.View("~/Views/SettingsPage/Index.cshtml", model);
-                }
-
-                this._logger.LogInformation("User accessed SettingsPage without pre-filled settings.");
-            }
-            catch (Exception ex)
-            {
-                this._logger.LogError(ex, "An error occurred while fetching user settings.");
+                return View("~/Views/SettingsPage/Index.cshtml", model);
             }
 
-            return this.View("~/Views/SettingsPage/Index.cshtml");
+            return View("~/Views/SettingsPage/Index.cshtml");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            return this.View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
         [HttpPost]
@@ -66,27 +54,26 @@ namespace WebApp.Controllers
             try
             {
                 string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                this.selectedLanguage = model.Language;
-                this.selectedTheme = model.IsLightTheme;
-                this.selectedCurrency = model.Currency;
+                selectedLanguage = model.Language;
+                selectedTheme = model.IsLightTheme;
+                selectedCurrency = model.Currency;
 
                 string id = userId;
                 SettingsDTO settingsDTO = new SettingsDTO
                 {
                     Id = id,
-                    Language = this.selectedLanguage,
-                    Currency = this.selectedCurrency,
-                    IsLightTheme = this.selectedTheme,
+                    Language = selectedLanguage,
+                    Currency = selectedCurrency,
+                    IsLightTheme = selectedTheme,
                 };
 
-                await this._settingsService.SaveSettings(settingsDTO);
-                this._logger.LogInformation("User settings saved successfully.");
-                return this.RedirectToAction("Index");
+                await _settingsService.SaveSettings(settingsDTO);
+                return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                this._logger.LogError(ex, "An error occurred while saving user settings.");
-                return this.RedirectToAction("Index");
+                // Log the error if needed
+                return RedirectToAction("Index");
             }
         }
     }

@@ -1,6 +1,7 @@
 ﻿using Application.DTOs;
 using Application.Interfaces;
 using Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 
 namespace Application.Services
 {
@@ -8,51 +9,66 @@ namespace Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
 
-        public SettingsService(IUnitOfWork unitOfWork)
+        private readonly ILogger<SettingsService> _logger;
+
+        public SettingsService(IUnitOfWork unitOfWork, ILogger<SettingsService> logger)
         {
             _unitOfWork = unitOfWork;
+            _logger = logger;
         }
 
         public async Task<SettingsDTO> GetUserSettingsAsync(string userId)
         {
-            var userFromDb = await this._unitOfWork.Users.GetByIdAsync(userId);
-            if (userFromDb != null)
+            _logger.LogInformation($"Fetching settings for user {userId}.");
+            try
             {
-                SettingsDTO dto = new SettingsDTO
+                var userFromDb = await this._unitOfWork.Users.GetByIdAsync(userId);
+                if (userFromDb != null)
                 {
-                    Id = userFromDb.Id,
-                    Currency = userFromDb.Currency,
-                    IsLightTheme = userFromDb.IsLightTheme,
-                    Language = userFromDb.Language,
-                };
+                    SettingsDTO dto = new SettingsDTO
+                    {
+                        Id = userFromDb.Id,
+                        Currency = userFromDb.Currency,
+                        IsLightTheme = userFromDb.IsLightTheme,
+                        Language = userFromDb.Language,
+                    };
 
-                return dto;
+                    return dto;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, $"An error occurred while fetching settings for user {userId}.");
+                throw;
             }
 
-            // Return default settings when user is not found
             return GetDefaultSettings();
         }
 
         public async Task SaveSettings(SettingsDTO settingsDTO)
         {
-            // Отримуємо користувача з бази даних за його Id
-            var user = await this._unitOfWork.Users.GetByIdAsync(settingsDTO.Id);
-
-            // Оновлюємо налаштування користувача з даних DTO
-            if (user != null)
+            _logger.LogInformation($"Saving settings for user {settingsDTO.Id}.");
+            try
             {
-                user.Language = settingsDTO.Language;
-                user.IsLightTheme = settingsDTO.IsLightTheme;
-                user.Currency = settingsDTO.Currency;
+                // Отримуємо користувача з бази даних за його Id
+                var user = await this._unitOfWork.Users.GetByIdAsync(settingsDTO.Id);
 
-                // Оновлюємо користувача в базі даних
-                this._unitOfWork.Users.Update(user);
-                await this._unitOfWork.CompleteAsync();
+                // Оновлюємо налаштування користувача з даних DTO
+                if (user != null)
+                {
+                    user.Language = settingsDTO.Language;
+                    user.IsLightTheme = settingsDTO.IsLightTheme;
+                    user.Currency = settingsDTO.Currency;
+
+                    // Оновлюємо користувача в базі даних
+                    this._unitOfWork.Users.Update(user);
+                    await this._unitOfWork.CompleteAsync();
+                }
             }
-            else
+            catch (Exception ex)
             {
-                // Якщо користувача не знайдено, можна обробити цю ситуацію відповідним чином, наприклад, кинути виключення або створити нового користувача.
-                // Ваш код обробки тут.
+                _logger.LogError(ex, $"An error occurred while saving settings for user {settingsDTO.Id}.");
+                throw;
             }
         }
 
