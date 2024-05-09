@@ -97,15 +97,20 @@
                         <div class="logo-text">MYB</div>
                     </a>
                     <div class="nav-menu mb-hidden">
-                        <a class="nav-link text-dark" asp-area="" asp-controller="home" asp-action="Index">@Localizer["Home"]</a>
-                        <a class="nav-link text-dark" asp-area="" asp-controller="faq" asp-action="Index">@Localizer["FAQ"]</a>
-                        <a class="nav-link text-dark" asp-area="" asp-controller="tips" asp-action="Index">@Localizer["Tips"]</a>
+
+                       
                         @if (User.Identity.IsAuthenticated)
                         {
+                            <a class="nav-link text-dark" asp-area="" asp-controller="home" asp-action="Index">@Localizer["Home"]</a>
                             <a class="nav-link text-dark" asp-area="" asp-controller="statistic" asp-action="Index">@Localizer["Statistic"]</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="faq" asp-action="Index">@Localizer["FAQ"]</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="tips" asp-action="Index">@Localizer["Tips"]</a>
                         }
+                       
                         else
                         {
+                            <a class="nav-link text-dark" asp-area="" asp-controller="faq" asp-action="Index">@Localizer["FAQ"]</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="tips" asp-action="Index">@Localizer["Tips"]</a>
                             <a class="nav-link text-dark" asp-area="" asp-controller="login" asp-action="">@Localizer["Login"]</a>
                             <a class="nav-link text-dark" asp-area="" asp-controller="signup" asp-action="">@Localizer["Signup"]</a>
                         }
