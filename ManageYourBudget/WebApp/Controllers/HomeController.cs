@@ -9,6 +9,7 @@ using Application.Services;
 using Application.Utils;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using WebApp.Extensions;
 using WebApp.Models;
 
 namespace WebApp.Controllers
@@ -83,22 +84,12 @@ namespace WebApp.Controllers
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!ModelState.IsValid)
             {
-
                 return BadRequest(ModelState);
             }
 
             ServiceResult serviceResult = await _expenseCategoryService.AddExpenseCategoryAsync(model, userId);
 
-            if (serviceResult.Success)
-            {
-
-                return Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-                return BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
         [HttpPost]
@@ -106,17 +97,7 @@ namespace WebApp.Controllers
         {
             ServiceResult serviceResult = await _expenseCategoryService.RemoveExpenseCategoryAsync(categoryId);
 
-            if (serviceResult.Success)
-            {
-
-                return Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-
-                return BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
         [HttpPost]
@@ -124,23 +105,12 @@ namespace WebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-
                 return BadRequest(ModelState);
             }
 
             ServiceResult serviceResult = await _expenseCategoryService.EditExpenseCategoryAsync(model);
 
-            if (serviceResult.Success)
-            {
-
-                return Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-
-                return BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
         [HttpPost]
@@ -151,18 +121,10 @@ namespace WebApp.Controllers
             {
                 return BadRequest(ModelState);
             }
+
             ServiceResult serviceResult = await _incomeService.AddIncomeAsync(model, userId);
 
-            if (serviceResult.Success)
-            {
-                return Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-
-                return BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
         [HttpPost]
@@ -176,17 +138,7 @@ namespace WebApp.Controllers
 
             ServiceResult serviceResult = await _savingsService.AddSavingsAsync(model, userId);
 
-            if (serviceResult.Success)
-            {
-
-                return Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-
-                return BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
         [HttpPost]
@@ -194,17 +146,7 @@ namespace WebApp.Controllers
         {
             ServiceResult serviceResult = await _savingsService.RemoveSavingsAsync(savingsId);
 
-            if (serviceResult.Success)
-            {
-
-                return Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-
-                return BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
         [HttpPost]
@@ -212,63 +154,31 @@ namespace WebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-
                 return BadRequest(ModelState);
             }
 
             ServiceResult serviceResult = await _savingsService.EditSavingsAsync(model);
 
-            if (serviceResult.Success)
-            {
-
-                return Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-
-                return BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
         public async Task<IActionResult> EditIncome([FromBody] EditIncomeDTO model)
         {
             if (!this.ModelState.IsValid)
             {
-
                 return this.BadRequest(this.ModelState);
             }
 
             ServiceResult serviceResult = await this._incomeService.EditIncomeAsync(model);
 
-            if (serviceResult.Success)
-            {
-
-                return this.Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-
-                return this.BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
         public async Task<IActionResult> RemoveIncome(string incomeId)
         {
             ServiceResult serviceResult = await this._incomeService.RemoveIncomeAsync(incomeId);
 
-            if (serviceResult.Success)
-            {
-
-                return this.Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-
-                return this.BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
         [HttpPost]
@@ -281,17 +191,7 @@ namespace WebApp.Controllers
 
             ServiceResult serviceResult = await _expenseService.AddExpenseAsync(model);
 
-            if (serviceResult.Success)
-            {
-
-                return Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-
-                return BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
         [HttpPost]
@@ -299,16 +199,7 @@ namespace WebApp.Controllers
         {
             ServiceResult serviceResult = await _expenseService.RemoveExpenseAsync(expenseId);
 
-            if (serviceResult.Success)
-            {
-
-                return Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-                return BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
         [HttpPost]
@@ -321,15 +212,7 @@ namespace WebApp.Controllers
 
             ServiceResult serviceResult = await _expenseService.EditExpenseAsync(model);
 
-            if (serviceResult.Success)
-            {
-                return Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-                return BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
     }
 }

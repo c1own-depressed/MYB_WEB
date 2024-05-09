@@ -23,10 +23,10 @@
                             <p class="card-amount">@income.Amount @income.CurrencyEmblem</p>
                             <div class="card-interaction">
                                 <button class="btn card-edit" onclick="openEditIncomeModal('@income.Id', '@income.IncomeName', '@income.Amount')">
-                                    <i class="fas fa-pencil-alt"></i> @Localizer["Edit"]
+                                    <i class="fas fa-pencil-alt"></i>
                                 </button>
-                                <button class="btn card-delete" onclick="removeIncome(@income.Id)">
-                                    <i class="fas fa-trash"></i> @Localizer["Delete"]
+                                <button class="btn card-delete" onclick="removeIncome('@income.Id')">
+                                    <i class="fas fa-trash"></i>
                                 </button>
                             </div>
                         </div>
@@ -37,7 +37,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="editIncomeModalLabel_@income.Id">@Localizer["Edit Income"]</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <button type="button" class="close" data-dismiss="modal" onclick="closeModalWindow('@income.Id')" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
@@ -52,7 +52,7 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["Close"]</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModalWindow('@income.Id')">@Localizer["Close"]</button>
                                         <button type="button" class="btn btn-primary" onclick="editIncome('@income.Id')">@Localizer["Save changes"]</button>
                                     </div>
                                 </div>
@@ -157,7 +157,9 @@
             });
         }
     }
-
+    function closeModalWindow(incomeId) {
+        $('#editIncomeModal_' + incomeId).modal('hide');
+    }
     function openEditIncomeModal(incomeId, incomeName, Amount) {
         $('#editIncomeName_' + incomeId).val(incomeName); // Set the category name in the input field
         $('#editAmount_' + incomeId).val(Amount); // Set the planned budget in the input field
