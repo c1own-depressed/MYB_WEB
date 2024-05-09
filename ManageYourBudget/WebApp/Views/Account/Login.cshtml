@@ -56,8 +56,8 @@
                                 <input asp-for="Password" type="password" class="form-text-field w-input" maxlength="256" name="password" data-name="Password" placeholder="" id="password" required="">
                             </div>
                         </div>
-                        <div class="login-button">
-                            <button type="submit" class="login-button-text">@Localizer["LoginButton"]</button>
+                        <div class="login-button" onclick="submitForm()">
+                            <div class="login-button-text">@Localizer["LoginButton"]</div>
                         </div>
                     </form>
                 </div>
@@ -70,3 +70,8 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+<script>
+    function submitForm() {
+        document.getElementById("login-form").submit();
+    }
+</script>

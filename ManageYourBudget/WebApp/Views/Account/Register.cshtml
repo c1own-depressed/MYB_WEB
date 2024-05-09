@@ -75,9 +75,10 @@
                             </div>
                         </div>
 
-                        <div class="login-button">
-                            <button type="submit" class="login-button-text">@Localizer["RegisterButton"]</button>
+                        <div class="login-button" onclick="submitForm()">
+                            <div class="login-button-text">@Localizer["RegisterButton"]</div>
                         </div>
+
                         
     </form>
                 </div>
@@ -91,3 +92,8 @@
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
 }
+<script>
+    function submitForm() {
+        document.querySelector(".signup-form").submit();
+    }
+</script>

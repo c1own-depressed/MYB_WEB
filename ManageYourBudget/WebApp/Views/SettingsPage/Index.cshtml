@@ -41,35 +41,6 @@
     <link rel="stylesheet" href="~/css/@cssFileName">
    </head>
 <body>
-    @* <h1>@localizer["Settings"]</h1> *@
-  @*   <form asp-controller="SettingsPage" asp-action="SaveSettings" method="post">
-        <div class="SelectOption">
-            <label for="language">@localizer["Language"]</label>
-            <select id="language" name="Language" class="selection">
-
-                <option value="en-US" id="enOption">@localizer["English"]</option>
-                <option value="uk-UA" id="ukOption">@localizer["Ukrainian"]</option>
-
-            </select>
-        </div>
-        <div class="SelectOption">
-            <label for="theme">@localizer["ChooseTheme"]</label>
-            <select id="theme" name="IsLightTheme" class="selection">
-                <option value="true" id="lightThemeOption">@localizer["Light"]</option>
-                <option value="false" id="darkThemeOption">@localizer["Dark"]</option>
-            </select>
-        </div>
-        <div class="SelectOption">
-            <label for="currency">@localizer["ChooseCurrency"]</label>
-            <select id="currency" name="Currency" class="selection">
-                <option value="usd" id="usdOption">USD</option>
-                <option value="uah" id="uahOption">UAH</option>
-            </select>
-        </div>
-        <button type="button" onclick="location.href='@Url.Action("ResetPassword", "Account")'">@localizer["ResetPassword"]</button>
-        <button type="submit">@localizer["Save"]</button>
-    </form>
- *@
     <section class="settings-section">
         <div class="container">
             <div class="settings-content">
@@ -111,8 +82,8 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="save-button">
-                            <button class="save-button-text" type="submit">@localizer["Save"]</button>
+                        <div class="save-button" onclick="submitForm()">
+                            <div class="save-button-text">@localizer["Save"]</div>
                         </div>
                     </form>
                 </div>
@@ -145,6 +116,9 @@
             document.getElementById('uahOption').setAttribute('selected', 'selected');
         } else {
             document.getElementById('usdOption').setAttribute('selected', 'selected');
+        }
+        function submitForm() {
+            document.getElementById("email-form").submit();
         }
     </script>
 </body>
