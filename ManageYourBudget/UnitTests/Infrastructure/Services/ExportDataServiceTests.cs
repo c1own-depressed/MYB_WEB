@@ -3,6 +3,7 @@ using Application.Interfaces;
 using Application.Services;
 using DocumentFormat.OpenXml.Vml;
 using Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 using Moq;
 using Persistence.Services;
 
@@ -14,12 +15,14 @@ namespace UnitTests.Infrastructure.Services
         private readonly Mock<IStatisticService> _mockStatisticService;
         private readonly ExportDataService _exportDataService;
         private readonly string _userId = Guid.NewGuid().ToString();
+        private readonly ILogger<ExportDataService> _logger;
 
         public ExportDataServiceTests()
         {
             _mockUnitOfWork = new Mock<IUnitOfWork>();
             _mockStatisticService = new Mock<IStatisticService>();
-            _exportDataService = new ExportDataService(_mockUnitOfWork.Object, _mockStatisticService.Object);
+            _logger = new Mock<ILogger<ExportDataService>>().Object;
+            _exportDataService = new ExportDataService(_mockUnitOfWork.Object, _mockStatisticService.Object, _logger);
         }
 
         [Fact]

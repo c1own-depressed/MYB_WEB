@@ -4,7 +4,9 @@ using Application.Services;
 using Application.Utils;
 using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 using Moq;
+using Persistence.Services;
 
 
 namespace UnitTests.Application.Services
@@ -14,12 +16,14 @@ namespace UnitTests.Application.Services
         private readonly Mock<IUnitOfWork> _mockUnitOfWork;
         private readonly Mock<IExpenseService> _mockExpenseService;
         private readonly ExpenseCategoryService _service;
+        private readonly ILogger<ExpenseCategoryService> _logger;
 
         public ExpenseCategoryServiceTests()
         {
             _mockUnitOfWork = new Mock<IUnitOfWork>();
             _mockExpenseService = new Mock<IExpenseService>();
-            _service = new ExpenseCategoryService(_mockUnitOfWork.Object, _mockExpenseService.Object);
+            _logger = new Mock<ILogger<ExpenseCategoryService>>().Object;
+            _service = new ExpenseCategoryService(_mockUnitOfWork.Object, _mockExpenseService.Object, _logger);
         }
 
         [Fact]

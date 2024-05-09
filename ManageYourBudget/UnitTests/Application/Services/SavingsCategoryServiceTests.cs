@@ -4,6 +4,7 @@ using Domain.Interfaces;
 using Moq;
 using FluentAssertions;
 using Application.DTOs.SavingsDTOs;
+using Microsoft.Extensions.Logging;
 
 namespace UnitTests.Application.Services
 {
@@ -11,11 +12,13 @@ namespace UnitTests.Application.Services
     {
         private readonly Mock<IUnitOfWork> _mockUnitOfWork;
         private readonly SavingsService _service;
+        private readonly ILogger<SavingsService> _logger;
 
         public SavingsServiceTests()
         {
             _mockUnitOfWork = new Mock<IUnitOfWork>();
-            _service = new SavingsService(_mockUnitOfWork.Object);
+            _logger = new Mock<ILogger<SavingsService>>().Object;
+            _service = new SavingsService(_mockUnitOfWork.Object, _logger);
         }
 
         [Fact]

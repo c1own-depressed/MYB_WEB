@@ -26,7 +26,11 @@ namespace Application.Services
                 var user = await _unitOfWork.Users.GetByIdAsync(userId);
                 var incomes = await _unitOfWork.Incomes.GetIncomesByUserIdAsync(userId);
                 string currencyRepresentation = CurrencyUtils.FormatCurrencyDisplay(user.Currency);
-                var months = Enumerable.Range(0, ((endDate.Year - startDate.Year) * 12) + (endDate.Month - startDate.Month) + 1)
+
+                // Calculate end date as the minimum of current date and provided endDate
+                DateTime queryEndDate = DateTime.Now.Date < endDate.Date ? DateTime.Now.Date : endDate.Date;
+
+                var months = Enumerable.Range(0, ((queryEndDate.Year - startDate.Year) * 12) + (queryEndDate.Month - startDate.Month) + 1)
                                        .Select(offset => new DateTime(startDate.Year, startDate.Month, 1).AddMonths(offset))
                                        .ToList();
 
@@ -38,10 +42,23 @@ namespace Application.Services
 
                 foreach (var income in incomes)
                 {
-                    var incomeMonth = new DateTime(income.Date.Year, income.Date.Month, 1);
-                    if (incomeMonth >= startDate && incomeMonth <= endDate && IsIncomeRelevantForMonth(income, incomeMonth))
+                    var startMonth = new DateTime(income.Date.Year, income.Date.Month, 1);
+                    if (income.IsRegular)
                     {
-                        monthlyIncome[incomeMonth] += income.Amount;
+                        // For regular incomes, add to all months from start month to queryEndDate
+                        var applicableMonths = months.Where(m => m >= startMonth && m <= queryEndDate);
+                        foreach (var month in applicableMonths)
+                        {
+                            monthlyIncome[month] += income.Amount;
+                        }
+                    }
+                    else
+                    {
+                        // For one-time incomes, only add to the month if it's within the range
+                        if (startMonth >= startDate && startMonth <= queryEndDate)
+                        {
+                            monthlyIncome[startMonth] += income.Amount;
+                        }
                     }
                 }
 
@@ -58,21 +75,6 @@ namespace Application.Services
             {
                 _logger.LogError(ex, "Failed to fetch incomes for user {UserId}.", userId);
                 throw;
-            }
-        }
-
-        private bool IsIncomeRelevantForMonth(Income income, DateTime month)
-        {
-            // Check if the income should be counted in the specified month
-            if (income.IsRegular)
-            {
-                // Regular income counts every month
-                return true;
-            }
-            else
-            {
-                // One-time income only counts in the month it was received
-                return income.Date.Month == month.Month && income.Date.Year == month.Year;
             }
         }
 

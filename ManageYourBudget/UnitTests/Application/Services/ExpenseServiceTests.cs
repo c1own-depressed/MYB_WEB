@@ -5,6 +5,7 @@ using Application.Services;
 using Domain.Entities;
 using Domain.Interfaces;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,11 +17,13 @@ namespace UnitTests.Application.Services
     {
         private readonly Mock<IUnitOfWork> _mockUnitOfWork;
         private readonly ExpenseService _service;
+        private readonly ILogger<ExpenseService> _logger;
 
         public ExpenseServiceTests()
         {
             _mockUnitOfWork = new Mock<IUnitOfWork>();
-            _service = new ExpenseService(_mockUnitOfWork.Object);
+            _logger = new Mock<ILogger<ExpenseService>>().Object;
+            _service = new ExpenseService(_mockUnitOfWork.Object, _logger);
         }
 
         [Fact]
