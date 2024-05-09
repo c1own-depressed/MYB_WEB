@@ -5,6 +5,7 @@ using Application.Services;
 using Application.Utils;
 using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 using Moq;
 
 namespace UnitTests.Application.Services
@@ -13,11 +14,13 @@ namespace UnitTests.Application.Services
     {
         private readonly Mock<IUnitOfWork> _mockUnitOfWork;
         private readonly IncomeService _service;
+        private readonly ILogger<IncomeService> _logger;
 
         public IncomeServiceTests()
         {
             _mockUnitOfWork = new Mock<IUnitOfWork>();
-            _service = new IncomeService(_mockUnitOfWork.Object);
+            _logger = new Mock<ILogger<IncomeService>>().Object;
+            _service = new IncomeService(_mockUnitOfWork.Object, _logger);
         }
 
         [Fact]
