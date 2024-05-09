@@ -6,13 +6,11 @@ namespace WebApp.Controllers
 {
     public class TipsController : Controller
     {
-        private readonly ILogger<FAQPageController> _logger;
         private readonly ISettingsService _settingsService;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public TipsController(ILogger<FAQPageController> logger, ISettingsService settingsService, IHttpContextAccessor httpContextAccessor)
+        public TipsController(ISettingsService settingsService, IHttpContextAccessor httpContextAccessor)
         {
-            _logger = logger;
             _settingsService = settingsService;
             _httpContextAccessor = httpContextAccessor;
         }

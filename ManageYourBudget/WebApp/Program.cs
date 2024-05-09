@@ -6,20 +6,29 @@ using Domain.Interfaces;
 using FluentAssertions.Common;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Persistence;
 using Persistence.AuthService;
 using Persistence.Services;
 using Serilog;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var logDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Logs");
+if (!Directory.Exists(logDirectory))
+{
+    Directory.CreateDirectory(logDirectory);
+}
 // Configure Serilog
 builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
+    .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
     .WriteTo.Seq("http://localhost:5341"));
 
-var connectionString = builder.Configuration.GetConnectionString("RomanConnection");
+var connectionString = builder.Configuration.GetConnectionString("AndriyConnection");
+
 
 if (connectionString != null)
 {
@@ -30,6 +39,8 @@ else
 {
     Log.Error("Connection string is null.");
 }
+
+
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
@@ -46,6 +57,11 @@ builder.Services.AddScoped<IStatisticService, StatisticService>();
 builder.Services.AddScoped<ISettingsService, SettingsService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IExportDataService, ExportDataService>();
+builder.Services.AddScoped<IHomeService, HomeService>();
+builder.Services.AddScoped<ICultureService, CultureService>();
+
+builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+
 builder.Services.AddControllersWithViews()
     .AddFluentValidation(fv =>
     {
@@ -96,17 +112,37 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
+app.UseExceptionHandler(
+    options => {
+        options.Run(
+            async context => {
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+                var ex = context.Features.Get<IExceptionHandlerFeature>();
+                if (ex != null)
+                {
+                    await context.Response.WriteAsync(ex.Error.Message);
+                }
+            }
+            );
+    }
+    );
 app.UseRouting();
 
 app.UseAuthentication(); // This is essential for Identity
 app.UseAuthorization();
 
-var cultures = new[] { "en", "uk" };
-var localizationOptions = new RequestLocalizationOptions().SetDefaultCulture(cultures[0])
-    .AddSupportedCultures(cultures)
-    .AddSupportedUICultures(cultures);
-app.UseRequestLocalization(localizationOptions);
+var supportedCultures = new[] { "en-US", "uk-UA" };
+var requestLocalizationOptions = new RequestLocalizationOptions()
+    .SetDefaultCulture("en-US")
+    .AddSupportedCultures(supportedCultures)
+    .AddSupportedUICultures(supportedCultures);
+
+// Configure the custom RequestCultureProvider using IServiceScopeFactory
+requestLocalizationOptions.RequestCultureProviders.Insert(0,
+    new DbRequestCultureProvider(app.Services.GetRequiredService<IServiceScopeFactory>()));
+
+// Apply the localization settings to the application
+app.UseRequestLocalization(requestLocalizationOptions);
 
 app.MapControllerRoute(
     name: "faq",

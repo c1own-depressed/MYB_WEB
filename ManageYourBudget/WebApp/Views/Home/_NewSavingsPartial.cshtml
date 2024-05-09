@@ -1,5 +1,6 @@
-﻿@using Application.DTOs.SavingsDTOs
+﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
+@using Application.DTOs.SavingsDTOs
 @model IEnumerable<SavingsDTO>
 <head>
     @{
@@ -7,14 +8,16 @@
         string cssFileName = $"Modal_{theme}.css";
     }
 
+
     <link rel="stylesheet" href="~/css/@cssFileName">
 </head>
+
 
 <div class="card-wrapper" id="card-wrapper">
     <div class="card">
         <div class="card-header" id="headingOne">
             <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseSavings" aria-expanded="true" aria-controls="collapseIncome">
-                <h2 class="mb-0">Savings</h2>
+                <h2 class="mb-0">@Localizer["SavingsTitle"]</h2>
             </button>
         </div>
 
@@ -41,24 +44,24 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="editSavingsModalLabel_@savings.Id">Edit Category</h5>
+                                        <h5 class="modal-title" id="editSavingsModalLabel_@savings.Id">@Localizer["EditModalTitle"]</h5>
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="form-group">
-                                            <label for="editSavingsName">Savings Name</label>
+                                            <label for="editSavingsName">@Localizer["SavingsNameLabel"]</label>
                                             <input type="text" class="form-control" id="editSavingsName_@savings.Id" value="@savings.SavingsName">
                                         </div>
                                         <div class="form-group">
-                                            <label for="editAmount">Amount</label>
+                                            <label for="editAmount">@Localizer["AmountLabel"]</label>
                                             <input type="number" class="form-control" id="editAmount_@savings.Id" value="@savings.Amount">
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" onclick="editSavings('@savings.Id')">Save changes</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["CloseButton"]</button>
+                                        <button type="button" class="btn btn-primary" onclick="editSavings('@savings.Id')">@Localizer["SaveChangesButton"]</button>
                                     </div>
                                 </div>
                             </div>
@@ -68,7 +71,7 @@
                 <div class="separator-line"></div>
                 <!-- Add Savings Button -->
                 <button type="button" class="btn add-btn" data-toggle="modal" data-target="#addSavingsModal">
-                    + Add Savings
+                    + @Localizer["AddSavingsButton"]
                 </button>
             </div>
         </div>
@@ -78,7 +81,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addSavingsModalLabel">Add Savings</h5>
+                    <h5 class="modal-title" id="addSavingsModalLabel">@Localizer["AddModalTitle"]</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -86,22 +89,22 @@
                 <div class="modal-body">
                     <form id="add-savings-form">
                         <div class="form-group">
-                            <label for="savings-name">Savings Name</label>
+                            <label for="savings-name">@Localizer["SavingsNameLabel"]</label>
                             <input type="text" class="form-control" id="savings-name" name="name" required>
                         </div>
                         <div class="form-group">
-                            <label for="savings-amount">Amount</label>
+                            <label for="savings-amount">@Localizer["AmountLabel"]</label>
                             <input type="number" class="form-control" id="savings-amount" name="amount" required>
                         </div>
                         <div class="form-group">
-                            <label for="savings-date">Date</label>
+                            <label for="savings-date">@Localizer["DateLabel"]</label>
                             <input type="datetime-local" class="form-control" id="savings-date" name="date">
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" form="add-savings-form">Add</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["CloseButton"]</button>
+                    <button type="submit" class="btn btn-primary" form="add-savings-form">@Localizer["AddButton"]</button>
                 </div>
             </div>
         </div>
@@ -134,7 +137,7 @@
 
     <script>
         function removeSavings(savingsId) {
-            if (confirm("Are you sure you want to remove this saving?")) {
+            if (confirm("@Localizer["ConfirmDeleteMessage"]")) {
                 $.ajax({
                     url: '@Url.Action("RemoveSavings", "Home")' + '?savingsId=' + savingsId,
                     type: 'POST',
@@ -143,7 +146,7 @@
                         location.reload();
                     },
                     error: function (error) {
-                        alert("Failed to remove savings");
+                        alert("@Localizer["FailedToRemoveMessage"]");
                     }
                 });
             }
@@ -175,7 +178,7 @@
                     location.reload(); // Reload the page or update UI as needed
                 },
                 error: function (error) {
-                    alert("Failed to edit income");
+                    alert("@Localizer["FailedToEditMessage"]");
                 }
             });
         }

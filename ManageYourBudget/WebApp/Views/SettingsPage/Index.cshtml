@@ -20,12 +20,13 @@
 <body>
     <h1>@localizer["Settings"]</h1>
     <form asp-controller="SettingsPage" asp-action="SaveSettings" method="post">
-        <!-- Додано форму тут -->
         <div class="SelectOption">
             <label for="language">@localizer["Language"]</label>
             <select id="language" name="Language" class="selection">
-                <option value="en" id="enOption">@localizer["English"]</option>
-                <option value="uk" id="uaOption">@localizer["Ukrainian"]</option>
+
+                <option value="en-US" id="enOption">@localizer["English"]</option>
+                <option value="uk-UA" id="ukOption">@localizer["Ukrainian"]</option>
+
             </select>
         </div>
         <div class="SelectOption">
@@ -36,38 +37,39 @@
             </select>
         </div>
         <div class="SelectOption">
-            <label for="currency">@localizer["ChooseCurency"]</label>
+            <label for="currency">@localizer["ChooseCurrency"]</label>
             <select id="currency" name="Currency" class="selection">
                 <option value="usd" id="usdOption">USD</option>
                 <option value="uah" id="uahOption">UAH</option>
             </select>
         </div>
-        <!-- Reset password button -->
-        <div class="SelectOption">
-            <button type="button" onclick="location.href='@Url.Action("ResetPassword", "Account")'">@localizer["ResetPassword"]</button>
-        </div>
-        <button type="submit" >@localizer["Save"]</button>
-        <!-- Додано formaction -->
+        <button type="button" onclick="location.href='@Url.Action("ResetPassword", "Account")'">@localizer["ResetPassword"]</button>
+        <button type="submit">@localizer["Save"]</button>
     </form>
     <script>
-        
         var isLightTheme = '@Model.IsLightTheme.ToString().ToLower()';
-        var language = '@Model.Language.ToString().ToLower()';
-        var currency = '@Model.Currency.ToString().ToLower()';
-        if (currency === 'uah') {
-            document.getElementById('uahOption').setAttribute('selected', 'selected');
-        } else {
-            document.getElementById('usdOption').setAttribute('selected', 'selected');
-        }
-        if (language === 'en') {
+        var language = '@Model.Language.ToLower()';
+        var currency = '@Model.Currency.ToLower()';
+
+        // Select Language
+        if (language === 'en-us') {
             document.getElementById('enOption').setAttribute('selected', 'selected');
-        } else {
-            document.getElementById('uaOption').setAttribute('selected', 'selected');
+        } else if (language === 'uk-ua') {
+            document.getElementById('ukOption').setAttribute('selected', 'selected');
         }
+
+        // Select Theme
         if (isLightTheme === 'true') {
             document.getElementById('lightThemeOption').setAttribute('selected', 'selected');
         } else {
             document.getElementById('darkThemeOption').setAttribute('selected', 'selected');
+        }
+
+        // Select Currency
+        if (currency === 'uah') {
+            document.getElementById('uahOption').setAttribute('selected', 'selected');
+        } else {
+            document.getElementById('usdOption').setAttribute('selected', 'selected');
         }
     </script>
 </body>
