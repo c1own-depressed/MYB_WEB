@@ -1,5 +1,6 @@
 ﻿@model WebApp.Models.RegisterViewModel
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+
 <!DOCTYPE html>
 <html data-wf-domain="myb-site-854d38.webflow.io" data-wf-page="663aef056f80bd247597be03" data-wf-site="663aef046f80bd247597bd93" lang="en" class="w-mod-js wf-inter-n4-active wf-inter-n5-active wf-inter-n6-active wf-inter-n7-active wf-freehand-n4-active wf-active">
 <head>
@@ -39,30 +40,46 @@
             <div class="signup-content">
                 <h1 class="heading">@Localizer["RegisterHeader"]</h1>
                 <div class="form-block w-form">
-                    <form asp-action="Register" method="post" id="register-form" name="register-form" data-name="Register Form" class="signup-form" aria-label="Register Form">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <form asp-action="Register" method="post" class="signup-form">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
                         <div class="form-line-wrapper">
-                            <label for="email" class="form-field-label">@Localizer["Email"]</label>
+                            <label for="username" class="form-field-label">Username</label>
                             <div class="text-field-wrapper">
-                                <input id="email" class="form-text-field w-input" maxlength="256" name="Email" placeholder="" type="email" required="">
+                                <input asp-for="UserName" class="form-text-field w-input" id="username" />
+                                <span asp-validation-for="UserName" class="text-danger"></span>
                             </div>
                         </div>
+
                         <div class="form-line-wrapper">
-                            <label for="username" class="form-field-label">@Localizer["UserName"]</label>
+                            <label for="email" class="form-field-label">Email</label>
                             <div class="text-field-wrapper">
-                                <input id="username" class="form-text-field w-input" maxlength="256" name="UserName" placeholder="" type="text" required="">
+                                <input asp-for="Email" class="form-text-field w-input" id="email" />
+                                <span asp-validation-for="Email" class="text-danger"></span>
                             </div>
                         </div>
+
                         <div class="form-line-wrapper">
-                            <label for="password" class="form-field-label">@Localizer["Password"]</label>
+                            <label for="password" class="form-field-label">Password</label>
                             <div class="text-field-wrapper">
-                                <input id="password" class="form-text-field w-input" maxlength="256" name="Password" placeholder="" type="password" required="">
+                                <input asp-for="Password" type="password" class="form-text-field w-input" id="password" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
                             </div>
                         </div>
+
+                        <div class="form-line-wrapper">
+                            <label for="confirmPassword" class="form-field-label">Confirm Password</label>
+                            <div class="text-field-wrapper">
+                                <input asp-for="ConfirmPassword" type="password" class="form-text-field w-input" id="confirmPassword" />
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+                        </div>
+
                         <div class="login-button">
                             <button type="submit" class="login-button-text">@Localizer["RegisterButton"]</button>
                         </div>
-                    </form>
+                        
+    </form>
                 </div>
             </div>
         </div>
