@@ -7,7 +7,8 @@
     <style>
         .wf-force-outline-none[tabindex="-1"]:focus {
             outline: none;
-        }</style>
+        }
+    </style>
     <title>Login</title>
     <meta content="Login" property="og:title">
     <meta content="Login" property="twitter:title">
@@ -42,17 +43,17 @@
             <div class="login-content">
                 <h1 class="heading">@Localizer["LoginHeader"]</h1>
                 <div class="w-form">
-                    <form asp-action="Login" method="post" id="login-form" name="login-form" data-name="Login Form" class="form-2" data-wf-page-id="663aef056f80bd247597be01" data-wf-element-id="f3b949c6-1514-2ef9-0d49-b2ea9c4ae195" aria-label="Login Form">
+                    <form asp-action="Login" method="post" id="login-form" name="login-form" data-name="Login Form" class="signup-form" data-wf-page-id="663aef056f80bd247597be01" data-wf-element-id="f3b949c6-1514-2ef9-0d49-b2ea9c4ae195" aria-label="Login Form">
                         <div class="form-line-wrapper">
-                            <label asp-for="Email" for="email" class="login-form-field-label">@Localizer["Email"]</label>
+                            <label for="email" class="form-field-label">@Localizer["Email"]</label>
                             <div class="text-field-wrapper">
-                                <input asp-for="Email" class="login-form-text-field w-input" maxlength="256" name="email" data-name="Email" type="email" id="email" required="">
+                                <input asp-for="Email" class="form-text-field w-input" maxlength="256" name="email" data-name="Email" type="email" id="email" required="">
                             </div>
                         </div>
                         <div class="form-line-wrapper">
-                            <label asp-for="Password" for="password" class="login-form-field-label">@Localizer["Password"]</label>
+                            <label for="password" class="form-field-label">@Localizer["Password"]</label>
                             <div class="text-field-wrapper">
-                                <input asp-for="Password" type="password" class="login-form-text-field w-input" maxlength="256" name="password" data-name="Password" placeholder="" id="password" required="">
+                                <input asp-for="Password" type="password" class="form-text-field w-input" maxlength="256" name="password" data-name="Password" placeholder="" id="password" required="">
                             </div>
                         </div>
                         <div class="login-button">
