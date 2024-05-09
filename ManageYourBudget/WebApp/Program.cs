@@ -27,7 +27,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
     .WriteTo.Seq("http://localhost:5341"));
 
-var connectionString = builder.Configuration.GetConnectionString("AndriyConnection");
+var connectionString = builder.Configuration.GetConnectionString("RomanConnection");
 
 
 if (connectionString != null)
