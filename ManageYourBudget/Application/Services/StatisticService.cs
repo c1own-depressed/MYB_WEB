@@ -18,50 +18,58 @@ namespace Application.Services
 
         public async Task<IEnumerable<IncomeStatisticDTO>> GetIncomesByDate(DateTime startDate, DateTime endDate, string userId)
         {
-            var user = await this._unitOfWork.Users.GetByIdAsync(userId);
-            var incomes = await this._unitOfWork.Incomes.GetIncomesByUserIdAsync(userId);
+            var user = await _unitOfWork.Users.GetByIdAsync(userId);
+            var incomes = await _unitOfWork.Incomes.GetIncomesByUserIdAsync(userId);
 
             string currencyRepresentation = CurrencyUtils.FormatCurrencyDisplay(user.Currency);
 
             // Generate all months within the date range
             var months = Enumerable.Range(0, ((endDate.Year - startDate.Year) * 12) + (endDate.Month - startDate.Month) + 1)
-                .Select(offset => new DateTime(startDate.Year, startDate.Month, 1).AddMonths(offset))
-                .ToList();
+                                   .Select(offset => new DateTime(startDate.Year, startDate.Month, 1).AddMonths(offset))
+                                   .ToList();
 
-            // Initialize list to hold income data for all months
-            List<IncomeDTO> incomeDTOs = new List<IncomeDTO>();
+            // Dictionary to track total income per month
+            var monthlyIncome = new Dictionary<DateTime, double>();
 
-            // Populate income data for each month in the range
+            // Initialize monthly totals to zero
             foreach (var month in months)
             {
-                foreach (var income in incomes)
+                monthlyIncome[month] = 0;
+            }
+
+            // Populate income data for each month in the range
+            foreach (var income in incomes)
+            {
+                var incomeMonth = new DateTime(income.Date.Year, income.Date.Month, 1);
+                if (incomeMonth >= startDate && incomeMonth <= endDate && IsIncomeRelevantForMonth(income, incomeMonth))
                 {
-                    if (IsIncomeRelevantForMonth(income, month))
-                    {
-                        incomeDTOs.Add(new IncomeDTO
-                        {
-                            Id = income.Id,
-                            IncomeName = income.IncomeName,
-                            Amount = income.Amount,
-                            CurrencyEmblem = currencyRepresentation,
-                            Date = month, // Use the current month for this income
-                            IsRegular = income.IsRegular,
-                        });
-                    }
+                    monthlyIncome[incomeMonth] += income.Amount;
                 }
             }
 
-            // Group incomeDTOs by month and calculate total amount for each month
-            var incomeByMonth = incomeDTOs
-                .GroupBy(income => new { Year = income.Date.Year, Month = income.Date.Month })
-                .Select(group => new IncomeStatisticDTO
-                {
-                    Month = new DateTime(group.Key.Year, group.Key.Month, 1),
-                    TotalAmount = group.Sum(income => income.Amount),
-                })
-                .OrderBy(dto => dto.Month);
+            // Convert dictionary to list of DTOs
+            var incomeByMonth = monthlyIncome.Select(kvp => new IncomeStatisticDTO
+            {
+                Month = kvp.Key,
+                TotalAmount = kvp.Value
+            }).OrderBy(dto => dto.Month);
 
             return incomeByMonth;
+        }
+
+        private bool IsIncomeRelevantForMonth(Income income, DateTime month)
+        {
+            // Check if the income should be counted in the specified month
+            if (income.IsRegular)
+            {
+                // Regular income counts every month
+                return true;
+            }
+            else
+            {
+                // One-time income only counts in the month it was received
+                return income.Date.Month == month.Month && income.Date.Year == month.Year;
+            }
         }
 
         public async Task<IEnumerable<TotalExpensesDTO>> GetTotalExpensesByDate(DateTime from, DateTime to, string userId)
@@ -162,20 +170,6 @@ namespace Application.Services
                 // Handle exceptions or log errors
                 Console.WriteLine($"Error retrieving all statistics: {ex.Message}");
                 throw; // Re-throw exception or return default value as needed
-            }
-        }
-
-        private bool IsIncomeRelevantForMonth(Income income, DateTime month)
-        {
-            if (income.IsRegular)
-            {
-                // Regular income is relevant for the specified month
-                return true;
-            }
-            else
-            {
-                // One-time income is relevant if its date falls within the specified month
-                return income.Date.Year == month.Year && income.Date.Month == month.Month;
             }
         }
     }
