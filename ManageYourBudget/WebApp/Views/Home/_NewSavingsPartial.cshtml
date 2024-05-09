@@ -33,7 +33,7 @@
                                 <button class="btn card-edit" onclick="openEditSavingsModal('@savings.Id', '@savings.SavingsName', '@savings.Amount')">
                                     <i class="fas fa-pencil-alt"></i>
                                 </button>
-                                <button class="btn card-delete" onclick="removeSavings(@savings.Id)">
+                                <button class="btn card-delete" onclick="removeSavings('@savings.Id')">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -45,7 +45,7 @@
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h5 class="modal-title" id="editSavingsModalLabel_@savings.Id">@Localizer["EditModalTitle"]</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModalWindow('@savings.Id')">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
@@ -60,7 +60,7 @@
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["CloseButton"]</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModalWindow('@savings.Id')">@Localizer["CloseButton"]</button>
                                         <button type="button" class="btn btn-primary" onclick="editSavings('@savings.Id')">@Localizer["SaveChangesButton"]</button>
                                     </div>
                                 </div>
@@ -154,10 +154,14 @@
     </script>
 
     <script>
+        function closeModalWindow(savingsId) {
+            $('#editSavingsModal_' + savingsId).modal('hide');
+        }
         function openEditSavingsModal(savingsId, savingsName, Amount) {
             $('#editSavingsName_' + savingsId).val(savingsName); // Set the category name in the input field
             $('#editAmount_' + savingsId).val(Amount); // Set the planned budget in the input field
-            $('#editSavingsModal_' + savingsId).modal('show'); // Show the modal
+            $('#editSavingsModal_' + savingsId).modal('show');
+            // Show the modal
         }
 
         function editSavings(savingsId) {
