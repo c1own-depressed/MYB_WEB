@@ -13,8 +13,8 @@ namespace Application.Validators
         public CreateExpenseDTOValidator() {
             RuleFor(x => x.ExpenseName)
                 .NotEmpty()
-                .Length(5, 100)
-                .WithMessage("Title length should be between 5 and 100 characters.");
+                .Length(1, 100)
+                .WithMessage("Title length should be between 1 and 100 characters.");
 
             RuleFor(x => x.Amount)
                 .GreaterThan(0)
