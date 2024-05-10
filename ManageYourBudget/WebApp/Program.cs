@@ -29,7 +29,6 @@ builder.Host.UseSerilog((ctx, lc) => lc
 
 var connectionString = builder.Configuration.GetConnectionString("RomanConnection");
 
-
 if (connectionString != null)
 {
     builder.Services.AddDbContext<MYBDbContext>(options =>
