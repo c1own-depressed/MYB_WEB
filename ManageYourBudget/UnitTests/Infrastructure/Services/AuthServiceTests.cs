@@ -12,6 +12,7 @@ using Application.DTOs.AccountDTOs;
 using Microsoft.AspNetCore.Mvc;
 using Application.Interfaces;
 using WebApp.Controllers;
+using Microsoft.Extensions.Logging;
 
 namespace UnitTests.Infrastructure.Services
 {
@@ -25,6 +26,7 @@ namespace UnitTests.Infrastructure.Services
         private readonly AuthService _service;
         private readonly Mock<IAuthService> _mockAuthService;
         private readonly AccountController _controller;
+        private readonly Mock<ILogger<AuthService>> _logger;
 
         public AuthServiceTests()
         {
@@ -40,11 +42,12 @@ namespace UnitTests.Infrastructure.Services
             _mockHttpContext.RequestServices = new ServiceCollection()
                 .AddSingleton(_authService.Object)
                 .BuildServiceProvider();
+            _logger = new Mock<ILogger<AuthService>>();
 
-            _service = new AuthService(_userManager.Object, _emailSender.Object, _httpContextAccessor.Object);
+            _service = new AuthService(_userManager.Object, _emailSender.Object, _httpContextAccessor.Object, _logger.Object);
 
             _mockAuthService = new Mock<IAuthService>();
-            _controller = new AccountController(null, _mockAuthService.Object, null);
+            _controller = new AccountController(_mockAuthService.Object, null);
         }
 
         [Fact]

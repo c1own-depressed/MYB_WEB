@@ -32,10 +32,10 @@
                                     <p class="card-amount">@expense.Amount @* @expense.CurrencyEmblem *@</p>
                                     <div class="card-interaction">
                                         <button class="btn card-edit" onclick="openEditExpenseModal('@expense.Id', '@expense.ExpenseName', '@expense.Amount', '@expense.Date')">
-                                            <i class="fas fa-pencil-alt"></i> @Localizer["Edit"]
+                                            <i class="fas fa-pencil-alt"></i> 
                                         </button>
-                                        <button class="btn card-delete" onclick="removeExpense(@expense.Id)">
-                                            <i class="fas fa-trash"></i> @Localizer["Delete"]
+                                        <button class="btn card-delete" onclick="removeExpense('@expense.Id')">
+                                            <i class="fas fa-trash"></i> 
                                         </button>
                                     </div>
                                 </div>
@@ -48,10 +48,10 @@
                             </button>
                             <div class="card-interaction">
                                 <button class="btn card-edit" onclick="openEditCategoryModal('@category.Id', '@category.Name', '@category.PlannedBudget')">
-                                    <i class="fas fa-pencil-alt"></i> @Localizer["Edit"]
+                                    <i class="fas fa-pencil-alt"></i>
                                 </button>
-                                <button class="btn card-delete" onclick="removeCategory(@category.Id)">
-                                    <i class="fas fa-trash"></i> @Localizer["Delete"]
+                                <button class="btn card-delete" onclick="removeCategory('@category.Id')">
+                                    <i class="fas fa-trash"></i>
                                 </button>
                             </div>
                         </div>
@@ -101,7 +101,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="editCategoryModalLabel_@category.Id">@Localizer["Edit Category"]</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeEditCategoryModalWindow('@category.Id')">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -116,7 +116,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["Close"]</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeEditCategoryModalWindow('@category.Id')">@Localizer["Close"]</button>
                         <button type="button" class="btn btn-primary" onclick="editCategory('@category.Id')">@Localizer["Save changes"]</button>
                     </div>
                 </div>
@@ -134,7 +134,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="editExpenseModalLabel">@Localizer["Edit Expense"]</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeEditExpenseModalWindow()">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -156,7 +156,7 @@
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["Close"]</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeEditExpenseModalWindow()">@Localizer["Close"]</button>
                     <button type="submit" class="btn btn-primary" form="edit-expense-form">@Localizer["Save Changes"]</button>
                 </div>
             </div>
@@ -238,6 +238,10 @@
     </script>
 
     <script>
+        function closeEditCategoryModalWindow(categoryId) {
+            $('#editCategoryModal_' + categoryId).modal('hide');
+           
+        }
         function openEditCategoryModal(categoryId, categoryName, plannedBudget) {
             $('#editCategoryName_' + categoryId).val(categoryName); // Set the category name in the input field
             $('#editPlannedBudget_' + categoryId).val(plannedBudget); // Set the planned budget in the input field
@@ -318,7 +322,9 @@
                 });
             }
         }
-
+        function closeEditExpenseModalWindow() {
+            $('#editExpenseModal' ).modal('hide');
+        }
         function openEditExpenseModal(expenseId, expenseName, amount, date) {
             $('#selectedExpenseId').val(expenseId);
             $('#edit-expense-name').val(expenseName);

@@ -38,5 +38,8 @@ dotnet_diagnostic.SA1401.severity = silent
 # S112: General or reserved exceptions should never be thrown
 dotnet_diagnostic.S112.severity = silent
 
+# CS8613: Nullability of reference types in return type doesn't match implicitly implemented member.
+dotnet_diagnostic.CS8613.severity = silent
+
 [*.xml]
 indent_size = 2
