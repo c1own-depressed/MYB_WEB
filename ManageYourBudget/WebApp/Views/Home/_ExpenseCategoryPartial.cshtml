@@ -6,8 +6,8 @@
 <div class="categories-list-wrapper">
     @foreach (var category in Model)
     {
-        <div class="card-wrapper" id="card-wrapper">
-             <div class="full-card-wrapper">
+        <div class="card-wrapper category-card-wrapper" id="card-wrapper">
+            <div class="full-card-wrapper">
                 <div class="full-card-top">
                     <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse_@category.Id" aria-expanded="true" aria-controls="collapseIncome">
 
@@ -17,8 +17,7 @@
                             <div class="card-header-right-text"><p>@Localizer["Remaining:"] @category.RemainingBudget</p></div>
                         </div>
                     </button>
-                </div>
-                
+                </div> 
             </div>
             <div id="collapse_@category.Id" class="collapse" aria-labelledby="headingOne" data-parent="#card-wrapper">
                <div class="full-card-bottom">

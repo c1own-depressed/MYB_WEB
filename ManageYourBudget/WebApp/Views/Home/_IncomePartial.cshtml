@@ -6,16 +6,16 @@
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 <div class="card-wrapper" id="card-wrapper">
-    <div class="full-card-wrapper">
-        
-        <div class="full-card-top">
-            <div class="full-card-heading">
-                <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseIncome" aria-expanded="true" aria-controls="collapseIncome">
-                    <h2 class="mb-0">@Localizer["Income"]</h2>
-                </button>
-            </div>
+       
+    <div class="full-card-top">
+        <div class="full-card-heading">
+            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseIncome" aria-expanded="true" aria-controls="collapseIncome">
+                <h2 class="mb-0">@Localizer["Income"]</h2>
+            </button>
         </div>
-        <div id="collapseIncome" class="collapse" aria-labelledby="headingOne" data-parent="#card-wrapper">
+    </div>
+
+    <div id="collapseIncome" class="collapse" aria-labelledby="headingOne" data-parent="#card-wrapper">
             <div class="full-card-bottom">
                 @foreach (var income in Model)
                 {
@@ -73,7 +73,7 @@
                 </div>
             </div>
             </div>
-        </div>
+
     <div class="modal fade" id="addIncomeModal" tabindex="-1" role="dialog" aria-labelledby="addIncomeModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">

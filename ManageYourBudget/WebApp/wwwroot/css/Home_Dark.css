@@ -2397,6 +2397,20 @@ img {
     line-height: 100%;
 }
 
+.flex-separator {
+    display: block;
+    height: 2em;
+}
+
+.category-card-wrapper {
+    margin-top: 1rem !important;
+}
+
+.savings-card-wrapper {
+    margin-top: 1rem !important;
+    margin-bottom: 1rem !important;
+}
+
 .footer {
     background-color: var(--accent);
     margin-top: auto;
