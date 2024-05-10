@@ -27,7 +27,9 @@ builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
     .WriteTo.Seq("http://localhost:5341"));
 
-var connectionString = builder.Configuration.GetConnectionString("DimaConnection");
+
+var connectionString = builder.Configuration.GetConnectionString("RostikConnection");
+
 
 if (connectionString != null)
 {
@@ -136,11 +138,9 @@ var requestLocalizationOptions = new RequestLocalizationOptions()
     .AddSupportedCultures(supportedCultures)
     .AddSupportedUICultures(supportedCultures);
 
-// Configure the custom RequestCultureProvider using IServiceScopeFactory
-requestLocalizationOptions.RequestCultureProviders.Insert(0,
-    new DbRequestCultureProvider(app.Services.GetRequiredService<IServiceScopeFactory>()));
+// Add custom RequestCultureProvider
+requestLocalizationOptions.RequestCultureProviders.Insert(0, new DbRequestCultureProvider(app.Services.GetRequiredService<IServiceScopeFactory>(), app.Services.GetRequiredService<ILogger<DbRequestCultureProvider>>()));
 
-// Apply the localization settings to the application
 app.UseRequestLocalization(requestLocalizationOptions);
 
 app.MapControllerRoute(
