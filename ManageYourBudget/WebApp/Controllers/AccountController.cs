@@ -148,6 +148,7 @@ namespace WebApp.Controllers
             {
                 ModelState.AddModelError(string.Empty, error.Description);
             }
+
             return View("ConfirmEmailFailure");
         }
 

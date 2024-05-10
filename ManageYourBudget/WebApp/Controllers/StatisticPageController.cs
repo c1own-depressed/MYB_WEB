@@ -4,6 +4,7 @@ using Application.DTOs.StatisticDTO;
 using Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
+using Application.Utils;
 
 namespace WebApp.Controllers
 {
@@ -22,12 +23,12 @@ namespace WebApp.Controllers
             _exportDataService = exportDataService;
         }
 
-        public enum ExportFormat
-        {
-            CSV,
-            XML,
-            XLSX
-        }
+        //public enum ExportFormat
+        //{
+        //    CSV,
+        //    XML,
+        //    XLSX
+        //}
 
         public async Task<IActionResult> Index()
         {
@@ -37,7 +38,7 @@ namespace WebApp.Controllers
             bool isLightTheme = temp.IsLightTheme;
             ViewBag.Theme = isLightTheme ? "Light" : "Dark";
 
-            string aspNetCoreCookiesValue = _httpContextAccessor.HttpContext.Request.Cookies[".AspNetCore.Cookies"];
+            //string aspNetCoreCookiesValue = _httpContextAccessor.HttpContext.Request.Cookies[".AspNetCore.Cookies"];
 
             try
             {
@@ -109,40 +110,52 @@ namespace WebApp.Controllers
         public async Task<IActionResult> ExportStatistics(DateTime startDate, DateTime endDate, ExportFormat format)
         {
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            try
-            {
-                byte[] fileContents;
-                string contentType;
-                string fileName;
+            var result = await _exportDataService.ExportData(startDate, endDate, userId, format);
 
-                switch (format)
-                {
-                    case ExportFormat.CSV:
-                        var csvData = await _exportDataService.ExportDataToCSV(startDate, endDate, userId);
-                        fileContents = Encoding.UTF8.GetBytes(csvData);
-                        contentType = "text/csv";
-                        fileName = "statistics.csv";
-                        break;
-                    case ExportFormat.XML:
-                        fileContents = await _exportDataService.ExportDataToXML(startDate, endDate, userId);
-                        contentType = "application/xml";
-                        fileName = "statistics.xml";
-                        break;
-                    case ExportFormat.XLSX:
-                        fileContents = await _exportDataService.ExportDataToXLSX(startDate, endDate, userId);
-                        contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                        fileName = "statistics.xlsx";
-                        break;
-                    default:
-                        return BadRequest("Unsupported format");
-                }
-
-                return File(fileContents, contentType, fileName);
-            }
-            catch (Exception ex)
-            {
+            if (!result.Success)
                 return StatusCode(500, "Failed to export data.");
-            }
+
+            return File(result.FileContents, result.ContentType, result.FileName);
         }
+
+        //[HttpGet]
+        //public async Task<IActionResult> ExportStatistics(DateTime startDate, DateTime endDate, ExportFormat format)
+        //{
+        //    string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        //    try
+        //    {
+        //        byte[] fileContents;
+        //        string contentType;
+        //        string fileName;
+
+        //        switch (format)
+        //        {
+        //            case ExportFormat.CSV:
+        //                var csvData = await _exportDataService.ExportDataToCSV(startDate, endDate, userId);
+        //                fileContents = Encoding.UTF8.GetBytes(csvData);
+        //                contentType = "text/csv";
+        //                fileName = "statistics.csv";
+        //                break;
+        //            case ExportFormat.XML:
+        //                fileContents = await _exportDataService.ExportDataToXML(startDate, endDate, userId);
+        //                contentType = "application/xml";
+        //                fileName = "statistics.xml";
+        //                break;
+        //            case ExportFormat.XLSX:
+        //                fileContents = await _exportDataService.ExportDataToXLSX(startDate, endDate, userId);
+        //                contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+        //                fileName = "statistics.xlsx";
+        //                break;
+        //            default:
+        //                return BadRequest("Unsupported format");
+        //        }
+
+        //        return File(fileContents, contentType, fileName);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return StatusCode(500, "Failed to export data.");
+        //    }
+        //}
     }
 }

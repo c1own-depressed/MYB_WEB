@@ -24,7 +24,6 @@ namespace WebApp.Controllers
         public async Task<IActionResult> Index()
         {
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            
             var userSettings = await _settingsService.GetUserSettingsAsync(userId);
 
             if (userSettings != null)
@@ -58,10 +57,9 @@ namespace WebApp.Controllers
                 selectedTheme = model.IsLightTheme;
                 selectedCurrency = model.Currency;
 
-                string id = userId;
                 SettingsDTO settingsDTO = new SettingsDTO
                 {
-                    Id = id,
+                    Id = userId,
                     Language = selectedLanguage,
                     Currency = selectedCurrency,
                     IsLightTheme = selectedTheme,
@@ -70,9 +68,8 @@ namespace WebApp.Controllers
                 await _settingsService.SaveSettings(settingsDTO);
                 return RedirectToAction("Index");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                // Log the error if needed
                 return RedirectToAction("Index");
             }
         }

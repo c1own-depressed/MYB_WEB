@@ -10,8 +10,8 @@ namespace Application.Validators
             RuleFor(x => x.ExpenseName)
                 .NotEmpty()
                 .WithMessage("Expense name cannot be empty.")
-                .Length(1, 100)
-                .WithMessage("Expense name length should be between 1 and 100 characters.");
+                .Length(2, 100)
+                .WithMessage("Expense name length should be between 2 and 100 characters.");
 
             RuleFor(x => x.Amount)
                 .GreaterThan(0)
