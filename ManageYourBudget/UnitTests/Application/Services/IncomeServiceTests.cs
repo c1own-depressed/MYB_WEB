@@ -76,7 +76,7 @@ namespace UnitTests.Application.Services
         public async Task AddIncomeAsync_WithShortTitle_ReturnsError()
         {
             // Arrange
-            var dto = new CreateIncomeDTO { IncomeName = "Pub", Amount = 450 };
+            var dto = new CreateIncomeDTO { IncomeName = "F", Amount = 450 };
             string userId = Guid.NewGuid().ToString();
 
             // Act
@@ -85,7 +85,7 @@ namespace UnitTests.Application.Services
             // Assert
             Assert.False(serviceResult.Success);
             var errorMessages = string.Join("; ", serviceResult.Errors);
-            Assert.Equal("Title length should be between 5 and 100 characters.", errorMessages);
+            Assert.Equal("Title length should be between 2 and 100 characters.", errorMessages);
         }
 
         [Fact]
@@ -101,7 +101,7 @@ namespace UnitTests.Application.Services
             // Assert
             Assert.False(serviceResult.Success);
             var errorMessages = string.Join("; ", serviceResult.Errors);
-            Assert.Equal("Title length should be between 5 and 100 characters.", errorMessages);
+            Assert.Equal("Title length should be between 2 and 100 characters.", errorMessages);
         }
 
         [Fact]
@@ -265,7 +265,7 @@ namespace UnitTests.Application.Services
         {
             // Arrange
             var incomeId = Guid.NewGuid().ToString();
-            var dto = new EditIncomeDTO { Id = incomeId, Name = "Cate", Amount = 450 };
+            var dto = new EditIncomeDTO { Id = incomeId, Name = "C", Amount = 450 };
 
             // Act
             var serviceResult = await _service.EditIncomeAsync(dto);
@@ -273,7 +273,7 @@ namespace UnitTests.Application.Services
             // Assert
             Assert.False(serviceResult.Success);
             var errorMessages = string.Join("; ", serviceResult.Errors);
-            Assert.Equal("Name length should be between 5 and 100 characters.", errorMessages);
+            Assert.Equal("Name length should be between 2 and 100 characters.", errorMessages);
         }
 
         [Fact]
@@ -289,7 +289,7 @@ namespace UnitTests.Application.Services
             // Assert
             Assert.False(serviceResult.Success);
             var errorMessages = string.Join("; ", serviceResult.Errors);
-            Assert.Equal("Name length should be between 5 and 100 characters.", errorMessages);
+            Assert.Equal("Name length should be between 2 and 100 characters.", errorMessages);
         }
 
         [Fact]

@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 using System.Xml.Linq;
 using Application.DTOs.StatisticDTO;
 using Application.Interfaces;
+using Application.Utils;
 using ClosedXML.Excel;
 using Domain.Interfaces;
 using Microsoft.Extensions.Logging;
@@ -24,6 +20,45 @@ namespace Persistence.Services
             _unitOfWork = unitOfWork;
             _statisticService = statisticService;
             _logger = logger;
+        }
+
+        public async Task<FileExportResult> ExportData(DateTime startDate, DateTime endDate, string userId, ExportFormat format)
+        {
+            try
+            {
+                byte[] fileContents;
+                string contentType;
+                string fileName;
+
+                switch (format)
+                {
+                    case ExportFormat.CSV:
+                        var csvData = await ExportDataToCSV(startDate, endDate, userId);
+                        fileContents = Encoding.UTF8.GetBytes(csvData);
+                        contentType = "text/csv";
+                        fileName = "statistics.csv";
+                        break;
+                    case ExportFormat.XML:
+                        fileContents = await ExportDataToXML(startDate, endDate, userId);
+                        contentType = "application/xml";
+                        fileName = "statistics.xml";
+                        break;
+                    case ExportFormat.XLSX:
+                        fileContents = await ExportDataToXLSX(startDate, endDate, userId);
+                        contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                        fileName = "statistics.xlsx";
+                        break;
+                    default:
+                        throw new NotSupportedException("Unsupported format");
+                }
+
+                return new FileExportResult(true, fileContents, contentType, fileName);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to export data for user ID: {UserId}", userId);
+                return new FileExportResult(false);
+            }
         }
 
         public async Task<string> ExportDataToCSV(DateTime startDate, DateTime endDate, string userId)
