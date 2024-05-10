@@ -132,6 +132,9 @@
   <data name="Edit Income" xml:space="preserve">
     <value>Edit Income</value>
   </data>
+  <data name="Income" xml:space="preserve">
+    <value>Income</value>
+  </data>
   <data name="Income Name" xml:space="preserve">
     <value>Income Name</value>
   </data>

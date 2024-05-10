@@ -147,6 +147,9 @@
   <data name="SaveChangesButton" xml:space="preserve">
     <value>Зберегти зміни</value>
   </data>
+  <data name="Savings" xml:space="preserve">
+    <value>Заощадження</value>
+  </data>
   <data name="SavingsHeading" xml:space="preserve">
     <value>Заощадження</value>
   </data>

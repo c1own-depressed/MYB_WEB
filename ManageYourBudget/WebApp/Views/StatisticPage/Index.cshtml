@@ -1,13 +1,14 @@
-﻿@*
+﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
 @{
-    ViewData["Title"] = "Statistic";
+    ViewData["Title"] = Localizer["Title.Statistic"];
 }
 @model IEnumerable<StatisticViewModel>
 <head>
     <meta charset="utf-8" />
-    <title>Statistic</title>
+    <title>@Localizer["Title.Statistic"]</title>
     @{
         // string theme = ViewBag.Theme ?? "Dark"; // За замовчуванням використовується темна тема
         // string cssFileName = $"Statistic_{theme}.css";
@@ -25,27 +26,27 @@
     <div class="statistic">
         <div class="statistic-manipulation">
             <div class="form-group">
-                <label for="startDate">Start Date:</label>
+                <label for="startDate">@Localizer["Label.StartDate"]</label>
                 <input type="date" class="form-control" id="startDate" name="startDate" />
             </div>
             <div class="form-group">
-                <label for="endDate">End Date:</label>
+                <label for="endDate">@Localizer["Label.EndDate"]</label>
                 <input type="date" class="form-control" id="endDate" name="endDate" />
             </div>
-            <a id="getStatistics" class="btn btn-default" href="@Url.Action("GetStatistics", "StatisticPage", new { startDate=DateTime.Today.AddMonths(-1), endDate=DateTime.Today, format="CSV" })">Show statistic</a>
-            <a id="exportCsvLink" class="btn btn-default" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "CSV" })">Export CSV</a>
-            <a id="exportXmlLink" class="btn btn-default" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "XML" })">Export XML</a>
-            <a id="exportXlsxLink" class="btn btn-default" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "XLSX" })">Export XLSX</a>
+            <a id="getStatistics" class="btn btn-default" href="@Url.Action("GetStatistics", "StatisticPage", new { startDate=DateTime.Today.AddMonths(-1), endDate=DateTime.Today, format="CSV" })">@Localizer["Button.ShowStatistic"]</a>
+            <a id="exportCsvLink" class="btn btn-default" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "CSV" })">@Localizer["Button.ExportCSV"]</a>
+            <a id="exportXmlLink" class="btn btn-default" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "XML" })">@Localizer["Button.ExportXML"]</a>
+            <a id="exportXlsxLink" class="btn btn-default" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "XLSX" })">@Localizer["Button.ExportXLSX"]</a>
         </div>
 
         <div class="table">
             <table id="statisticsTable">
                 <thead>
                     <tr>
-                        <th>Income</th>
-                        <th>Summary Expenses</th>
-                        <th>Saved</th>
-                        <th>Month</th>
+                        <th>@Localizer["Table.Header.Income"]</th>
+                        <th>@Localizer["Table.Header.SummaryExpenses"]</th>
+                        <th>@Localizer["Table.Header.Saved"]</th>
+                        <th>@Localizer["Table.Header.Month"]</th>
                     </tr>
                 </thead>
                 <tbody>

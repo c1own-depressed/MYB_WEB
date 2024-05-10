@@ -1,7 +1,9 @@
 ﻿@model WebApp.Models.SettingsViewModel
 @inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer localizer
 @{
-    ViewData["Title"] = "SettingsPage";
+    ViewData["Title"] = "Settings Page";
+    string theme = ViewBag.Theme ?? "Dark";
+    string cssFileName = $"Settings_{theme}.css";
 }
 
 <!DOCTYPE html>
@@ -34,10 +36,6 @@
          display: none !important;
          }
       </style>
-    @{
-        string theme = ViewBag.Theme ?? "Dark"; // За замовчуванням використовується темна тема
-        string cssFileName = $"Settings_{theme}.css";
-    }
     <link rel="stylesheet" href="~/css/@cssFileName">
    </head>
 <body>
@@ -46,14 +44,14 @@
             <div class="settings-content">
                 <h1 class="heading">@localizer["Settings"]</h1>
                 <div class="w-form">
-                    <form asp-controller="SettingsPage" asp-action="SaveSettings" method="post" id="email-form" name="email-form" data-name="Email Form" method="post" class="form" data-wf-page-id="663aef056f80bd247597bdf6" data-wf-element-id="c1953f65-f1ec-12cd-93fe-4514e0d8dc3f" aria-label="Email Form">
+                    <form asp-controller="SettingsPage" asp-action="SaveSettings" method="post" id="settings-form" name="settings-form" class="form">
                         <div class="div-block-3">
                             <div class="settings-option">
                                 <div class="settings-label-wrapper">
                                     <div class="settings-label-text">@localizer["Language"]</div>
                                 </div>
                                 <div class="select-wrapper">
-                                    <select id="language" name="language" data-name="language choice" class="select-field w-select">
+                                    <select id="language" name="Language" class="select-field w-select">
                                         <option value="en-US" id="enOption">@localizer["English"]</option>
                                         <option value="uk-UA" id="ukOption">@localizer["Ukrainian"]</option>
                                     </select>
@@ -64,7 +62,7 @@
                                     <div class="settings-label-text">@localizer["ChooseTheme"]</div>
                                 </div>
                                 <div class="select-wrapper">
-                                    <select id="theme" name="theme" data-name="theme choice" class="select-field w-select">
+                                    <select id="theme" name="IsLightTheme" class="select-field w-select">
                                         <option value="true" id="lightThemeOption">@localizer["Light"]</option>
                                         <option value="false" id="darkThemeOption">@localizer["Dark"]</option>
                                     </select>
@@ -75,7 +73,7 @@
                                     <div class="settings-label-text">@localizer["ChooseCurrency"]</div>
                                 </div>
                                 <div class="select-wrapper">
-                                    <select id="currency" name="currency" data-name="currency choice" class="select-field w-select">
+                                    <select id="currency" name="Currency" class="select-field w-select">
                                         <option value="usd" id="usdOption">USD</option>
                                         <option value="uah" id="uahOption">UAH</option>
                                     </select>
@@ -117,8 +115,9 @@
         } else {
             document.getElementById('usdOption').setAttribute('selected', 'selected');
         }
+
         function submitForm() {
-            document.getElementById("email-form").submit();
+            document.getElementById("settings-form").submit();
         }
     </script>
 </body>

@@ -60,6 +60,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IExportDataService, ExportDataService>();
 builder.Services.AddScoped<IHomeService, HomeService>();
 builder.Services.AddScoped<ICultureService, CultureService>();
+builder.Services.AddScoped<IThemeService, ThemeService>();
 
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
@@ -73,6 +74,15 @@ builder.Services.AddControllersWithViews()
     });
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 builder.Services.AddMvc().AddViewLocalization(Microsoft.AspNetCore.Mvc.Razor.LanguageViewLocationExpanderFormat.Suffix).AddDataAnnotationsLocalization();
+builder.Services.AddWebOptimizer();
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30); // Set according to your requirements
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+builder.Services.AddHttpContextAccessor();
 
 // Add Identity services and configure the options
 builder.Services.AddDefaultIdentity<User>(options => {
@@ -111,6 +121,8 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+app.UseSession();
+app.UseWebOptimizer();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseExceptionHandler(

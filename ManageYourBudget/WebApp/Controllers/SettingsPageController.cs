@@ -10,15 +10,17 @@ namespace WebApp.Controllers
     public class SettingsPageController : Controller
     {
         private readonly ISettingsService _settingsService;
+        private readonly IThemeService _themeService;
         private string? selectedLanguage;
         private bool selectedTheme;
         private string? selectedCurrency;
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public SettingsPageController(ISettingsService settingsService, IHttpContextAccessor httpContextAccessor)
+        public SettingsPageController(ISettingsService settingsService, IHttpContextAccessor httpContextAccessor, IThemeService themeService)
         {
             _settingsService = settingsService;
             _httpContextAccessor = httpContextAccessor;
+            _themeService = themeService;
         }
 
         public async Task<IActionResult> Index()
@@ -34,6 +36,7 @@ namespace WebApp.Controllers
                     IsLightTheme = userSettings.IsLightTheme,
                     Currency = userSettings.Currency,
                 };
+                ViewBag.Theme = userSettings.IsLightTheme ? "Light" : "Dark";
 
                 return View("~/Views/SettingsPage/Index.cshtml", model);
             }
@@ -66,6 +69,7 @@ namespace WebApp.Controllers
                 };
 
                 await _settingsService.SaveSettings(settingsDTO);
+                await _themeService.SaveUserThemeAsync(userId, model.IsLightTheme);
                 return RedirectToAction("Index");
             }
             catch (Exception)

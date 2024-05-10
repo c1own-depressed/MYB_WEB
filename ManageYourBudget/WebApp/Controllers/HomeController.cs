@@ -24,6 +24,7 @@ namespace WebApp.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly ISettingsService _settingsService;
         private readonly IHomeService _homeService;
+        private readonly IThemeService _themeService;
 
         public HomeController(
             IExpenseCategoryService expenseCategoryService,
@@ -32,7 +33,8 @@ namespace WebApp.Controllers
             IExpenseService expenseService,
             IHttpContextAccessor httpContextAccessor,
             ISettingsService settingsService,
-            IHomeService homeService)
+            IHomeService homeService,
+            IThemeService themeService)
         {
             _expenseCategoryService = expenseCategoryService;
             _incomeService = incomeService;
@@ -41,6 +43,8 @@ namespace WebApp.Controllers
             _httpContextAccessor = httpContextAccessor;
             _settingsService = settingsService;
             _homeService = homeService;
+            _themeService = themeService;
+            _themeService = themeService;
         }
 
         public async Task<IActionResult> Index()
@@ -61,6 +65,9 @@ namespace WebApp.Controllers
                 {
                     Data = new List<HomeDTO> { homeData }
                 };
+
+                bool isLightTheme = await _themeService.GetUserThemeAsync(userId);
+                ViewBag.IsLightTheme = isLightTheme;
 
                 return View(viewModel);
             }
@@ -213,6 +220,15 @@ namespace WebApp.Controllers
             ServiceResult serviceResult = await _expenseService.EditExpenseAsync(model);
 
             return this.HandleServiceResult(serviceResult);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SetTheme(bool isLightTheme)
+        {
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            await _themeService.SaveUserThemeAsync(userId, isLightTheme);
+
+            return RedirectToAction("Index");
         }
     }
 }

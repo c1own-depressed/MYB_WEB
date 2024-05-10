@@ -147,6 +147,9 @@
   <data name="SaveChangesButton" xml:space="preserve">
     <value>Save changes</value>
   </data>
+  <data name="Savings" xml:space="preserve">
+    <value>Savings</value>
+  </data>
   <data name="SavingsHeading" xml:space="preserve">
     <value>Savings</value>
   </data>

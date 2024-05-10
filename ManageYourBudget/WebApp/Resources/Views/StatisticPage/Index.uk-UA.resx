@@ -117,34 +117,37 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="EndDateLabel" xml:space="preserve">
-    <value>Кінцева дата</value>
+  <data name="Button.ExportCSV" xml:space="preserve">
+    <value>Експорт CSV</value>
   </data>
-  <data name="ExportButton" xml:space="preserve">
-    <value>Експорт</value>
+  <data name="Button.ExportXLSX" xml:space="preserve">
+    <value>Експорт XLSX</value>
   </data>
-  <data name="IncomeColumn" xml:space="preserve">
+  <data name="Button.ExportXML" xml:space="preserve">
+    <value>Експорт XML</value>
+  </data>
+  <data name="Button.ShowStatistic" xml:space="preserve">
+    <value>Показати статистику</value>
+  </data>
+  <data name="Label.EndDate" xml:space="preserve">
+    <value>Дата завершення:</value>
+  </data>
+  <data name="Label.StartDate" xml:space="preserve">
+    <value>Дата початку:</value>
+  </data>
+  <data name="Table.Header.Income" xml:space="preserve">
     <value>Дохід</value>
   </data>
-  <data name="MonthColumn" xml:space="preserve">
+  <data name="Table.Header.Month" xml:space="preserve">
     <value>Місяць</value>
   </data>
-  <data name="PickPeriodLabel" xml:space="preserve">
-    <value>Оберіть період</value>
+  <data name="Table.Header.Saved" xml:space="preserve">
+    <value>Заощаджено</value>
   </data>
-  <data name="SavedColumn" xml:space="preserve">
-    <value>Збережено</value>
-  </data>
-  <data name="StartDateLabel" xml:space="preserve">
-    <value>Початкова дата</value>
-  </data>
-  <data name="StringStatisticTitlStatisticTitle" xml:space="preserve">
-    <value>Статистика</value>
-  </data>
-  <data name="SubmitButton" xml:space="preserve">
-    <value>Відправити</value>
-  </data>
-  <data name="SummaryExpensesColumn" xml:space="preserve">
+  <data name="Table.Header.SummaryExpenses" xml:space="preserve">
     <value>Загальні витрати</value>
+  </data>
+  <data name="Title.Statistic" xml:space="preserve">
+    <value>Статистика</value>
   </data>
 </root>

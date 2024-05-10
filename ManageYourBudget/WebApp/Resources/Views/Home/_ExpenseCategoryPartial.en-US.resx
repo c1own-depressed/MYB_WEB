@@ -156,11 +156,11 @@
   <data name="Expense:" xml:space="preserve">
     <value>Expense:</value>
   </data>
-  <data name="Planned Budget" xml:space="preserve">
-    <value>Planned budget:</value>
+  <data name="Planned:" xml:space="preserve">
+    <value>Planned:</value>
   </data>
-  <data name="Remaining Budget" xml:space="preserve">
-    <value>Remaining budget:</value>
+  <data name="Remaining:" xml:space="preserve">
+    <value>Remaining:</value>
   </data>
   <data name="Remove" xml:space="preserve">
     <value>Remove</value>
