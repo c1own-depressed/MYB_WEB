@@ -1,14 +1,16 @@
 ﻿body {
     background-color: #2C2C2C;
     color: white;
-}
-
-html {
+    /*font-size: 1vw;*/
     font-size: 16px;
 }
 
+.categories-list-wrapper {
+    margin-bottom: 5em;
+}
+
 .category-wrapper {
-    margin: 1rem;
+    margin: 1em;
     color: white;
 }
 
@@ -20,13 +22,13 @@ html {
 
 .category-heading-name-wrapper {
     background-color: #424242;
-    border-radius: 0.3125rem;
-    padding: 1rem 1.5rem;
+    border-radius: 0.3125em;
+    padding: 1em 1.5em;
     display: inline-block;
 }
 
 .category-heading {
-    font-size: 2.25rem;
+    font-size: 2.25em;
 }
 
 .category-heading-details-wrapper {
@@ -35,7 +37,7 @@ html {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    gap: 1rem;
+    gap: 1em;
 }
 
 .expenses-wrapper {
@@ -43,7 +45,7 @@ html {
 }
 
 .add-category-button {
-    margin: 1rem;
+    margin: 1em;
     color: #1C25FF;
 }
 
@@ -53,25 +55,25 @@ html {
 }
 
 .card-wrapper {
-    margin: 1rem;
+    margin: 1em;
 }
 
-    .card-wrapper .card-header {
-        background-color: #424242;
-        color: white;
-        border-radius: 30px 30px 0px 0px;
-    }
+.card-wrapper .card-header {
+    background-color: #424242;
+    color: white;
+    border-radius: 1.88em 1.88em 0px 0px;
+}
 
 .card-header-button-content {
     display: flex;
     justify-content: space-between;
-    gap: 20px;
+    gap: 1.25em;
 }
 
 .category-details {
     display: flex;
     justify-content: space-between;
-    gap: 20px;
+    gap: 1.25em;
 }
 
 .card-wrapper .card {
@@ -81,7 +83,7 @@ html {
 .card-body {
     color: white;
     background-color: #424242;
-    border-radius: 0px 0px 30px 30px;
+    border-radius: 0px 0px 1.88em 1.88em;
 }
 
 .card-wrapper .btn-link {
@@ -93,7 +95,7 @@ html {
 .card-content, .card-details, .card-interaction {
     display: flex;
     justify-content: space-between;
-    gap: 20px;
+    gap: 1.25em;
 }
 
 .card-amount, .card-name {
@@ -113,23 +115,23 @@ html {
 .add-btn {
     font-weight: bold;
     color: #1C25FF;
-    margin-top: 10px;
+    margin-top: 0.63em;
 }
 
 /* Apply a top border to all income-content elements instead of a bottom border */
 .card-content {
-    padding-left: 16px;
+    padding-left: 1em;
     border-top: 1px solid rgba(255, 255, 255, 0.5);
-    padding-top: 5px;
-    margin-top: 5px;
+    padding-top: 0.32em;
+    margin-top: 0.32em;
 }
 
-    /* Use the first-child pseudo-class to remove the top border from the first element */
-    .card-content:first-child {
-        border-top: none;
-        padding-top: 0;
-        margin-top: 0;
-    }
+/* Use the first-child pseudo-class to remove the top border from the first element */
+.card-content:first-child {
+    border-top: none;
+    padding-top: 0;
+    margin-top: 0;
+}
 
 .separator-line {
     background-color: rgba(255, 255, 255, 0.9);
@@ -151,4 +153,14 @@ html {
 .add-income-button:focus {
     outline: none !important;
     box-shadow: none !important;
+}
+
+@media screen and (max-width: 29.9375em) {
+    .card-header-button-content {
+        flex-direction: column;
+    }
+
+    .card-content {
+        flex-direction: column;
+    }
 }

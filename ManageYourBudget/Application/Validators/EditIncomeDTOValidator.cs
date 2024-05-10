@@ -9,8 +9,8 @@ namespace Application.Validators
         {
             RuleFor(x => x.Name)
                 .NotEmpty()
-                .Length(5, 100)
-                .WithMessage("Name length should be between 5 and 100 characters.");
+                .Length(1, 100)
+                .WithMessage("Name length should be between 1 and 100 characters.");
 
             RuleFor(x => x.Amount)
                 .GreaterThan(0)
