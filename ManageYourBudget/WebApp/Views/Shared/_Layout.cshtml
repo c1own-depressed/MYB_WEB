@@ -1,4 +1,4 @@
-@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+п»ї@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
 <!DOCTYPE html>
 <html lang="en">
@@ -20,12 +20,12 @@
     <link href="./1_files/myb-site-854d38.webflow.b1ac5a189.css" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/" rel="preconnect">
     <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin="anonymous">
-    <script src="./1_files/webfont.js.завантаження" type="text/javascript"></script>
+    <script src="./1_files/webfont.js.Р·Р°РІР°РЅС‚Р°Р¶РµРЅРЅСЏ" type="text/javascript"></script>
     <link rel="stylesheet" href="./1_files/css" media="all">
     <script type="text/javascript">WebFont.load({ google: { families: ["Inter:regular,500,600,700"] } });</script>
     <script type="text/javascript">!function (o, c) { var n = c.documentElement, t = " w-mod-"; n.className += t + "js", ("ontouchstart" in o || o.DocumentTouch && c instanceof DocumentTouch) && (n.className += t + "touch") }(window, document);</script>
-    <link href="https://assets-global.website-files.com/img/favicon.ico" rel="shortcut icon" type="image/x-icon">
-    <link href="https://assets-global.website-files.com/img/webclip.png" rel="apple-touch-icon">
+@*     <link href="https://assets-global.website-files.com/img/favicon.ico" rel="shortcut icon" type="image/x-icon">
+    <link href="https://assets-global.website-files.com/img/webclip.png" rel="apple-touch-icon"> *@
     <style type="text/css">
         .w-webflow-badge {
             display: none !important;
@@ -37,8 +37,9 @@
         }
     </style>
     @{
-        string theme = ViewBag.Theme ?? "Dark"; // За замовчуванням використовується темна тема
-        string cssFileName = $"Footer_{theme}.css";
+        // string theme = ViewBag.Theme ?? "Dark"; // Р—Р° Р·Р°РјРѕРІС‡СѓРІР°РЅРЅСЏРј РІРёРєРѕСЂРёСЃС‚РѕРІСѓС”С‚СЊСЃСЏ С‚РµРјРЅР° С‚РµРјР°
+        // string cssFileName = $"Footer_{theme}.css";
+        string cssFileName = $"Footer_Dark.css";
     }
     <link rel="stylesheet" href="~/css/@cssFileName">
 </head>
@@ -90,7 +91,7 @@
                 </div>
             </div>
         </nav> *@
-        <nav class="nav">
+        @* <nav class="nav">
             <div class="container">
                 <div class="nav-content">
                     <a href="https://myb-site-854d38.webflow.io/" class="nav-logo-wrapper w-inline-block">
@@ -169,6 +170,69 @@
                 </div>
             </div>
         </nav>
+     *@
+        <nav class="nav">
+            <div class="container">
+                <div class="nav-content">
+                    <a asp-area="" asp-controller="home" asp-action="Index" class="nav-logo-wrapper w-inline-block">
+                        <div class="logo-text">MYB</div>
+                    </a>
+                    <div class="nav-menu mb-hidden">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a class="menu-link" asp-area="" asp-controller="home" asp-action="Index">@Localizer["Home"]</a>
+                            <a class="menu-link" asp-area="" asp-controller="statistic" asp-action="Index">@Localizer["Statistic"]</a>
+                            <a class="menu-link" asp-area="" asp-controller="faq" asp-action="Index">@Localizer["FAQ"]</a>
+                            <a class="menu-link" asp-area="" asp-controller="tips" asp-action="Index">@Localizer["Tips"]</a>
+                        }
+
+                        else
+                        {
+                            <a class="menu-link" asp-area="" asp-controller="faq" asp-action="Index">@Localizer["FAQ"]</a>
+                            <a class="menu-link" asp-area="" asp-controller="tips" asp-action="Index">@Localizer["Tips"]</a>
+                            <a class="menu-link" asp-area="" asp-controller="login" asp-action="">@Localizer["Login"]</a>
+                            <a class="menu-link" asp-area="" asp-controller="signup" asp-action="">@Localizer["Signup"]</a>
+                        }
+                    </div>
+                    <div class="nav-buttons">
+
+                        <div class="button-wrapper without-border">
+                               @if (User.Identity.IsAuthenticated)
+                        {<a asp-area="" asp-controller="Settings" asp-action="Index">
+                            <div class="nav-settings-icon">пЂ“</div>
+                            </a>
+                        }
+                        </div>
+                        <div class="button-wrapper">
+                            @if (User.Identity.IsAuthenticated)
+                        {
+                               
+
+                                <a asp-area="" asp-controller="logout" asp-action="">
+                            <div class="nav-settings-icon">п‚‹</div>
+                            </a>
+                        }
+                        </div>
+                        <div class="button-wrapper desktop-hidden">
+                            <svg class="burger-menu" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" viewBox="0 0 50 50" fill="none">
+                                <g clip-path="url(#clip0_2015_46)">
+                                    <rect width="50" height="50" fill="url(#pattern0_2015_46)"></rect>
+                                </g>
+                                <defs>
+                                    <pattern id="pattern0_2015_46" patternContentUnits="objectBoundingBox" width="1" height="1">
+                                        <use href="#image0_2015_46" transform="scale(0.00195312)"></use>
+                                    </pattern>
+                                    <clippath id="clip0_2015_46">
+                                        <rect width="50" height="50" fill="currentColor"></rect>
+                                    </clippath>
+                                    <image id="image0_2015_46" width="512" height="512" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgAAAAIACAYAAAD0eNT6AAAa1UlEQVR4Ae3de8iedR3H8Y+bbmp/beKh0lmUHZwZYUIQnuepkoJaomn9p9vMIooMAtFOpJaYzpUmKGkMzAStv9RN7b8op0TDLYxpBZ1AmuZpZvb8bJM9Y8+9+3C5+/pd1+uB4Q6P23W/fu/t+73uPbufxBsBAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECBAgAABAgQIECDQQoE3JTklycok1ya5OcmdvjDQgAY0oIEKGigzq8yuFUlOTnJgC+dsqy5pcZJLZgb/w0leSvKqLww0oAENaKADDZSZ9tD2m9oy67xtFzgyyY1JXujAIVtaLG4a0IAGNDCogTLrVidZ0uctYMHM0L/M4LfdW/w0oAEN9LCB52cWgCuS7N+3ReDdSR7r4YEP2gr9mLsGDWhAA/1rYGOSpX1ZAs5O8qzhb+PXgAY0oAENvNbAM0nO6PoScG6SbQ7cb3oNaEADGtDArAbKBwou7+oSsMxH9886bE/19e+pPmfuzDWggUENlBvks7q2BLzH0/6Gv21fAxrQgAb22MDWJEd1ZQkoH+H4O4e+x0MftBX6MXcNGtCABvrTwKNJFnZhCSj/zEG4DDSgAQ1oQAPDN/D12heA8iI/XuBn+AP3m4OVBjSgAQ2UBp5LcnjNS8Aad/+e/dCABjSgAQ2M1cAPal0ADnL3P9aB2/5t/xrQgAY0UBoorxa4qMYloHxiHxEz0IAGNKABDYzfwMU1LgDls/o5dAYa0IAGNKCB8RtYX9sCUD73sU/pO/6B+83CTgMa0IAGSgNllpaZWs3bKe7+PfuhAQ1oQAMaaKSBk6qZ/klWOfRGDt0dgDsADWhAAxqo6uMAvm8BsABoQAMa0IAGGmngmpqeAbjFoTdy6DZ/m78GNKABDdxc0wKw1gJgAdCABjSgAQ000kCZqdW83ebQGzl0m7/NXwMa0IAGbq1m+ie5wQJgAdCABjSgAQ000sD1NS0AX3XojRy6zd/mrwENaEADX65pAfi4BcACoAENaEADGmikgXNqWgDe7NAbOXSbv81fAxrQQL8b+G+Sw2paAMq1brIEWAI0oAENaEADEzXw+9qGf7ne7zr0iQ7d1t/vrd/5O38NaKA08O0aF4CjLQAWAA1oQAMa0MBEDSytcQEo17zOwU908O4A3AFoQAMa6G8D99U6/Mt1n2oBsABoQAMa0IAGxmrghJoXgHLt9zj4sQ7e1t/frd/ZO3sNaOCu2od/uf63JXnGEmAJ0IAGNKABDQzVwNYkR3RhASiP4dMOfahDt/Xb+jWgAQ1o4PyuDP8dj+NaS4AlQAMa0IAGNDCwgat2DM0u/XefJLc7+IEHb/O3+WtAAxrobwPlM+mWWdnJt/LAPBPQ37j9websNaABDey+gdVJ5nVy8u/yoC5N8qJnAzwboAENaEADPW+gzMJVu8zIzn/zuCQben7wNuHdb8JcuGhAA31o4Lcz/1T+A52f9nM8wPlJViR5yiLgLkADGtCABnrSwJNJLurLU/5zzP/Xv3tBkguTPJDklZ4E0Ift1mN0F6cBDWjg/w2U2XZ/kgtmPsHPfq9PP1+ZJXBIknOT3LB9IdiS5GlLgTsDDWhAAxqopIEys8rsKgO/zLLyWjgHz5p0vkGAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECb6jAYUnOT7Imyfokf07ydJJXfWGgAQ1oQAMVNFBm1p+SrEtyY5Lzkhz6hk7Oin/yhUk+l+TBJK9UcLiWEQuZBjSgAQ2M0kCZbeWm9rNJFlQ8rxu79H2TfD7JXwx9W70GNKABDfSkgfLswMok8xubppX9RMcneawnhz3Kluh93VVoQAMa6EcDG5IcV9nsnvhyv5TkJcPftq8BDWhAAz1voMzCL0w8VSv4CcrTHT/s+WHb7Pux2Ttn56wBDYzSQPlgwXkVzPGxLrE8sDsMf9u+BjSgAQ1oYLcN/CTJPmNN2Jb/T9c58N0e+Cgbovd1R6EBDWig2w18r+WzfOTLO9fwN/w1oAENaEADQzXwmZGnbEv/h7cnedahD3XoNvtub/bO1/lqQAPDNLA1yZKWzvSRLutew9/w14AGNKABDYzUwN0jTdoWvvNpDnykAx9mM/Q+7iA0oAEN9KOBk1o414e+pPLSvkJloAENaEADGhi9gfuHnrYte8ejDX/LjwY0oAENaGCiBo5p2Wwf6nKucugTHbptefRtmRkzDWigaw18Z6iJ27J32mwBsABoQAMa0IAGJmpgY8tm+x4v5y0OfKID79oG6/G4K9OABjQwfgNlplbz9gkLgAVAAxrQgAY00EgD51Qz/ZNc5tAbOXQb8/gbMzt2GtBAVxr4Sk0LwGoLgAVAAxrQgAY00EgD19e0ANzm0Bs59K5srx6HOzENaEAD4zdwa00LwFoLgAVAAxrQgAY00EgDZaZW83aLQ2/k0G3M42/M7NhpQANdaeDmaqZ/kvL5jLsC73E4Sw1oQAMamGYDV9e0AKy0AFiANKABDWhAA400cFFNC8DJDr2RQ5/mxunXdsejAQ1ooB0NnFjTAnBgkhctAZYADWhAAxrQwEQNlFl6QE0LQLnWhxz6RIdu827H5u0cnIMGNDDNBtbVNvzL9fo4AL9ppvmbxq+tPw1ooAsNVPX3/zuWlcVJnvcsgGcBNKABDWhAA2M1UGbooh1Dtbb/eklgG3gXNnCPQcca0MA0GriutqG/8/Uu8SzAWFvfNELza/oDTgMa0EB7Gvh3krfuPFBr/PrlnvqxBGhAAxrQgAZGauBrNQ78Xa95YZLHHPxIB28Lb88W7iychQY0sLcbeCTJgl2Haa3ffleSZywBlgANaEADGtDAwAb+leQdtQ77ua77VC8ONPDQ9/aG6ddzV6MBDWigXQ1sS3LGXEO09u9fnuQl259FQAMa0IAGNDCrgTIbP1n7kN/T9Z+eZKuDn3XwtvB2beHOw3loQAN7s4HytP9pexqeXfnxo5I8agmwBGhAAxrQQM8b2JDknV0Z7sM+jv2SfDHJsz0//L25Zfq13NVoQAMaaEcDz80MyyuSlH8p19u3w5Nc7wWD3AVYBDWgAQ30oIEy+Msr/FX/Ij9Nbi3l9Y5XJFnvXwv4Q6AHfwi4C2vHXZhzcA57o4EXkpTP6lc+sU+1r+3f5MAf9HOVz318UpKLk1yT5KYkd/rCQAMa0IAGKmigzKyrt8+wE5OUmeaNAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBAgQIECAAAECBNohcFCSDyVZlmS5Lww0oAENaKCCBsrMKrOrzDBvQwocluSSJHcn+UeSV31hoAENaEADFTdQZtnPZ2baqiSHDjkLe/VuJyf5ZZL/VHzIlhULmwY0oAENDGrg5SS/SHJiryb8HA/22CQPG/q2ew1oQAMa6FkD65McM8ds7PR375vkW0nKNjRoW/JjfDSgAQ1ooKsNbEtyZZL5nZ74Oz24g5P8yuC3+GhAAxrQgAZea+DBPnzA4JFJNjlwv+k1oAENaEADsxp4PMmSnW6WO/XVcue/2YHPOvCuPq3lcXnKVgMa0MDoDTyRpPxruE69HZBkg+Fv+GtAAxrQgAYGNvCbJPt3aQP4sQMfeOA25dE3ZWbMNKCBrjawpisLwEcNf8NfAxrQgAY0MFIDZ9a+BJSn/v/o0Ec69K5utB6XuzUNaEADwzfwhyQLa14CLjX8DX8NaEADGtDAWA2sqHUBKC/285RDH+vQbcnDb8msWGlAA11tYMvMi+aVWVrd28cMf8NfAxrQgAY0MFEDZ1U3/ZOsdegTHXpXN1qPy92aBjSggeEbuKO2BWDezKf1/acFwAKgAQ1oQAMamKiB8umE96lpCXi/A5/owG3Hw2/HrFhpQANdb+B9NS0AF1oALAAa0IAGNKCBRho4v6YF4JsOvZFD7/pW6/G5c9OABjSw5wbKpwyu5u1HFgALgAY0oAENaKCRBqp6aeDyUYu2OgYa0IAGNKCByRu4vZrb/yQWgMkP3G8ahhrQgAY0UBqoagHwVwCi9QeXBjSgAQ0000BVfwXwDX8F4K9ANKABDWhAA400cEVNfwVwgUNv5NBtz81szxw5akADNTdwXk0LwLEWAAuABjSgAQ1ooJEGjqlpASgvW+ilgG3cNW/crl2/GtBAGxr4e20vBVyWlZ/a/BrZ/NoQoGvwB6EGNKCB6TRQ1b8A2PFMxUcsABYADWhAAxrQwEQNnLljqNb0332TPOngJzp4G/d0Nm7u3DWggTY0sCXJ/JoG/87XeokFwAKgAQ1oQAMaGKuBi3YeqLV9ff8kTzj4sQ6+Dduna3AXpAENaGA6DWxOsqC2ob/r9Z5tAbAAaEADGtCABkZq4PRdh2mt377JwY908Dbu6Wzc3LlrQANtaGB1rcN+d9d9QJJHLAGWAA1oQAMa0MDABn6dZOHuBmnN33dwkk0OfuDBt2HzdA3ugDSgAQ1Mp4HyMXOH1jzoB137kiSPWwIsARrQgAY0oIFZDWxMcsSgAdqFHzsoyYMOftbB27ans21z564BDbShgQeSLO7CgB/mMZQXNrgyyTaLgEVAAxrQgAZ62kCZgZfX/GI/wwz8ud5naZJ1PT34NmydrsHdjwY0oIHpNHBfkvfONRz79P0nJLk3ycuWAXcCGtCABjTQ0QbKHf89ST7cpwE/7GM9JMnKJHcl+VtHA7BtT2fb5s5dAxqYRgN/TfKzmZm2Ikn513DehhQoHxRxfJJlST6VZLkvDDSgAQ1ooMUNlFlVZtYHkywactZ5NwIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQIECBAgQIAAAQJVCPwPDAI4hs9mAVgAAAAASUVORK5CYII="></image>
+                                </defs>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </nav>
     </header>
     <div class="container">
         <main role="main" class="pb-3">
@@ -176,7 +240,7 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
+    @* <footer class="border-top footer text-muted">
         <div class="footer">
             <div class="container">
                 <div class="footer-content">
@@ -230,6 +294,39 @@
                     </div>
                 </div>
             </div>
+    </footer> *@
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <a href="https://myb-site-854d38.webflow.io/" class="nav-logo-wrapper w-inline-block">
+                    <div class="logo-text">MYB</div>
+                </a>
+                <div class="footer-menu">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a class="menu-link" asp-area="" asp-controller="home" asp-action="Index">@Localizer["Home"]</a>
+                        <a class="menu-link" asp-area="" asp-controller="faq" asp-action="Index">@Localizer["FAQ"]</a>
+                        <a class="menu-link" asp-area="" asp-controller="statistic" asp-action="Index">@Localizer["Statistic"]</a>
+                    }
+
+                    else
+                    {
+                        <a class="menu-link" asp-area="" asp-controller="faq" asp-action="Index">@Localizer["FAQ"]</a>
+                    }
+                </div>
+                <div class="footer-social-media-wrapper">
+                    <a href="https://myb-site-854d38.webflow.io/faq#" class="footer-social-media-link w-inline-block">
+                        <div href="https://ua.linkedin.com/" class="footer-icon">п‚Њ</div>
+                    </a>
+                    <a href="https://myb-site-854d38.webflow.io/faq#" class="footer-social-media-link w-inline-block">
+                        <div href="https://www.facebook.com/?locale=uk_UA" class="footer-icon">п‚љ</div>
+                    </a>
+                    <a href="https://myb-site-854d38.webflow.io/faq#" class="footer-social-media-link w-inline-block">
+                        <div href="instagram.com" class=" footer-icon size3-5">п…­</div>
+                    </a>
+                </div>
+            </div>
+        </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
@@ -237,3 +334,9 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+<style>
+    a, .logo-text, .footer-social-media-link {
+        color:black;
+    }
+
+</style>

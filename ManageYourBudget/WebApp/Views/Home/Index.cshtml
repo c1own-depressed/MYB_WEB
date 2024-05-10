@@ -13,8 +13,9 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
     @{
-        string theme = ViewBag.Theme ?? "Dark"; // За замовчуванням використовується темна тема
-        string cssFileName = $"Home_{theme}.css";
+        //string theme = ViewBag.Theme ?? "Dark"; // За замовчуванням використовується темна тема
+        //string cssFileName = $"Home_{theme}.css";
+        string cssFileName = $"Home_Dark.css";
     }
 
     <link rel="stylesheet" href="~/css/@cssFileName">
@@ -30,23 +31,21 @@
             @if (Model.Data != null && Model.Data.Any())
             {
                 var firstHomeData = Model.Data.FirstOrDefault();
-                @Html.Partial("_NewSavingsPartial", firstHomeData.Savings)
+                @Html.Partial("_SavingsPartial", firstHomeData.Savings)
             }
         </div>
-
         <div>
             @if (Model.Data != null && Model.Data.Any())
             {
                 var firstHomeData = Model.Data.FirstOrDefault();
-                @Html.Partial("_NewIncomePartial", firstHomeData.Incomes)
+                @Html.Partial("_IncomePartial", firstHomeData.Incomes)
             }
         </div>
-
         <div>
             @if (Model.Data != null && Model.Data.Any())
             {
                 var firstHomeData = Model.Data.FirstOrDefault();
-                @Html.Partial("_NewExpenseCategoryPartial", firstHomeData.Categories)
+                @Html.Partial("_ExpenseCategoryPartial", firstHomeData.Categories)
             }
         </div>
     </div>
