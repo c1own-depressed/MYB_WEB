@@ -47,7 +47,7 @@
             @if (Model.Data != null && Model.Data.Any())
             {
                 var firstHomeData = Model.Data.FirstOrDefault();
-                @Html.Partial("_NewExpenseCategoryPartial", firstHomeData.Categories)
+                @Html.Partial("_ExpenseCategoryPartial", firstHomeData.Categories)
             }
         </div>
     </div>

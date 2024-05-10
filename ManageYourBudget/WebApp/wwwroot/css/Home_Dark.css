@@ -2841,7 +2841,7 @@ img {
     line-height: 100%;
 }
 
-.card-footer {
+.card-footer-button {
     justify-content: space-between;
     padding: 1.25em .63em 1.25em 2em;
     display: flex;
@@ -3180,7 +3180,7 @@ img {
     }
 
     .card-header-right-text {
-        font-size: 3.72em;
+        font-size: 1em;
         line-height: 100%;
     }
 
@@ -3203,15 +3203,15 @@ img {
     }
 
     .card-item-icon {
-        font-size: 3.72em;
+        font-size: 1em;
     }
 
-    .card-footer {
+    .card-footer-button {
         padding: 2.33em;
     }
 
     .card-add-button-text {
-        font-size: 4.19em;
+        font-size: 1.19em;
         line-height: 100%;
     }
 }
