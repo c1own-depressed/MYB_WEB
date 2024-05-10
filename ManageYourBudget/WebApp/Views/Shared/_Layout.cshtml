@@ -174,16 +174,44 @@
         <nav class="nav">
             <div class="container">
                 <div class="nav-content">
-                    <a href="https://myb-site-854d38.webflow.io/" class="nav-logo-wrapper w-inline-block">
+                    <a asp-area="" asp-controller="home" asp-action="Index" class="nav-logo-wrapper w-inline-block">
                         <div class="logo-text">MYB</div>
                     </a>
-                    <div class="nav-menu mb-hidden"><a href="https://myb-site-854d38.webflow.io/faq#" class="menu-link">MAIN</a><a href="https://myb-site-854d38.webflow.io/faq#" class="menu-link">FAQ</a><a href="https://myb-site-854d38.webflow.io/faq#" class="menu-link">STATISTIC</a></div>
+                    <div class="nav-menu mb-hidden">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <a class="menu-link" asp-area="" asp-controller="home" asp-action="Index">@Localizer["Home"]</a>
+                            <a class="menu-link" asp-area="" asp-controller="statistic" asp-action="Index">@Localizer["Statistic"]</a>
+                            <a class="menu-link" asp-area="" asp-controller="faq" asp-action="Index">@Localizer["FAQ"]</a>
+                            <a class="menu-link" asp-area="" asp-controller="tips" asp-action="Index">@Localizer["Tips"]</a>
+                        }
+
+                        else
+                        {
+                            <a class="menu-link" asp-area="" asp-controller="faq" asp-action="Index">@Localizer["FAQ"]</a>
+                            <a class="menu-link" asp-area="" asp-controller="tips" asp-action="Index">@Localizer["Tips"]</a>
+                            <a class="menu-link" asp-area="" asp-controller="login" asp-action="">@Localizer["Login"]</a>
+                            <a class="menu-link" asp-area="" asp-controller="signup" asp-action="">@Localizer["Signup"]</a>
+                        }
+                    </div>
                     <div class="nav-buttons">
+
                         <div class="button-wrapper without-border">
+                               @if (User.Identity.IsAuthenticated)
+                        {<a asp-area="" asp-controller="Settings" asp-action="Index">
                             <div class="nav-settings-icon"></div>
+                            </a>
+                        }
                         </div>
                         <div class="button-wrapper">
+                            @if (User.Identity.IsAuthenticated)
+                        {
+                               
+
+                                <a asp-area="" asp-controller="logout" asp-action="">
                             <div class="nav-settings-icon"></div>
+                            </a>
+                        }
                         </div>
                         <div class="button-wrapper desktop-hidden">
                             <svg class="burger-menu" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="100%" viewBox="0 0 50 50" fill="none">
@@ -273,16 +301,28 @@
                 <a href="https://myb-site-854d38.webflow.io/" class="nav-logo-wrapper w-inline-block">
                     <div class="logo-text">MYB</div>
                 </a>
-                <div class="footer-menu"><a href="https://myb-site-854d38.webflow.io/faq#" class="footer-menu-link">Main</a><a href="https://myb-site-854d38.webflow.io/faq#" class="footer-menu-link">FAQ</a><a href="https://myb-site-854d38.webflow.io/faq#" class="footer-menu-link">Statistic</a></div>
+                <div class="footer-menu">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a class="menu-link" asp-area="" asp-controller="home" asp-action="Index">@Localizer["Home"]</a>
+                        <a class="menu-link" asp-area="" asp-controller="faq" asp-action="Index">@Localizer["FAQ"]</a>
+                        <a class="menu-link" asp-area="" asp-controller="statistic" asp-action="Index">@Localizer["Statistic"]</a>
+                    }
+
+                    else
+                    {
+                        <a class="menu-link" asp-area="" asp-controller="faq" asp-action="Index">@Localizer["FAQ"]</a>
+                    }
+                </div>
                 <div class="footer-social-media-wrapper">
                     <a href="https://myb-site-854d38.webflow.io/faq#" class="footer-social-media-link w-inline-block">
-                        <div class="footer-icon"></div>
+                        <div href="https://ua.linkedin.com/" class="footer-icon"></div>
                     </a>
                     <a href="https://myb-site-854d38.webflow.io/faq#" class="footer-social-media-link w-inline-block">
-                        <div class="footer-icon"></div>
+                        <div href="https://www.facebook.com/?locale=uk_UA" class="footer-icon"></div>
                     </a>
                     <a href="https://myb-site-854d38.webflow.io/faq#" class="footer-social-media-link w-inline-block">
-                        <div class="footer-icon size3-5"></div>
+                        <div href="instagram.com" class=" footer-icon size3-5"></div>
                     </a>
                 </div>
             </div>
@@ -294,3 +334,9 @@
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+<style>
+    a, .logo-text, .footer-social-media-link {
+        color:black;
+    }
+
+</style>
