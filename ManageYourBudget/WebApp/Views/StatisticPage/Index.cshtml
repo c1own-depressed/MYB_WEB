@@ -21,7 +21,7 @@
         }
     </style>
 </head>
-<body>
+<body onload="restoreInputValues()">
     <div class="statistic">
         <div class="statistic-manipulation">
             <div class="form-group">
@@ -63,6 +63,36 @@
         </div>
     </div>
     <script>
+        // Отримуємо доступ до елементів інтерфейсу
+        var startDateInput = document.getElementById('startDate');
+        var endDateInput = document.getElementById('endDate');
+
+        // Функція для збереження значень у localStorage
+        function saveInputValues() {
+            localStorage.setItem('startDateValue', startDateInput.value);
+            localStorage.setItem('endDateValue', endDateInput.value);
+        }
+
+        // Додаємо обробник подій для збереження значень при зміні полів вводу
+        startDateInput.addEventListener('change', saveInputValues);
+        endDateInput.addEventListener('change', saveInputValues);
+
+        // Функція для заповнення полів вводу після перезавантаження сторінки
+        function restoreInputValues() {
+            var savedStartDate = localStorage.getItem('startDateValue');
+            var savedEndDate = localStorage.getItem('endDateValue');
+
+            if (savedStartDate) {
+                startDateInput.value = savedStartDate;
+            }
+
+            if (savedEndDate) {
+                endDateInput.value = savedEndDate;
+            }
+        }
+
+        // Викликаємо функцію для відновлення значень після завантаження сторінки
+        restoreInputValues();
         function updateExportLinks() {
             var startDate = document.getElementById('startDate').value;
             var endDate = document.getElementById('endDate').value;
