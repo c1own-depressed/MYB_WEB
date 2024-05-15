@@ -217,7 +217,15 @@
                         location.reload();
                     },
                     error: function (error) {
-                        alert("Wrong data");
+                        if (error.responseJSON && error.responseJSON.errors) {
+                            var errorMessages = error.responseJSON.errors;
+                            // Вивести помилки для користувача
+                            errorMessages.forEach(function (errorMessage) {
+                                alert(errorMessage); // або додайте помилку до DOM для відображення
+                            });
+                        } else {
+                            alert(messages.addIncomeError);
+                        }
                         $('#add-category-form')[0].reset();
                     }
                 });
@@ -271,7 +279,15 @@
                     location.reload(); // Reload the page or update UI as needed
                 },
                 error: function (error) {
-                    alert("Failed to edit category");
+                    if (error.responseJSON && error.responseJSON.errors) {
+                        var errorMessages = error.responseJSON.errors;
+                        // Вивести помилки для користувача
+                        errorMessages.forEach(function (errorMessage) {
+                            alert(errorMessage); // або додайте помилку до DOM для відображення
+                        });
+                    } else {
+                        alert(messages.addIncomeError);
+                    }
                 }
             });
         }
@@ -303,9 +319,19 @@
                         location.reload();
                     },
                     error: function (error) {
-                        alert("Failed to add expense");
+                        
+                        if (error.responseJSON && error.responseJSON.errors) {
+                            var errorMessages = error.responseJSON.errors;
+                            // Вивести помилки для користувача
+                            errorMessages.forEach(function (errorMessage) {
+                                alert(errorMessage); // або додайте помилку до DOM для відображення
+                            });
+                        } else {
+                            alert(messages.addIncomeError);
+                        }
                         $('#add-expense-form')[0].reset();
                     }
+                   
                 });
             });
         });
@@ -366,7 +392,15 @@
                         location.reload();
                     },
                     error: function (error) {
-                        alert("Failed to edit expense");
+                        if (error.responseJSON && error.responseJSON.errors) {
+                            var errorMessages = error.responseJSON.errors;
+                            // Вивести помилки для користувача
+                            errorMessages.forEach(function (errorMessage) {
+                                alert(errorMessage); // або додайте помилку до DOM для відображення
+                            });
+                        } else {
+                            alert(messages.addIncomeError);
+                        }
                     }
                 });
             });

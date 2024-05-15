@@ -84,7 +84,7 @@ namespace WebApp.Controllers
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return this.HandleModelStateErrors();
             }
 
             ServiceResult serviceResult = await _expenseCategoryService.AddExpenseCategoryAsync(model, userId);
@@ -105,7 +105,7 @@ namespace WebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return this.HandleModelStateErrors();
             }
 
             ServiceResult serviceResult = await _expenseCategoryService.EditExpenseCategoryAsync(model);
@@ -119,7 +119,7 @@ namespace WebApp.Controllers
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return this.HandleModelStateErrors();
             }
 
             ServiceResult serviceResult = await _incomeService.AddIncomeAsync(model, userId);
@@ -133,7 +133,7 @@ namespace WebApp.Controllers
             string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return this.HandleModelStateErrors();
             }
 
             ServiceResult serviceResult = await _savingsService.AddSavingsAsync(model, userId);
@@ -154,7 +154,7 @@ namespace WebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return this.HandleModelStateErrors();
             }
 
             ServiceResult serviceResult = await _savingsService.EditSavingsAsync(model);
@@ -166,7 +166,7 @@ namespace WebApp.Controllers
         {
             if (!this.ModelState.IsValid)
             {
-                return this.BadRequest(this.ModelState);
+                return this.HandleModelStateErrors();
             }
 
             ServiceResult serviceResult = await this._incomeService.EditIncomeAsync(model);
@@ -186,7 +186,7 @@ namespace WebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return this.HandleModelStateErrors();
             }
 
             ServiceResult serviceResult = await _expenseService.AddExpenseAsync(model);
@@ -207,7 +207,7 @@ namespace WebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return this.HandleModelStateErrors();
             }
 
             ServiceResult serviceResult = await _expenseService.EditExpenseAsync(model);

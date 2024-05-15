@@ -141,7 +141,15 @@
                         location.reload();
                     },
                     error: function (error) {
-                        alert("Error adding income");
+                        if (error.responseJSON && error.responseJSON.errors) {
+                            var errorMessages = error.responseJSON.errors;
+                            // Вивести помилки для користувача
+                            errorMessages.forEach(function (errorMessage) {
+                                alert(errorMessage); // або додайте помилку до DOM для відображення
+                            });
+                        } else {
+                            alert(messages.addIncomeError);
+                        }
                     }
                 });
             });
@@ -195,7 +203,15 @@
                     location.reload(); // Reload the page or update UI as needed
                 },
                 error: function (error) {
-                    alert("@Localizer["FailedToEditMessage"]");
+                    if (error.responseJSON && error.responseJSON.errors) {
+                        var errorMessages = error.responseJSON.errors;
+                        // Вивести помилки для користувача
+                        errorMessages.forEach(function (errorMessage) {
+                            alert(errorMessage); // або додайте помилку до DOM для відображення
+                        });
+                    } else {
+                        alert(messages.addIncomeError);
+                    }
                 }
             });
         }
