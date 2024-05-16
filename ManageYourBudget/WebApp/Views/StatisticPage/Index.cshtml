@@ -15,13 +15,14 @@
     }
 
     <link rel="stylesheet" href="~/css/@cssFileName">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
     <style>
         a.btn {
             color: white;
         }
     </style>
 </head>
-<body onload="restoreInputValues()">
+<body>
     <div class="statistic">
         <div class="statistic-manipulation">
             <div class="form-group">
@@ -32,10 +33,22 @@
                 <label for="endDate">End Date:</label>
                 <input type="date" class="form-control" id="endDate" name="endDate" />
             </div>
-            <a id="getStatistics" class="btn btn-default" href="@Url.Action("GetStatistics", "StatisticPage", new { startDate=DateTime.Today.AddMonths(-1), endDate=DateTime.Today, format="CSV" })">Show statistic</a>
-            <a id="exportCsvLink" class="btn btn-default" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "CSV" })">Export CSV</a>
-            <a id="exportXmlLink" class="btn btn-default" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "XML" })">Export XML</a>
-            <a id="exportXlsxLink" class="btn btn-default" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "XLSX" })">Export XLSX</a>
+
+            <div class="button-grid">
+                <div class="custom-button-wrapper">
+                    <a id="getStatistics" class="custom-btn" href="@Url.Action("GetStatistics", "StatisticPage", new { startDate=DateTime.Today.AddMonths(-1), endDate=DateTime.Today, format="CSV" })">Show statistic</a>
+                </div>
+                <div class="custom-button-wrapper">
+                    <a id="exportCsvLink" class="custom-btn" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "CSV" })">Export CSV</a>
+                </div>
+                <div class="custom-button-wrapper">
+                    <a id="exportXmlLink" class="custom-btn" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "XML" })">Export XML</a>
+                </div>
+                <div class="custom-button-wrapper">
+                    <a id="exportXlsxLink" class="custom-btn" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "XLSX" })">Export XLSX</a>
+                </div>
+            </div>
+
         </div>
 
         <div class="table">
@@ -63,51 +76,21 @@
         </div>
     </div>
     <script>
-        // Отримуємо доступ до елементів інтерфейсу
-        var startDateInput = document.getElementById('startDate');
-        var endDateInput = document.getElementById('endDate');
-
-        // Функція для збереження значень у localStorage
-        function saveInputValues() {
-            localStorage.setItem('startDateValue', startDateInput.value);
-            localStorage.setItem('endDateValue', endDateInput.value);
-        }
-
-        // Додаємо обробник подій для збереження значень при зміні полів вводу
-        startDateInput.addEventListener('change', saveInputValues);
-        endDateInput.addEventListener('change', saveInputValues);
-
-        // Функція для заповнення полів вводу після перезавантаження сторінки
-        function restoreInputValues() {
-            var savedStartDate = localStorage.getItem('startDateValue');
-            var savedEndDate = localStorage.getItem('endDateValue');
-
-            if (savedStartDate) {
-                startDateInput.value = savedStartDate;
-            }
-
-            if (savedEndDate) {
-                endDateInput.value = savedEndDate;
-            }
-        }
-
-        // Викликаємо функцію для відновлення значень після завантаження сторінки
-        restoreInputValues();
         function updateExportLinks() {
             var startDate = document.getElementById('startDate').value;
             var endDate = document.getElementById('endDate').value;
             var baseUrl = '@Url.Action("ExportStatistics", "StatisticPage")';
-            
+
             document.getElementById('exportCsvLink').href = `${baseUrl}?startDate=${startDate}&endDate=${endDate}&format=CSV`;
             document.getElementById('exportXmlLink').href = `${baseUrl}?startDate=${startDate}&endDate=${endDate}&format=XML`;
             document.getElementById('exportXlsxLink').href = `${baseUrl}?startDate=${startDate}&endDate=${endDate}&format=XLSX`;
-            
+
             document.getElementById('getStatistics').href = `@Url.Action("GetStatistics", "StatisticPage")?startDate=${startDate}&endDate=${endDate}`;
         }
 
         document.getElementById('startDate').addEventListener('change', updateExportLinks);
         document.getElementById('endDate').addEventListener('change', updateExportLinks);
-        
+
         // Call updateExportLinks to set initial values correctly
         updateExportLinks();
     </script>
