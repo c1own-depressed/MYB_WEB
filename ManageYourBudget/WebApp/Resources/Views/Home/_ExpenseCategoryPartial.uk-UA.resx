@@ -156,11 +156,14 @@
   <data name="Expense:" xml:space="preserve">
     <value>Витрата:</value>
   </data>
-  <data name="Planned budget:" xml:space="preserve">
+  <data name="Planned budget" xml:space="preserve">
     <value>Планований бюджет:</value>
   </data>
-  <data name="Remaining budget:" xml:space="preserve">
-    <value>Залишок бюджету:</value>
+  <data name="Planned:" xml:space="preserve">
+    <value>Заплановано:</value>
+  </data>
+  <data name="Remaining:" xml:space="preserve">
+    <value>Залишок:</value>
   </data>
   <data name="Remove" xml:space="preserve">
     <value>Видалити</value>

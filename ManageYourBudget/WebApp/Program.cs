@@ -28,7 +28,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Seq("http://localhost:5341"));
 
 
-var connectionString = builder.Configuration.GetConnectionString("AndriyConnection");
+var connectionString = builder.Configuration.GetConnectionString("RostikConnection");
 
 
 if (connectionString != null)

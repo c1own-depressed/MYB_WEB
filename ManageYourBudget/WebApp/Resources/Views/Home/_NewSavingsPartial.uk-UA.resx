@@ -138,7 +138,7 @@
   <data name="DateLabel" xml:space="preserve">
     <value>Дата</value>
   </data>
-  <data name="EditModalTitle" xml:space="preserve">
+  <data name="EditModaltitle" xml:space="preserve">
     <value>Редагувати заощадження</value>
   </data>
   <data name="FailedToEditMessage" xml:space="preserve">

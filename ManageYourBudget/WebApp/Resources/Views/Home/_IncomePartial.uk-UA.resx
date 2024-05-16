@@ -132,11 +132,11 @@
   <data name="Edit Income" xml:space="preserve">
     <value>Редагувати дохід</value>
   </data>
+  <data name="Income" xml:space="preserve">
+    <value>Дохід</value>
+  </data>
   <data name="Income Name" xml:space="preserve">
     <value>Назва доходу</value>
-  </data>
-  <data name="Income:" xml:space="preserve">
-    <value>Дохід:</value>
   </data>
   <data name="Incomes" xml:space="preserve">
     <value>Доходи</value>
