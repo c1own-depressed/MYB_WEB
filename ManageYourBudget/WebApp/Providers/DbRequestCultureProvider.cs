@@ -26,7 +26,7 @@ public class DbRequestCultureProvider : RequestCultureProvider
             if (string.IsNullOrEmpty(userId))
             {
                 _logger.LogInformation("User ID is null or empty, cannot determine culture.");
-                return null;
+                return new ProviderCultureResult("en-US", "en-US");
             }
 
             _logger.LogInformation("Retrieving culture for user ID: {UserId}", userId);
@@ -34,7 +34,7 @@ public class DbRequestCultureProvider : RequestCultureProvider
             if (string.IsNullOrEmpty(culture))
             {
                 _logger.LogInformation("No culture found for user ID: {UserId}", userId);
-                return null;
+                return new ProviderCultureResult("en-US", "en-US");
             }
 
             _logger.LogInformation("Culture for user ID {UserId} determined as {Culture}", userId, culture);
