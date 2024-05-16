@@ -2401,6 +2401,20 @@ img {
     height: 2.81em;
 }
 
+.custom-btn {
+    color: black; /* Ensures text color is black */
+    text-decoration: none; /* Optional: Removes underline from links */
+}
+
+.custom-button-wrapper {
+    padding: 1em;
+}
+
+.custom-btn:hover {
+    color: black; /* Keeps the text color black on hover */
+    text-decoration: underline; /* Optional: Adds underline on hover */
+}
+
 @media screen and (max-width: 479px) {
     .nav {
         padding-top: 8.37em;
