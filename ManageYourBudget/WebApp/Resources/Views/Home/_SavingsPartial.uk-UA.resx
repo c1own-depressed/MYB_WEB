@@ -147,10 +147,10 @@
   <data name="SaveChangesButton" xml:space="preserve">
     <value>Зберегти зміни</value>
   </data>
-  <data name="SavingsHeading" xml:space="preserve">
+  <data name="Savings" xml:space="preserve">
     <value>Заощадження</value>
   </data>
-  <data name="SavingsLabel" xml:space="preserve">
+  <data name="SavingsHeading" xml:space="preserve">
     <value>Заощадження</value>
   </data>
   <data name="SavingsNameLabel" xml:space="preserve">
