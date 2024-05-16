@@ -1,69 +1,332 @@
 ﻿
 body {
     background-color: #D9D9D9;
-    color:black;
+}
+
+html {
+    font-size: 16px;
+}
+
+.category-wrapper {
+    margin: 1rem;
+    color: white;
+}
+
+.category-heading-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.category-heading-name-wrapper {
+    background-color: #7B7B7B;
+    border-radius: 0.3125rem;
+    padding: 1rem 1.5rem;
+    display: inline-block;
+}
+
+.category-heading {
+    font-size: 2.25rem;
+}
+
+.category-heading-details-wrapper {
+    color: burlywood;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.expenses-wrapper {
+    color: burlywood;
+}
+
+.add-category-button {
+    margin: 1rem;
+    color: #1C25FF;
+}
+
+/* card item styles */
+.card {
+    background-color: #D9D9D9;
+}
+
+.card-wrapper {
+    margin: 1rem;
+}
+
+    .card-wrapper .card-header {
+        background-color: #7B7B7B;
+        color: white;
+        border-radius: 30px 30px 0px 0px;
+    }
+
+.card-header-button-content {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.category-details {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.card-wrapper .card {
+    border: none;
+}
+
+.card-body {
+    color: white;
+    background-color: #A8A8A8;
+    border-radius: 0px 0px 30px 30px;
+}
+
+.card-wrapper .btn-link {
+    color: white;
+    text-decoration: none;
+    text-align: left;
+}
+
+.card-content, .card-details, .card-interaction {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.card-amount, .card-name {
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.card-edit, .card-delete {
+    color: #7B7B7B;
+}
+
+    .card-edit:hover, .card-delete:hover {
+        color: black;
+    }
+
+/* Style for the Add Income button */
+.add-btn {
+    font-weight: bold;
+    color: #1C25FF;
+    margin-top: 10px;
+}
+
+/* Apply a top border to all income-content elements instead of a bottom border */
+.card-content {
+    padding-left: 16px;
+    border-top: 1px solid rgba(0, 0, 0, 0.5);
+    padding-top: 5px;
+    margin-top: 5px;
+}
+
+    /* Use the first-child pseudo-class to remove the top border from the first element */
+    .card-content:first-child {
+        border-top: none;
+        padding-top: 0;
+        margin-top: 0;
+    }
+
+.separator-line {
+    background-color: rgba(0, 0, 0, 0.9);
+    height: 2px;
+}
+
+.btn-outline-primary:hover {
+    background-color: #1C25FF;
+    color: white;
+}
+
+/* Remove the focus outline from buttons */
+.btn:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+/* Specifically for your income button, if it has a unique class */
+.add-income-button:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+@media screen and (max-width: 29.9375em) {
+    .card-header-button-content {
+        flex-direction: column;
+    }
+
+    .card-content {
+        flex-direction: column;
+    }
+}
+
+
+/* Base styles for all devices */
+body {
+    font-family: 'Arial', sans-serif;
+    background: #fff;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    font-size: 16px; /* Use a base font size */
 }
 
 .statistic {
-    display: flex;
-    gap: 2em;
+    padding: 20px;
 }
 
-.statistic-manipulation {
-    display: flex;
-    flex-direction: column;
+.custom-btn {
+    color: black; /* Ensures text color is black */
+    text-decoration: none; /* Optional: Removes underline from links */
+    transition: .35s;
 }
 
+.custom-button-wrapper {
+    padding: 1em;
+}
+
+.custom-btn:hover {
+    color: black; /* Keeps the text color black on hover */
+    text-decoration: underline; /* Optional: Adds underline on hover */
+}
+
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 10px;
+    padding: 20px;
+}
+
+.custom-button-wrapper {
+    display: flex;
+    justify-content: center; /* Center the buttons in their grid cell */
+}
+
+.custom-btn {
+    padding: 12px 24px;
+    text-align: center;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    display: block; /* Make sure anchor takes full size for better click area */
+}
+
+    .custom-btn:hover {
+        background-color: #0056b3;
+    }
+
+@media (max-width: 479px) {
+    .button-grid {
+        grid-template-columns: 1fr; /* Stack buttons on smaller screens */
+    }
+
+    .custom-btn {
+        padding: 10px 20px; /* Slightly smaller padding on smaller screens */
+    }
+}
+
+/* Make buttons and inputs easier to interact with on all devices */
+.btn, input[type="date"], .form-control {
+    padding: 12px;
+    font-size: 1rem; /* Increase touch targets */
+}
+
+/* Table styling for readability */
 table {
-    margin-top: 10%;
     width: 100%;
     border-collapse: collapse;
-    color: black;
 }
 
 th, td {
-    border: 1px solid black;
-    padding: 10px;
-    text-align: center;
-    color: black;
+    text-align: left;
+    padding: 8px;
 }
 
-.choose-options {
-    width: 40%;
-    height: 100%;
-    left: 5%;
-    margin-right: 20px;
-    top: 10%;
-    color: black;
-}
-.date-pick label, .date-pick .form-group label {
-    color: black;
-}
-
-.buttons {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 1em;
-}
-
-button {
-    width: 182px;
-    height: 42px;
-    background-color: #545454;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin: 0 auto;
-    display: block;
-    text-align: center;
-    margin-top: 60px;
-}
-
-    button:hover {
-        background-color: white;
-        color: #545454;
+/* Media Queries for Tablet Devices */
+@media (max-width: 768px) {
+    body {
+        font-size: 14px; /* Slightly smaller font-size on tablets */
     }
 
+    .statistic {
+        padding: 10px; /* Reduce padding */
+    }
 
+    .form-group {
+        margin-bottom: 1rem; /* Space out form elements */
+    }
+
+    table {
+        font-size: 0.9rem; /* Smaller table text */
+    }
+}
+
+/*@media (min-width: 1201px) {
+    .button-grid {
+        grid-template-columns: repeat(2, 1fr);*/ /* Create two columns */
+/*}
+}*/
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* Start with two columns by default */
+    gap: 10px;
+    padding: 20px;
+}
+
+@media (max-width: 1200px) {
+    .button-grid {
+        grid-template-columns: repeat(2, 1fr); /* Change to one column when the screen size is 1200px or less */
+    }
+}
+
+.form-group {
+    margin-top: 20px;
+}
+
+@media (min-width: 1201px) {
+    .button-grid {
+        grid-template-columns: repeat(4, 1fr); /* Maintain two columns for screens wider than 1200px */
+    }
+}
+
+/* Ensure this media query comes after the others to avoid conflicts */
+@media (max-width: 991px) {
+    .button-grid {
+        grid-template-columns: 1fr; /* Ensure one column layout for very small devices */
+    }
+}
+/* Media Queries for Mobile Devices */
+@media (max-width: 480px) {
+    .statistic-manipulation {
+        flex-direction: column; /* Stack form elements */
+    }
+
+    .btn {
+        width: 100%; /* Full-width buttons for easier access */
+        margin-top: 10px;
+    }
+
+    .form-group {
+        width: 100%; /* Full width form elements */
+    }
+
+    table {
+        font-size: 0.8rem; /* Even smaller table text */
+    }
+
+    /* Stack table headers and rows for better visibility */
+    th, td {
+        display: block;
+        text-align: right;
+    }
+
+        td::before {
+            content: attr(data-label);
+            float: left;
+            font-weight: bold;
+        }
+}

@@ -28,6 +28,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Seq("http://localhost:5341"));
 
 
+
 var connectionString = builder.Configuration.GetConnectionString("RostikConnection");
 
 
@@ -40,8 +41,6 @@ else
 {
     Log.Error("Connection string is null.");
 }
-
-
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
