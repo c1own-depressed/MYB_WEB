@@ -29,7 +29,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
 
 
 
-var connectionString = builder.Configuration.GetConnectionString("RostikConnection");
+var connectionString = builder.Configuration.GetConnectionString("AndriyConnection");
 
 
 if (connectionString != null)
