@@ -22,8 +22,8 @@
         }
     </style>
 </head>
-<body>
-    <div class="statistic">
+<body >
+    <div class="statistic" >
         <div class="statistic-manipulation">
             <div class="form-group">
                 <label for="startDate">Start Date:</label>
@@ -76,6 +76,46 @@
         </div>
     </div>
     <script>
+       
+        var startDateInput = document.getElementById('startDate');
+        var endDateInput = document.getElementById('endDate');
+
+        // Функція для збереження значень полів дати в localStorage
+        function saveInputValues() {
+            localStorage.setItem('startDateValue', startDateInput.value);
+            localStorage.setItem('endDateValue', endDateInput.value);
+        }
+
+        // Додавання обробника подій change для полів дати
+        startDateInput.addEventListener('change', saveInputValues);
+        endDateInput.addEventListener('change', saveInputValues);
+
+        // Функція для відновлення збережених значень полів дати з localStorage
+        function restoreInputValues() {
+            var savedStartDate = localStorage.getItem('startDateValue');
+            var savedEndDate = localStorage.getItem('endDateValue');
+            if (savedStartDate && savedEndDate) {
+                startDateInput.value = savedStartDate;
+                endDateInput.value = savedEndDate;
+            }
+        }
+
+        // Перевірка, чи передані значення полів дати через запит
+        function checkQueryParameters() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const startDateParam = urlParams.get('startDate');
+            const endDateParam = urlParams.get('endDate');
+
+            // Якщо значення не передані через запит, очищаємо поля дати
+            if (!startDateParam || !endDateParam) {
+                startDateInput.value = '';
+                endDateInput.value = '';
+            }
+        }
+
+        // Викликаємо функції відновлення та перевірки запиту при завантаженні сторінки
+        restoreInputValues();
+        checkQueryParameters();
         function updateExportLinks() {
             var startDate = document.getElementById('startDate').value;
             var endDate = document.getElementById('endDate').value;
