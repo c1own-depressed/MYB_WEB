@@ -67,7 +67,8 @@ namespace WebApp.Controllers
                 var result = await _authService.RegisterUserAsync(userRegisterationDTO);
                 if (result.Succeeded)
                 {
-                    return RedirectToAction("CheckEmail");
+                    //return RedirectToAction("CheckEmail");
+                    return RedirectToAction("Login");
                 }
 
                 foreach (var error in result.Errors)
