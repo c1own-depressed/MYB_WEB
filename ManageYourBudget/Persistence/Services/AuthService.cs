@@ -51,7 +51,18 @@ namespace Persistence.AuthService
                 if (result.Succeeded)
                 {
                     _logger.LogInformation($"User registered successfully: {userRegistrationDTO.Email}");
-                    await SendEmailConfirmationAsync(user);
+                    // await SendEmailConfirmationAsync(user);
+
+                    // Automatically confirm email
+                    var confirmEmailResult = await ConfirmEmailAsync(user.Id, await _userManager.GenerateEmailConfirmationTokenAsync(user));
+                    if (confirmEmailResult.Succeeded)
+                    {
+                        _logger.LogInformation($"Email confirmed automatically for user: {userRegistrationDTO.Email}");
+                    }
+                    else
+                    {
+                        _logger.LogWarning($"Automatic email confirmation failed for user: {userRegistrationDTO.Email}");
+                    }
                 }
 
                 return result;
