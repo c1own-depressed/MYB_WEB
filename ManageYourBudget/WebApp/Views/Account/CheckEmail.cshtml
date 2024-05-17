@@ -1,0 +1,14 @@
+﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@{
+    ViewData["Title"] = Localizer["CheckYourEmailTitle"];
+}
+<head>
+    <link rel="stylesheet" href="~/css/OtherPages_Light.css">
+</head>
+<body>
+<h2>@Localizer["CheckYourEmailHeader"]</h2>
+<div class="alert alert-info" role="alert">
+    @Localizer["CheckYourEmailMessage"]
+</div>
+</body>
+

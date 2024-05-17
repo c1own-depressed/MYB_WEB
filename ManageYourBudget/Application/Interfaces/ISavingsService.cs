@@ -5,11 +5,11 @@ namespace Application.Interfaces
 {
     public interface ISavingsService
     {
-        Task<IEnumerable<SavingsDTO>> GetSavingsByUserIdAsync(int userId);
+        Task<IEnumerable<SavingsDTO>> GetSavingsByUserIdAsync(string userId);
 
-        Task<ServiceResult> AddSavingsAsync(CreateSavingsDTO model);
+        Task<ServiceResult> AddSavingsAsync(CreateSavingsDTO model, string userId);
 
-        Task<ServiceResult> RemoveSavingsAsync(int savingsId);
+        Task<ServiceResult> RemoveSavingsAsync(string savingsId);
 
         Task<ServiceResult> EditSavingsAsync(EditSavingsDTO model);
     }

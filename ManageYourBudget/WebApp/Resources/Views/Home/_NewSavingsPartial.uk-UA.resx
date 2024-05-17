@@ -117,31 +117,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ChooseCurency" xml:space="preserve">
-    <value>Choose currency:</value>
+  <data name="AddButton" xml:space="preserve">
+    <value>Додати</value>
   </data>
-  <data name="ChooseTheme" xml:space="preserve">
-    <value>Choose theme:</value>
+  <data name="AddModalTitle" xml:space="preserve">
+    <value>Додати заощадження</value>
   </data>
-  <data name="Dark" xml:space="preserve">
-    <value>Dark</value>
+  <data name="AddSavingsButton" xml:space="preserve">
+    <value>Додати заощадження</value>
   </data>
-  <data name="English" xml:space="preserve">
-    <value>English</value>
+  <data name="AmountLabel" xml:space="preserve">
+    <value>Сума</value>
   </data>
-  <data name="Language" xml:space="preserve">
-    <value>Language:</value>
+  <data name="CloseButton" xml:space="preserve">
+    <value>Закрити</value>
   </data>
-  <data name="Light" xml:space="preserve">
-    <value>Light</value>
+  <data name="ConfirmDeleteMessage" xml:space="preserve">
+    <value>Ви впевнені, що хочете видалити це заощадження?</value>
   </data>
-  <data name="Save" xml:space="preserve">
-    <value>Save</value>
+  <data name="DateLabel" xml:space="preserve">
+    <value>Дата</value>
   </data>
-  <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+  <data name="EditModaltitle" xml:space="preserve">
+    <value>Редагувати заощадження</value>
   </data>
-  <data name="Ukrainian" xml:space="preserve">
-    <value>Ukrainian</value>
+  <data name="FailedToEditMessage" xml:space="preserve">
+    <value>Не вдалося відредагувати заощадження</value>
+  </data>
+  <data name="FailedToRemoveMessage" xml:space="preserve">
+    <value>Не вдалося видалити заощадження</value>
+  </data>
+  <data name="SaveChangesButton" xml:space="preserve">
+    <value>Зберегти зміни</value>
+  </data>
+  <data name="SavingsNameLabel" xml:space="preserve">
+    <value>Назва заощадження</value>
+  </data>
+  <data name="SavingsTitle" xml:space="preserve">
+    <value>Заощадження</value>
   </data>
 </root>

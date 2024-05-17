@@ -1,9 +1,15 @@
-﻿using Application.Services;
+﻿using Application.DTOs.SavingsDTOs;
+using Application.Services;
 using Domain.Entities;
 using Domain.Interfaces;
+using Microsoft.Extensions.Logging;
 using Moq;
+using Xunit;
 using FluentAssertions;
-using Application.DTOs.SavingsDTOs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace UnitTests.Application.Services
 {
@@ -11,11 +17,13 @@ namespace UnitTests.Application.Services
     {
         private readonly Mock<IUnitOfWork> _mockUnitOfWork;
         private readonly SavingsService _service;
+        private readonly ILogger<SavingsService> _logger;
 
         public SavingsServiceTests()
         {
             _mockUnitOfWork = new Mock<IUnitOfWork>();
-            _service = new SavingsService(_mockUnitOfWork.Object);
+            _logger = new Mock<ILogger<SavingsService>>().Object;
+            _service = new SavingsService(_mockUnitOfWork.Object, _logger);
         }
 
         [Fact]
@@ -23,12 +31,12 @@ namespace UnitTests.Application.Services
         {
             // Arrange
             var dto = new CreateSavingsDTO { SavingsName = "Negative Savings", Amount = -100 };
+            string userId = Guid.NewGuid().ToString();
 
             // Act
-            var serviceResult = await _service.AddSavingsAsync(dto);
+            var serviceResult = await _service.AddSavingsAsync(dto, userId);
 
             // Assert
-            serviceResult.Should().NotBeNull();
             serviceResult.Success.Should().BeFalse();
             serviceResult.Errors.Should().Contain("Savings amount must be greater than 0.");
         }
@@ -38,12 +46,12 @@ namespace UnitTests.Application.Services
         {
             // Arrange
             var dto = new CreateSavingsDTO { SavingsName = "Zero Savings", Amount = 0 };
+            string userId = Guid.NewGuid().ToString();
 
             // Act
-            var serviceResult = await _service.AddSavingsAsync(dto);
+            var serviceResult = await _service.AddSavingsAsync(dto, userId);
 
             // Assert
-            serviceResult.Should().NotBeNull();
             serviceResult.Success.Should().BeFalse();
             serviceResult.Errors.Should().Contain("Savings amount must be greater than 0.");
         }
@@ -53,25 +61,30 @@ namespace UnitTests.Application.Services
         {
             // Arrange
             var dto = new CreateSavingsDTO { SavingsName = "Valid Savings", Amount = 500 };
-
             _mockUnitOfWork.Setup(u => u.Savings.AddAsync(It.IsAny<Savings>()))
-                           .Returns(Task.CompletedTask); // Simulate saving successfully
+                           .Returns(Task.CompletedTask)
+                           .Verifiable("AddAsync was not called with a Savings object.");
+            _mockUnitOfWork.Setup(u => u.CompleteAsync())
+                           .ReturnsAsync(1)
+                           .Verifiable("CompleteAsync was not called to save the changes.");
+            string userId = Guid.NewGuid().ToString();
 
             // Act
-            var serviceResult = await _service.AddSavingsAsync(dto);
+            var serviceResult = await _service.AddSavingsAsync(dto, userId);
 
             // Assert
-            serviceResult.Should().NotBeNull();
             serviceResult.Success.Should().BeTrue();
             serviceResult.Errors.Should().BeEmpty();
+
+            _mockUnitOfWork.Verify();
         }
 
         [Fact]
         public async Task RemoveSavingsAsync_ExistingSavings_RemovesSavings()
         {
             // Arrange
-            int savingsId = 1;
-            var savingsToRemove = new Savings { Id = savingsId };
+            string savingsId = Guid.NewGuid().ToString();
+            var savingsToRemove = new Savings { Id = savingsId, UserId = Guid.NewGuid().ToString() };
 
             _mockUnitOfWork.Setup(u => u.Savings.GetByIdAsync(savingsId))
                            .ReturnsAsync(savingsToRemove);
@@ -80,7 +93,6 @@ namespace UnitTests.Application.Services
             var serviceResult = await _service.RemoveSavingsAsync(savingsId);
 
             // Assert
-            serviceResult.Should().NotBeNull();
             serviceResult.Success.Should().BeTrue();
             serviceResult.Errors.Should().BeEmpty();
 
@@ -92,7 +104,7 @@ namespace UnitTests.Application.Services
         public async Task RemoveSavingsAsync_NonExistingSavings_ReturnsError()
         {
             // Arrange
-            int savingsId = 1;
+            string savingsId = Guid.NewGuid().ToString();
 
             _mockUnitOfWork.Setup(u => u.Savings.GetByIdAsync(savingsId))
                            .ReturnsAsync((Savings)null);
@@ -101,7 +113,6 @@ namespace UnitTests.Application.Services
             var serviceResult = await _service.RemoveSavingsAsync(savingsId);
 
             // Assert
-            serviceResult.Should().NotBeNull();
             serviceResult.Success.Should().BeFalse();
             serviceResult.Errors.Should().Contain("Savings not found.");
 
@@ -113,18 +124,19 @@ namespace UnitTests.Application.Services
         public async Task EditSavingsAsync_WithValidData_ReturnsSuccess()
         {
             // Arrange
-            int savingsId = 1;
+            string savingsId = Guid.NewGuid().ToString();
             var dto = new EditSavingsDTO { Id = savingsId, SavingsName = "Edited Savings", Amount = 1000 };
-            var savings = new Savings { Id = savingsId, SavingsName = "Original Savings", Amount = 500 };
+            var savings = new Savings { Id = savingsId, SavingsName = "Original Savings", Amount = 500, UserId = Guid.NewGuid().ToString() };
 
             _mockUnitOfWork.Setup(u => u.Savings.GetByIdAsync(savingsId))
                            .ReturnsAsync(savings);
+            _mockUnitOfWork.Setup(u => u.CompleteAsync())
+                           .ReturnsAsync(1);
 
             // Act
             var serviceResult = await _service.EditSavingsAsync(dto);
 
             // Assert
-            serviceResult.Should().NotBeNull();
             serviceResult.Success.Should().BeTrue();
             serviceResult.Errors.Should().BeEmpty();
             savings.SavingsName.Should().Be(dto.SavingsName);
@@ -137,7 +149,7 @@ namespace UnitTests.Application.Services
         public async Task EditSavingsAsync_NonExistingSavings_ReturnsError()
         {
             // Arrange
-            int savingsId = 1;
+            string savingsId = Guid.NewGuid().ToString();
             var dto = new EditSavingsDTO { Id = savingsId, SavingsName = "Edited Savings", Amount = 1000 };
 
             _mockUnitOfWork.Setup(u => u.Savings.GetByIdAsync(savingsId))
@@ -147,7 +159,6 @@ namespace UnitTests.Application.Services
             var serviceResult = await _service.EditSavingsAsync(dto);
 
             // Assert
-            serviceResult.Should().NotBeNull();
             serviceResult.Success.Should().BeFalse();
             serviceResult.Errors.Should().Contain("Savings not found.");
 

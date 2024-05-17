@@ -1,10 +1,15 @@
 using System.Diagnostics;
+using System.Security.Claims;
+using Application.DTOs;
 using Application.DTOs.ExpenseDTOs;
 using Application.DTOs.IncomeDTOs;
 using Application.DTOs.SavingsDTOs;
 using Application.Interfaces;
+using Application.Services;
 using Application.Utils;
+using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
+using WebApp.Extensions;
 using WebApp.Models;
 
 namespace WebApp.Controllers
@@ -16,37 +21,51 @@ namespace WebApp.Controllers
         private readonly IIncomeService _incomeService;
         private readonly ISavingsService _savingsService;
         private readonly IExpenseService _expenseService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly ISettingsService _settingsService;
+        private readonly IHomeService _homeService;
 
         public HomeController(
-            ILogger<HomeController> logger,
             IExpenseCategoryService expenseCategoryService,
             IIncomeService incomeService,
             ISavingsService savingsService,
-            IExpenseService expenseService)
+            IExpenseService expenseService,
+            IHttpContextAccessor httpContextAccessor,
+            ISettingsService settingsService,
+            IHomeService homeService)
         {
-            _logger = logger;
             _expenseCategoryService = expenseCategoryService;
             _incomeService = incomeService;
             _savingsService = savingsService;
             _expenseService = expenseService;
+            _httpContextAccessor = httpContextAccessor;
+            _settingsService = settingsService;
+            _homeService = homeService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var userId = 1;
-            var categories = await _expenseCategoryService.GetExpenseCategoriesByUserIdAsync(userId);
-            var incomes = await _incomeService.GetIncomesByUserIdAsync(userId);
-            var savings = await _savingsService.GetSavingsByUserIdAsync(userId);
-            var model = new HomeViewModel
+            if (!User.Identity.IsAuthenticated)
             {
-                Categories = categories,
-                Incomes = incomes,
-                Savings = savings,
-            };
+                return RedirectToAction("Login", "Account"); // Перенаправлення на сторінку входу
+            }
+            else
+            {
+                var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
-            _logger.LogError("Home page opened");
-            return View(model);
+                // Отримання об'єкта HomeDTO з сервісу
+                var homeData = await _homeService.GetHomeDataAsync(userId);
+
+                // Створення об'єкта HomeViewModel та заповнення його даними з HomeDTO
+                var viewModel = new HomeViewModel
+                {
+                    Data = new List<HomeDTO> { homeData }
+                };
+
+                return View(viewModel);
+            }
         }
+
 
         public IActionResult Privacy()
         {
@@ -62,43 +81,23 @@ namespace WebApp.Controllers
         [HttpPost]
         public async Task<IActionResult> AddExpenseCategory([FromBody] CreateExpenseCategoryDTO model)
         {
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!ModelState.IsValid)
             {
-                _logger.LogError("Invalid model state for AddExpenseCategory");
-                return BadRequest(ModelState);
+                return this.HandleModelStateErrors();
             }
 
-            ServiceResult serviceResult = await _expenseCategoryService.AddExpenseCategoryAsync(model);
+            ServiceResult serviceResult = await _expenseCategoryService.AddExpenseCategoryAsync(model, userId);
 
-            if (serviceResult.Success)
-            {
-                _logger.LogInformation($"Category added: {model.Title} with budget {model.PlannedBudget}");
-                return Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-                _logger.LogError($"Failed to add category: {errorMessages}");
-                return BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveExpenseCategory(int categoryId)
+        public async Task<IActionResult> RemoveExpenseCategory(string categoryId)
         {
             ServiceResult serviceResult = await _expenseCategoryService.RemoveExpenseCategoryAsync(categoryId);
 
-            if (serviceResult.Success)
-            {
-                _logger.LogInformation($"Category with ID {categoryId} removed.");
-                return Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-                _logger.LogError($"Failed to remove category: {errorMessages}");
-                return BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
         [HttpPost]
@@ -106,88 +105,48 @@ namespace WebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                _logger.LogError("Invalid model state for EditExpenseCategory");
-                return BadRequest(ModelState);
+                return this.HandleModelStateErrors();
             }
 
             ServiceResult serviceResult = await _expenseCategoryService.EditExpenseCategoryAsync(model);
 
-            if (serviceResult.Success)
-            {
-                _logger.LogInformation($"Category edited: ID {model.Id}, Name: {model.Name}, Planned Budget: {model.PlannedBudget}");
-                return Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-                _logger.LogError($"Failed to edit category: {errorMessages}");
-                return BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddIncome([FromBody] IncomeDTO model)
+        public async Task<IActionResult> AddIncome([FromBody] CreateIncomeDTO model)
         {
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return this.HandleModelStateErrors();
             }
 
-            ServiceResult serviceResult = await _incomeService.AddIncomeAsync(model);
+            ServiceResult serviceResult = await _incomeService.AddIncomeAsync(model, userId);
 
-            if (serviceResult.Success)
-            {
-                _logger.LogError($"Income added: {model.IncomeName} with budget {model.Amount}");
-                return Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-                _logger.LogError($"Failed to add income: {errorMessages}");
-                return BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
         [HttpPost]
         public async Task<IActionResult> AddSavings([FromBody] CreateSavingsDTO model)
         {
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             if (!ModelState.IsValid)
             {
-                _logger.LogError("Invalid model state for AddSavings");
-                return BadRequest(ModelState);
+                return this.HandleModelStateErrors();
             }
 
-            ServiceResult serviceResult = await _savingsService.AddSavingsAsync(model);
+            ServiceResult serviceResult = await _savingsService.AddSavingsAsync(model, userId);
 
-            if (serviceResult.Success)
-            {
-                _logger.LogInformation($"Savings added: {model.SavingsName} with amount {model.Amount}");
-                return Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-                _logger.LogError($"Failed to add savings: {errorMessages}");
-                return BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveSavings(int savingsId)
+        public async Task<IActionResult> RemoveSavings(string savingsId)
         {
             ServiceResult serviceResult = await _savingsService.RemoveSavingsAsync(savingsId);
 
-            if (serviceResult.Success)
-            {
-                _logger.LogInformation($"Savings with ID {savingsId} removed.");
-                return Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-                _logger.LogError($"Failed to remove savings: {errorMessages}");
-                return BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
         [HttpPost]
@@ -195,104 +154,52 @@ namespace WebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                _logger.LogError("Invalid model state for EditSavings");
-                return BadRequest(ModelState);
+                return this.HandleModelStateErrors();
             }
 
             ServiceResult serviceResult = await _savingsService.EditSavingsAsync(model);
 
-            if (serviceResult.Success)
-            {
-                _logger.LogInformation($"Savings edited: ID {model.Id}, Name: {model.SavingsName}, Amount: {model.Amount}");
-                return Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-                _logger.LogError($"Failed to edit savings: {errorMessages}");
-                return BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
         public async Task<IActionResult> EditIncome([FromBody] EditIncomeDTO model)
         {
             if (!this.ModelState.IsValid)
             {
-                this._logger.LogError("Invalid model state for EditIncome");
-                return this.BadRequest(this.ModelState);
+                return this.HandleModelStateErrors();
             }
 
             ServiceResult serviceResult = await this._incomeService.EditIncomeAsync(model);
 
-            if (serviceResult.Success)
-            {
-                this._logger.LogInformation($"Income edited: ID {model.Id}, Name: {model.Name}, Amount: {model.Amount}");
-                return this.Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-                this._logger.LogError($"Failed to edit income: {errorMessages}");
-                return this.BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
-        public async Task<IActionResult> RemoveIncome(int incomeId)
+        public async Task<IActionResult> RemoveIncome(string incomeId)
         {
             ServiceResult serviceResult = await this._incomeService.RemoveIncomeAsync(incomeId);
 
-            if (serviceResult.Success)
-            {
-                this._logger.LogInformation($"Income with ID {incomeId} removed.");
-                return this.Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-                this._logger.LogError($"Failed to remove income: {errorMessages}");
-                return this.BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddExpense([FromBody] ExpenseDTO model) // Add Expense action
+        public async Task<IActionResult> AddExpense([FromBody] CreateExpenseDTO model) // Add Expense action
         {
             if (!ModelState.IsValid)
             {
-                return BadRequest(ModelState);
+                return this.HandleModelStateErrors();
             }
 
             ServiceResult serviceResult = await _expenseService.AddExpenseAsync(model);
 
-            if (serviceResult.Success)
-            {
-                _logger.LogError($"Expense added: {model.ExpenseName} with amount {model.Amount}");
-                return Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-                _logger.LogError($"Failed to add expense: {errorMessages}");
-                return BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
         [HttpPost]
-        public async Task<IActionResult> RemoveExpense(int expenseId) // Remove Expense action
+        public async Task<IActionResult> RemoveExpense(string expenseId) // Remove Expense action
         {
             ServiceResult serviceResult = await _expenseService.RemoveExpenseAsync(expenseId);
 
-            if (serviceResult.Success)
-            {
-                _logger.LogInformation($"Expense with ID {expenseId} removed.");
-                return Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-                _logger.LogError($"Failed to remove expense: {errorMessages}");
-                return BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
 
         [HttpPost]
@@ -300,23 +207,12 @@ namespace WebApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                _logger.LogError("Invalid model state for EditExpense");
-                return BadRequest(ModelState);
+                return this.HandleModelStateErrors();
             }
 
             ServiceResult serviceResult = await _expenseService.EditExpenseAsync(model);
 
-            if (serviceResult.Success)
-            {
-                _logger.LogInformation($"Expense edited: ID {model.Id}, Name: {model.ExpenseName}, Amount: {model.Amount}");
-                return Ok();
-            }
-            else
-            {
-                var errorMessages = string.Join("; ", serviceResult.Errors);
-                _logger.LogError($"Failed to edit expense: {errorMessages}");
-                return BadRequest(errorMessages);
-            }
+            return this.HandleServiceResult(serviceResult);
         }
     }
 }

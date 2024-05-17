@@ -11,7 +11,7 @@ namespace Persistence.Repositories
         {
         }
 
-        public async Task<IEnumerable<Income>> GetIncomesByUserIdAsync(int userId)
+        public async Task<IEnumerable<Income>> GetIncomesByUserIdAsync(string userId)
         {
             return await _context.Set<Income>().Where(income => income.UserId == userId).ToListAsync();
         }

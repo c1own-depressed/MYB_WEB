@@ -5,6 +5,7 @@ using Application.Services;
 using Domain.Entities;
 using Domain.Interfaces;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 using Moq;
 using System.Linq;
 using System.Threading.Tasks;
@@ -16,18 +17,20 @@ namespace UnitTests.Application.Services
     {
         private readonly Mock<IUnitOfWork> _mockUnitOfWork;
         private readonly ExpenseService _service;
+        private readonly ILogger<ExpenseService> _logger;
 
         public ExpenseServiceTests()
         {
             _mockUnitOfWork = new Mock<IUnitOfWork>();
-            _service = new ExpenseService(_mockUnitOfWork.Object);
+            _logger = new Mock<ILogger<ExpenseService>>().Object;
+            _service = new ExpenseService(_mockUnitOfWork.Object, _logger);
         }
 
         [Fact]
         public async Task AddExpenseAsync_WithNegativeAmount_ReturnsError()
         {
             // Arrange
-            var dto = new ExpenseDTO { ExpenseName = "Negative Expense", Amount = -100 };
+            var dto = new CreateExpenseDTO { ExpenseName = "Negative Expense", Amount = -100, CategoryId = Guid.NewGuid().ToString() };
 
             // Act
             var serviceResult = await _service.AddExpenseAsync(dto);
@@ -42,7 +45,7 @@ namespace UnitTests.Application.Services
         public async Task AddExpenseAsync_WithZeroAmount_ReturnsError()
         {
             // Arrange
-            var dto = new ExpenseDTO { ExpenseName = "Zero Expense", Amount = 0 };
+            var dto = new CreateExpenseDTO { ExpenseName = "Zero Expense", Amount = 0, CategoryId = Guid.NewGuid().ToString() };
 
             // Act
             var serviceResult = await _service.AddExpenseAsync(dto);
@@ -57,7 +60,7 @@ namespace UnitTests.Application.Services
         public async Task AddExpenseAsync_WithValidData_ReturnsSuccess()
         {
             // Arrange
-            var dto = new ExpenseDTO { ExpenseName = "Valid Expense", Amount = 500 };
+            var dto = new CreateExpenseDTO { ExpenseName = "Valid Expense", Amount = 500, CategoryId = Guid.NewGuid().ToString() };
 
             _mockUnitOfWork.Setup(u => u.Expenses.AddAsync(It.IsAny<Expense>()))
                            .Returns(Task.CompletedTask); // Simulate saving successfully
@@ -75,8 +78,8 @@ namespace UnitTests.Application.Services
         public async Task RemoveExpenseAsync_ExistingExpense_RemovesExpense()
         {
             // Arrange
-            int expenseId = 1;
-            var expenseToRemove = new Expense { Id = expenseId };
+            string expenseId = Guid.NewGuid().ToString();
+            var expenseToRemove = new Expense { Id = expenseId, CategoryId = Guid.NewGuid().ToString() };
 
             _mockUnitOfWork.Setup(u => u.Expenses.GetByIdAsync(expenseId))
                            .ReturnsAsync(expenseToRemove);
@@ -97,7 +100,7 @@ namespace UnitTests.Application.Services
         public async Task RemoveExpenseAsync_NonExistingExpense_ReturnsError()
         {
             // Arrange
-            int expenseId = 1;
+            string expenseId = Guid.NewGuid().ToString();
 
             _mockUnitOfWork.Setup(u => u.Expenses.GetByIdAsync(expenseId))
                            .ReturnsAsync((Expense)null);
@@ -118,9 +121,9 @@ namespace UnitTests.Application.Services
         public async Task EditExpenseAsync_WithValidData_ReturnsSuccess()
         {
             // Arrange
-            int expenseId = 1;
+            string expenseId = Guid.NewGuid().ToString();
             var dto = new EditExpenseDTO { Id = expenseId, ExpenseName = "Edited Expense", Amount = 1000 };
-            var expense = new Expense { Id = expenseId, ExpenseName = "Original Expense", Amount = 500 };
+            var expense = new Expense { Id = expenseId, ExpenseName = "Original Expense", Amount = 500, CategoryId = Guid.NewGuid().ToString() };
 
             _mockUnitOfWork.Setup(u => u.Expenses.GetByIdAsync(expenseId))
                            .ReturnsAsync(expense);
@@ -142,7 +145,7 @@ namespace UnitTests.Application.Services
         public async Task EditExpenseAsync_NonExistingExpense_ReturnsError()
         {
             // Arrange
-            int expenseId = 1;
+            string expenseId = Guid.NewGuid().ToString();
             var dto = new EditExpenseDTO { Id = expenseId, ExpenseName = "Edited Expense", Amount = 1000 };
 
             _mockUnitOfWork.Setup(u => u.Expenses.GetByIdAsync(expenseId))

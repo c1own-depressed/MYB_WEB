@@ -1,44 +1,50 @@
-﻿@model Tuple<List<string>, List<string>>  
+﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+@model Tuple<List<string>, List<string>>
 
 @{
-    ViewData["Title"] = "Tips & Tricks";
+    ViewData["Title"] = Localizer["TipsTricksTitle"];
 }
 
-<div style="display: flex;">
-    <div style="flex: 1;">
-        <h2>Tips</h2>
-
-        @if (Model.Item1 != null && Model.Item1.Count > 0)
-        {
-            <ul>
-                @foreach (var tip in Model.Item1)
-                {
-                    <li>@tip</li>
-                }
-            </ul>
-        }
-        else
-        {
-            <p>No tips available at the moment. Please check back later.</p>
-        }
-    </div>
-
-    <div style="flex: 1;">
-        <h2>Tricks</h2>
-
-        @if (Model.Item2 != null && Model.Item2.Count > 0)
-        {
-            <ul>
-                @foreach (var trick in Model.Item2)
-                {
-                    <li><a href="@trick">@trick</a></li>
-                }
-            </ul>
-        }
-        else
-        {
-            <p>No tricks available at the moment. Please check back later.</p>
-        }
-    </div>
-</div>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <style>
+        .wf-force-outline-none[tabindex="-1"]:focus {
+            outline: none;
+        }</style>
+    <title>Tips and Tricks</title>
+    @{
+        string theme = ViewBag.Theme ?? "Light"; 
+        string cssFileName = $"OtherPages_{theme}.css";
+    }
+</head>
+<body>
+    <section class="tips-and-tricks-section">
+        <div class="">
+            <div class="tips-and-tricks-content align-center">
+                <h1 class="heading align-center">Tips&amp;Tricks</h1>
+                <div class="tips-and-tricks-wrapper">
+                    <div class="list-wrapper">
+                        <div class="list-item">o <strong class="bold">Track Every Expense:</strong> Keep a meticulous record of every single expense, no matter how small. This will give you a clear picture of where your money is going and help you identify areas where you can cut back or reallocate funds.</div>
+                        <div class="list-item">o <strong class="bold">Allocate Every Dollar:</strong> With zero-budgeting, every dollar you earn has a designated purpose. Before the month begins, assign each dollar to a specific category such as groceries, utilities, savings, or entertainment. This ensures that your income is fully accounted for and helps prevent overspending.</div>
+                        <div class="list-item">o <strong class="bold">Regularly Review and Adjust:</strong> Review your budget regularly, ideally at the end of each month. Compare your actual spending to your budgeted amounts and identify any discrepancies. Adjust your budget as needed to reflect changes in income, expenses, or financial goals.</div>
+                        <div class="list-item">o <strong class="bold">Build an Emergency Fund:</strong> One of the fundamental principles of zero-budgeting is being prepared for unexpected expenses. Allocate a portion of your income each month to build an emergency fund. Aim to save enough to cover at least three to six months' worth of living expenses.</div>
+                    </div>
+                    <div class="list-wrapper">
+                        <h2 class="links-heading-mb">Useful links</h2>
+                        <a href="https://www.anaplan.com/blog/zbb-zero-based-budgeting-guide/" class="tricks-link w-inline-block">
+                            <div class="list-item">o The ultimate guide to zero-based budgeting (ZBB)</div>
+                        </a>
+                        <a href="https://www.nerdwallet.com/article/finance/zero-based-budgeting-explained" class="tricks-link w-inline-block">
+                            <div class="list-item">o Zero-Based Budgeting: Spend Every Penny but Meet Your Financial Goals</div>
+                        </a>
+                        <a href="https://www.indeed.com/career-advice/career-development/zero-based-budgeting" class="tricks-link w-inline-block">
+                            <div class="list-item">o How To Start Using Zero-Based Budgeting (With Pros and Cons)</div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
 

@@ -2,7 +2,7 @@
 {
     public class IncomeDTO
     {
-        public int Id { get; set; }
+        required public string Id { get; set; }
 
         public string IncomeName { get; set; } = string.Empty;
 

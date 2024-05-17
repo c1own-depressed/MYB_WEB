@@ -18,7 +18,7 @@ namespace Persistence.Repositories
             return await _context.Set<T>().ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetByIdAsync(string id)
         {
             var entity = await _context.Set<T>().FindAsync(id);
             if (entity == null)

@@ -3,11 +3,13 @@
 @model IEnumerable<IncomeDTO>
 
 
+@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
+
 <div class="card-wrapper" id="card-wrapper">
     <div class="card">
-        <div class="card-header" id="headingOne">      
+        <div id="headingOne">
             <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseIncome" aria-expanded="true" aria-controls="collapseIncome">
-                <h2 class="mb-0">Income</h2>
+                <h2 class="mb-0">@Localizer["Income"]</h2>
             </button>
         </div>
 
@@ -23,7 +25,7 @@
                                 <button class="btn card-edit" onclick="openEditIncomeModal('@income.Id', '@income.IncomeName', '@income.Amount')">
                                     <i class="fas fa-pencil-alt"></i>
                                 </button>
-                                <button class="btn card-delete" onclick="removeIncome(@income.Id)">
+                                <button class="btn card-delete" onclick="removeIncome('@income.Id')">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -34,24 +36,24 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="editIncomeModalLabel_@income.Id">Edit Income</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <h5 class="modal-title" id="editIncomeModalLabel_@income.Id">@Localizer["Edit Income"]</h5>
+                                        <button type="button" class="close" data-dismiss="modal" onclick="closeModalWindow('@income.Id')" aria-label="Close">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="form-group">
-                                            <label for="editIncomeName_@income.Id">Income Name</label>
+                                            <label for="editIncomeName_@income.Id">@Localizer["Income Name"]</label>
                                             <input type="text" class="form-control" id="editIncomeName_@income.Id" value="@income.IncomeName">
                                         </div>
                                         <div class="form-group">
-                                            <label for="editAmount_@income.Id">Amount</label>
+                                            <label for="editAmount_@income.Id">@Localizer["Amount"]</label>
                                             <input type="number" class="form-control" id="editAmount_@income.Id" value="@income.Amount">
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary" onclick="editIncome('@income.Id')">Save changes</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModalWindow('@income.Id')">@Localizer["Close"]</button>
+                                        <button type="button" class="btn btn-primary" onclick="editIncome('@income.Id')">@Localizer["Save changes"]</button>
                                     </div>
                                 </div>
                             </div>
@@ -61,7 +63,7 @@
                 <div class="separator-line"></div>
                 <!-- Add Income Button -->
                 <button type="button" class="btn add-btn" data-toggle="modal" data-target="#addIncomeModal">
-                    + Add Income
+                    + @Localizer["Add Income"]
                 </button>
             </div>
         </div>
@@ -71,7 +73,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addIncomeModalLabel">Add Income</h5>
+                    <h5 class="modal-title" id="addIncomeModalLabel">@Localizer["Add Income"]</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -79,93 +81,112 @@
                 <div class="modal-body">
                     <form id="add-income-form">
                         <div class="form-group">
-                            <label for="income-name">Income Name</label>
+                            <label for="income-name">@Localizer["Income Name"]</label>
                             <input type="text" class="form-control" id="income-name" name="name" required>
                         </div>
                         <div class="form-group">
-                            <label for="income-amount">Amount</label>
+                            <label for="income-amount">@Localizer["Amount"]</label>
                             <input type="number" class="form-control" id="income-amount" name="amount" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="income-date">@Localizer["Date"]</label>
+                            <input type="datetime-local" class="form-control" id="income-date" name="date">
+                        </div>
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="income-regular" name="isRegular">
+                            <label class="form-check-label" for="income-regular">@Localizer["Regular Income"]</label>
                         </div>
                     </form>
                 </div>
+
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary" form="add-income-form">Add</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["Close"]</button>
+                    <button type="submit" class="btn btn-primary" form="add-income-form">@Localizer["Add"]</button>
                 </div>
             </div>
         </div>
     </div>
+</div>
 
-    <script>
-        $(document).ready(function () {
-            $('#add-income-form').on('submit', function (e) {
-                e.preventDefault();
-                $.ajax({
-                    url: '@Url.Action("AddIncome", "Home")',
-                    type: 'POST',
-                    contentType: 'application/json',
-                    data: JSON.stringify({
-                        IncomeName: $('#income-name').val(),
-                        Amount: $('#income-amount').val()
-                    }),
-                    success: function (response) {
-                        $('#addIncomeModal').modal('hide');
-                        location.reload();
-                    },
-                    error: function (error) {
-                        alert("Error adding income");
-                    }
-                });
-            });
-        });
-    </script>
 
-    <script>
-        function removeIncome(incomeId) {
-            if (confirm("Are you sure you want to remove this income?")) {
-                $.ajax({
-                    url: '@Url.Action("RemoveIncome", "Home")' + '?incomeId=' + incomeId,
-                    type: 'POST',
-                    contentType: 'application/json',
-                    success: function (response) {
-                        location.reload();
-                    },
-                    error: function (error) {
-                        alert("Failed to remove category");
-                    }
-                });
-            }
-        }
-    </script>
+<script>
+    // Localize JavaScript messages
+    var messages = {
+        addIncomeError: '@Localizer["Error adding income"]',
+        removeIncomeConfirmation: '@Localizer["Are you sure you want to remove this income?"]',
+        removeIncomeFail: '@Localizer["Failed to remove income"]',
+        editIncomeFail: '@Localizer["Failed to edit income"]'
+    };
 
-    <script>
-        function openEditIncomeModal(incomeId, incomeName, Amount) {
-            $('#editIncomeName_' + incomeId).val(incomeName); // Set the category name in the input field
-            $('#editAmount_' + incomeId).val(Amount); // Set the planned budget in the input field
-            $('#editIncomeModal_' + incomeId).modal('show'); // Show the modal
-        }
-
-        function editIncome(incomeId) {
-            var newName = $('#editIncomeName_' + incomeId).val();
-            var newAmount = $('#editAmount_' + incomeId).val();
-
+    $(document).ready(function () {
+        $('#add-income-form').on('submit', function (e) {
+            e.preventDefault();
             $.ajax({
-                url: '@Url.Action("EditIncome", "Home")',
+                url: '@Url.Action("AddIncome", "Home")',
                 type: 'POST',
                 contentType: 'application/json',
                 data: JSON.stringify({
-                    Id: incomeId,
-                    Name: newName,
-                    Amount: newAmount
+                    IncomeName: $('#income-name').val(),
+                    Amount: parseFloat($('#income-amount').val()),
+                    Date: new Date($('#income-date').val()),
+                    IsRegular: $('#income-regular').prop('checked')
                 }),
                 success: function (response) {
-                    $('#editIncomeModal_' + incomeId).modal('hide'); // Hide the modal
-                    location.reload(); // Reload the page or update UI as needed
+                    $('#addIncomeModal').modal('hide');
+                    location.reload();
                 },
                 error: function (error) {
-                    alert("Failed to edit income");
+                    alert(messages.addIncomeError);
+                }
+            });
+        });
+    });
+
+    function removeIncome(incomeId) {
+        if (confirm(messages.removeIncomeConfirmation)) {
+            $.ajax({
+                url: '@Url.Action("RemoveIncome", "Home")' + '?incomeId=' + incomeId,
+                type: 'POST',
+                contentType: 'application/json',
+                success: function (response) {
+                    location.reload();
+                },
+                error: function (error) {
+                    alert(messages.removeIncomeFail);
                 }
             });
         }
-    </script>
+    }
+    function closeModalWindow(incomeId) {
+        $('#editIncomeModal_' + incomeId).modal('hide');
+    }
+    function openEditIncomeModal(incomeId, incomeName, Amount) {
+        $('#editIncomeName_' + incomeId).val(incomeName); // Set the category name in the input field
+        $('#editAmount_' + incomeId).val(Amount); // Set the planned budget in the input field
+        $('#editIncomeModal_' + incomeId).modal('show'); // Show the modal
+    }
+
+    function editIncome(incomeId) {
+        var newName = $('#editIncomeName_' + incomeId).val();
+        var newAmount = $('#editAmount_' + incomeId).val();
+
+        $.ajax({
+            url: '@Url.Action("EditIncome", "Home")',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({
+                Id: incomeId,
+                Name: newName,
+                Amount: newAmount
+            }),
+            success: function (response) {
+                $('#editIncomeModal_' + incomeId).modal('hide'); // Hide the modal
+                location.reload(); // Reload the page or update UI as needed
+            },
+            error: function (error) {
+                alert(messages.editIncomeFail);
+            }
+        });
+    }
+</script>
 </div>

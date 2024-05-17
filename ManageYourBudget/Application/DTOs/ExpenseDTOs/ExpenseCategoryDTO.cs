@@ -2,7 +2,7 @@
 {
     public class ExpenseCategoryDTO
     {
-        public int Id { get; set; }
+        required public string Id { get; set; }
 
         required public string Name { get; set; }
 

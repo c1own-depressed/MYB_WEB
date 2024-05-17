@@ -1,38 +1,100 @@
-﻿@using Application.DTOs.SavingsDTOs
+﻿@inject Microsoft.AspNetCore.Mvc.Localization.IViewLocalizer Localizer
 
+@using Application.DTOs.SavingsDTOs
 @model IEnumerable<SavingsDTO>
+<head>
+    @{
+        string theme = ViewBag.Theme ?? "Dark"; // За замовчуванням використовується темна тема
+        string cssFileName = $"Modal_{theme}.css";
+    }
 
-<div class="savings-wrapper">
-    <div class="category-wrapper">
-        <div class="category-content">
-            <div class="category-heading-wrapper">
-                <div class="category-heading-name-wrapper">
-                    <h2 class="category-heading">Savings</h2>
-                </div>
-            </div>
-            <div class="expenses-wrapper">
-                @foreach (var saving in Model)
-                {
-                    <div class="saving-item">
-                        <p>Savings: @saving.SavingsName  (@saving.Amount ₴)</p>
-                        <div class="saving-item-buttons">
-                            <button class="btn btn-primary edit-savings-button" data-id="@saving.Id">Edit</button>
-                            <button class="btn btn-danger delete-savings-button" data-id="@saving.Id">Delete</button>
-                        </div>
-                    </div>
-                }
+
+    <link rel="stylesheet" href="~/css/@cssFileName">
+</head>
+
+
+
+<div class="card-wrapper savings-card-wrapper" id="card-wrapper">
+    <div class="full-card-wrapper">
+        <div class="full-card-top">
+            <div class="full-card-heading">
+            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseSavings" aria-expanded="true" aria-controls="collapseIncome">
+                <h2 class="mb-0">@Localizer["Savings"]</h2>
+                </button>
             </div>
         </div>
+        <div id="collapseSavings" class="collapse" aria-labelledby="headingOne" data-parent="#card-wrapper">
+            <div class="full-card-bottom">
+            
+                @foreach (var savings in Model)
+                {
+                    <div class="card-bottom-item">
+                        <div class="card-item-text">@savings.SavingsName</div>
+                        <div class="card-item-info">
+                            <div class="card-item-text">@savings.Amount @savings.CurrencyEmblem</div>
+                            <div class="edit-delete-buttons-wrapper">
+                                <button class="btn card-edit" onclick="openEditSavingsModal('@savings.Id', '@savings.SavingsName', '@savings.Amount')">
+                                    <div class="card-item-icon"><i class="fas fa-pencil-alt"> </i></div>
+                                </button>
+                                <button class="btn card-delete" onclick="removeSavings('@savings.Id')">
+                                    <div class="card-item-icon"><i class="fas fa-trash"> </i></div>
+                                </button>
+                            </div>
+                        </div>
 
-        <button type="button" class="btn btn-primary add-savings-button" data-toggle="modal" data-target="#addSavingsModal">
-            + Add Savings
-        </button>
+                        <div class="modal fade" id="editSavingsModal_@savings.Id" tabindex="-1" role="dialog" aria-labelledby="editSavingsModalLabel_@savings.Id" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="editSavingsModalLabel_@savings.Id">@Localizer["EditModalTitle"]</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModalWindow('@savings.Id')">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <div class="form-group">
+                                            <label for="editSavingsName">@Localizer["SavingsNameLabel"]</label>
+                                            <input type="text" class="form-control" id="editSavingsName_@savings.Id" value="@savings.SavingsName">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="editAmount">@Localizer["AmountLabel"]</label>
+                                            <input type="number" class="form-control" id="editAmount_@savings.Id" value="@savings.Amount">
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModalWindow('@savings.Id')">@Localizer["CloseButton"]</button>
+                                        <button type="button" class="btn btn-primary" onclick="editSavings('@savings.Id')">@Localizer["SaveChangesButton"]</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                 }
+            
+                <div class="card-footer">
+                    @* <div class="card-add-button">
+                        <div class="card-add-button-text">+ Add Expense</div>
+                    </div> *@
+                    <button type="button" class="btn add-btn" data-toggle="modal" data-target="#addSavingsModal">
+                        <div class="card-add-button">
+                            <div class="card-add-button-text">+ @Localizer["AddSavingsButton"]</div>
+                        </div>
+                    </button>
+                    @* <div class="edit-delete-buttons-wrapper">
+                        <div class="card-item-icon"></div>
+                        <div class="card-item-icon"></div>
+                    </div> *@
+                </div>
+            </div>
+        </div>
     </div>
+
+
     <div class="modal fade" id="addSavingsModal" tabindex="-1" role="dialog" aria-labelledby="addSavingsModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="addSavingsModalLabel">Add Savings</h5>
+                    <h5 class="modal-title" id="addSavingsModalLabel">@Localizer["AddModalTitle"]</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -40,82 +102,63 @@
                 <div class="modal-body">
                     <form id="add-savings-form">
                         <div class="form-group">
-                            <label for="savings-name">Savings Name</label>
+                            <label for="savings-name">@Localizer["SavingsNameLabel"]</label>
                             <input type="text" class="form-control" id="savings-name" name="name" required>
                         </div>
                         <div class="form-group">
-                            <label for="savings-amount">Amount</label>
+                            <label for="savings-amount">@Localizer["AmountLabel"]</label>
                             <input type="number" class="form-control" id="savings-amount" name="amount" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="savings-date">@Localizer["DateLabel"]</label>
+                            <input type="datetime-local" class="form-control" id="savings-date" name="date">
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="addSavingsButton">Add</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["CloseButton"]</button>
+                    <button type="submit" class="btn btn-primary" form="add-savings-form">@Localizer["AddButton"]</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Edit Savings Modal -->
-    <div class="modal fade" id="editSavingsModal" tabindex="-1" role="dialog" aria-labelledby="editSavingsModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editSavingsModalLabel">Edit Savings</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label for="editSavingsName">Savings Name</label>
-                        <input type="text" class="form-control" id="editSavingsName">
-                    </div>
-                    <div class="form-group">
-                        <label for="editSavingsAmount">Amount</label>
-                        <input type="number" class="form-control" id="editSavingsAmount">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" id="saveEditSavingsButton">Save changes</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-<script>
-    $(document).ready(function () {
-        // Add Savings
-        $('#addSavingsButton').click(function () {
-            var newName = $('#savings-name').val();
-            var newAmount = $('#savings-amount').val();
-
-            $.ajax({
-                url: '@Url.Action("AddSavings", "Home")',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify({
-                    SavingsName: newName,
-                    Amount: newAmount
-                }),
-                success: function (response) {
-                    $('#addSavingsModal').modal('hide');
-                    location.reload();
-                },
-                error: function (error) {
-                    alert("Error adding savings");
-                }
+    <script>
+        $(document).ready(function () {
+            $('#add-savings-form').on('submit', function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: '@Url.Action("AddSavings", "Home")',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({
+                        SavingsName: $('#savings-name').val(),
+                        Amount: $('#savings-amount').val(),
+                        Date: new Date($('#savings-date').val()),
+                    }),
+                    success: function (response) {
+                        $('#addSavingsModal').modal('hide');
+                        location.reload();
+                    },
+                    error: function (error) {
+                        if (error.responseJSON && error.responseJSON.errors) {
+                            var errorMessages = error.responseJSON.errors;
+                            // Вивести помилки для користувача
+                            errorMessages.forEach(function (errorMessage) {
+                                alert(errorMessage); // або додайте помилку до DOM для відображення
+                            });
+                        } else {
+                            alert(messages.addIncomeError);
+                        }
+                    }
+                });
             });
         });
+    </script>
 
-        // Delete Savings
-        $('.delete-savings-button').click(function () {
-            var savingsId = $(this).data('id');
-
-            if (confirm("Are you sure you want to remove this savings?")) {
+    <script>
+        function removeSavings(savingsId) {
+            if (confirm("@Localizer["ConfirmDeleteMessage"]")) {
                 $.ajax({
                     url: '@Url.Action("RemoveSavings", "Home")' + '?savingsId=' + savingsId,
                     type: 'POST',
@@ -124,31 +167,27 @@
                         location.reload();
                     },
                     error: function (error) {
-                        alert("Failed to remove savings");
+                        alert("@Localizer["FailedToRemoveMessage"]");
                     }
                 });
             }
-        });
+        }
+    </script>
 
-        // Edit Savings
-        $('.edit-savings-button').click(function () {
-            var savingItem = $(this).closest('.saving-item');
-            var savingsId = $(this).data('id');
-            var savingsName = savingItem.find('p').text().split(' ').slice(1, -2).join(" ");
-            var savingsAmount = parseFloat(savingItem.find('p').text().match(/\d+(\.\d+)?/)[0]);
+    <script>
+        function closeModalWindow(savingsId) {
+            $('#editSavingsModal_' + savingsId).modal('hide');
+        }
+        function openEditSavingsModal(savingsId, savingsName, Amount) {
+            $('#editSavingsName_' + savingsId).val(savingsName); // Set the category name in the input field
+            $('#editAmount_' + savingsId).val(Amount); // Set the planned budget in the input field
+            $('#editSavingsModal_' + savingsId).modal('show');
+            // Show the modal
+        }
 
-            $('#editSavingsName').val(savingsName);
-            $('#editSavingsAmount').val(savingsAmount);
-
-            $('#saveEditSavingsButton').data('id', savingsId);
-
-            $('#editSavingsModal').modal('show');
-        });
-
-        $('#saveEditSavingsButton').click(function () {
-            var savingsId = $(this).data('id');
-            var newName = $('#editSavingsName').val();
-            var newAmount = $('#editSavingsAmount').val();
+        function editSavings(savingsId) {
+            var newName = $('#editSavingsName_' + savingsId).val();
+            var newAmount = $('#editAmount_' + savingsId).val();
 
             $.ajax({
                 url: '@Url.Action("EditSavings", "Home")',
@@ -160,27 +199,21 @@
                     Amount: newAmount
                 }),
                 success: function (response) {
-                    $('#editSavingsModal').modal('hide');
-                    location.reload();
+                    $('#editSavingsModal_' + savingsId).modal('hide'); // Hide the modal
+                    location.reload(); // Reload the page or update UI as needed
                 },
                 error: function (error) {
-                    alert("Failed to edit savings");
+                    if (error.responseJSON && error.responseJSON.errors) {
+                        var errorMessages = error.responseJSON.errors;
+                        // Вивести помилки для користувача
+                        errorMessages.forEach(function (errorMessage) {
+                            alert(errorMessage); // або додайте помилку до DOM для відображення
+                        });
+                    } else {
+                        alert(messages.addIncomeError);
+                    }
                 }
             });
-        });
-
-        // Close Modal
-        $('#editSavingsModal').on('hidden.bs.modal', function () {
-            $(this).find('form')[0].reset();
-        });
-
-        // Close Modal when Close button or Cross button is clicked
-        $('#editSavingsModal .close').click(function () {
-            $('#editSavingsModal').modal('hide');
-        });
-
-        $('#editSavingsModal [data-dismiss="modal"]').click(function () {
-            $('#editSavingsModal').modal('hide');
-        });
-    });
-</script>
+        }
+    </script>
+</div>

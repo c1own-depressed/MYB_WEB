@@ -1,0 +1,107 @@
+﻿/* Стилі для модального вікна */
+.modal-body {
+    background-color: #2C2C2C; /* Темний фон */
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    color: #FFFFFF; /* Колір тексту */
+}
+
+.modal-title {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    color: #FFFFFF; /* Колір тексту */
+}
+
+/* Стилі для картки */
+.card-wrapper {
+    width: 100%;
+    margin: auto;
+}
+
+.card {
+    border: 1px solid #555555; /* Темніші лінії контейнера */
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.card-header {
+    background-color: #3A3A3A; /* Темний фон заголовка картки */
+    padding: 10px;
+    border-bottom: 1px solid #555555; /* Темна лінія під заголовком */
+}
+
+    .card-header button {
+        color: #FFFFFF; /* Колір тексту кнопки */
+        background-color: transparent;
+        border: none;
+    }
+
+        .card-header button:hover {
+            text-decoration: underline; /* Підкреслення при наведенні на кнопку */
+        }
+
+.card-body {
+    padding: 10px;
+}
+
+.card-content {
+    margin-bottom: 10px;
+}
+
+.modal-header {
+    background-color: #3A3A3A; /* Темний фон заголовка */
+    border-bottom: 1px solid #555555; /* Темна лінія під заголовком */
+    padding: 10px;
+}
+
+.modal-content {
+    border: 1px solid #555555; /* Темна лінія контейнера */
+    border-radius: 5px;
+}
+
+.modal-body {
+    padding: 15px;
+}
+
+.modal-footer {
+    background-color: #3A3A3A; /* Темний фон підвалу */
+    border-top: 1px solid #555555; /* Темна лінія над підвалом */
+    padding: 10px;
+}
+/* Стилі для кнопок */
+.btn-primary {
+    color: #FFFFFF; /* Колір тексту кнопки */
+    background-color: #007BFF; /* Колір фону кнопки */
+    border: none;
+    border-radius: 5px;
+    padding: 8px 20px;
+    cursor: pointer;
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3; /* Темніший колір фону кнопки при наведенні */
+    }
+
+/* Стилі для полів вводу */
+.form-control {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #555555; /* Темніша лінія в полі вводу */
+    border-radius: 5px;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+
+.input-group {
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.input-group-addon {
+    padding: 8px;
+    background-color: #3A3A3A; /* Темний фон групи вводу */
+    border: 1px solid #555555; /* Темніша лінія групи вводу */
+    border-radius: 5px;
+}

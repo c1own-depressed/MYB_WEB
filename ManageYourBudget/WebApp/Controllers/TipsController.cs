@@ -1,15 +1,40 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Interfaces;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace WebApp.Controllers
 {
     public class TipsController : Controller
     {
-        public IActionResult Index()
+        private readonly ISettingsService _settingsService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        public TipsController(ISettingsService settingsService, IHttpContextAccessor httpContextAccessor)
         {
-            var tips = GetTipsFromSomewhere();
-            var tricks = GetTricksFromSomewhere();
-            var model = new Tuple<List<string>, List<string>>(tips, tricks);
-            return View("~/Views/TipsTricksPage/Index.cshtml", model);
+            _settingsService = settingsService;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (userId != null)
+            {
+                var temp = await _settingsService.GetUserSettingsAsync(userId);
+                bool IsLight_Theme = temp.IsLightTheme;
+                ViewBag.Theme = IsLight_Theme ? "Light" : "Dark";
+                var tips = GetTipsFromSomewhere();
+                var tricks = GetTricksFromSomewhere();
+                var model = new Tuple<List<string>, List<string>>(tips, tricks);
+                return View("~/Views/TipsTricksPage/Index.cshtml", model);
+            }
+            else
+            {
+                var tips = GetTipsFromSomewhere();
+                var tricks = GetTricksFromSomewhere();
+                var model = new Tuple<List<string>, List<string>>(tips, tricks);
+                return View("~/Views/TipsTricksPage/Index.cshtml", model);
+            }
         }
 
         private List<string> GetTipsFromSomewhere()

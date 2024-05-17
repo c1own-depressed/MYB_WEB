@@ -1,12 +1,14 @@
 using Domain.Entities;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Persistence
 {
-    public class MYBDbContext : DbContext
+    public class MYBDbContext : IdentityDbContext
     {
         public MYBDbContext(DbContextOptions<MYBDbContext> options)
-    : base(options)
+            : base(options)
         {
         }
 
@@ -22,6 +24,9 @@ namespace Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder); // This ensures Identity configs are initialized
+
+            // Custom configurations
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<Savings>().ToTable("Savings");
             modelBuilder.Entity<Income>().ToTable("Income");
