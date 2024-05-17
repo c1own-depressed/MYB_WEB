@@ -46,11 +46,12 @@ namespace WebApp.Controllers
                     return RedirectToAction("Index", "Home");
                 }
 
-                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                ModelState.AddModelError(string.Empty, "Invalid email or password.");
             }
 
             return View(model);
         }
+
 
         [HttpPost]
         public async Task<IActionResult> Register(RegisterViewModel model)
