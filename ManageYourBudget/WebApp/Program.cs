@@ -25,13 +25,14 @@ if (!Directory.Exists(logDirectory))
 builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
     .WriteTo.File("Logs/log-.txt", rollingInterval: RollingInterval.Day)
-    .WriteTo.Seq("http://localhost:5341"));
+    .WriteTo.Seq("http://localhost:5341")
+);
 
-
-
-var connectionString = builder.Configuration.GetConnectionString("RostikConnection");
-
-
+// var connectionString = builder.Configuration.GetConnectionString("ConnectionString");
+// Configuration
+var connectionString = builder.Configuration.GetConnectionString("RomanConnection");
+//var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__AppDbContext");
+//var connectionString = builder.Configuration.GetConnectionString("RomanConnection");
 if (connectionString != null)
 {
     builder.Services.AddDbContext<MYBDbContext>(options =>

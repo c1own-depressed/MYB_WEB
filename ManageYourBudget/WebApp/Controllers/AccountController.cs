@@ -1,7 +1,5 @@
 ﻿using Application.DTOs.AccountDTOs;
 using Application.Interfaces;
-using Microsoft.AspNetCore.Identity.UI.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using WebApp.Models;
 
