@@ -1,0 +1,49 @@
+﻿:root {
+    --black: #000;
+    --accent: #9de392;
+    --accent-dark: #538962;
+    --white: white;
+    --black-light: #1e1e1e;
+    --transparent: transparent;
+    --accent-light: #d0f8cf;
+}
+
+body {
+    font-size: 1vw;
+}
+/* Max Font Size */
+@media screen and (min-width:1920px) {
+    body {
+        font-size: 19.2px;
+    }
+}
+/* Container Max Width */
+.container {
+    max-width: 1920px;
+    padding: 0em 9.38em;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.section {
+    padding: 3.75em 0em;
+}
+
+a {
+    text-decoration: none;
+    color: var(--black);
+}
+
+@media screen and (max-width: 479px) {
+    .section {
+        padding: 12.53em 0em;
+    }
+    
+    .container {
+        padding: 0em 6.68em;
+    }
+}

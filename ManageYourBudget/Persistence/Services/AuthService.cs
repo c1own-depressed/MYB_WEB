@@ -102,6 +102,7 @@ namespace Persistence.AuthService
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimTypes.NameIdentifier, user.Id),
+                    new Claim(ClaimTypes.Name, user.UserName),
                 };
 
                 // Create authentication properties

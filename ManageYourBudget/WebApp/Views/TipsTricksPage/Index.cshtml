@@ -14,13 +14,14 @@
         }</style>
     <title>Tips and Tricks</title>
     @{
-        string theme = ViewBag.Theme ?? "Light"; 
-        string cssFileName = $"OtherPages_{theme}.css";
+        //string theme = ViewBag.Theme ?? "Light"; 
+        // string cssFileName = $"~/css/TipsAndTricks.css";
     }
+    <link rel="stylesheet" href="~/css/TipsAndTricks.css">
 </head>
 <body>
-    <section class="tips-and-tricks-section">
-        <div class="">
+    <section class="section">
+        <div class="container">
             <div class="tips-and-tricks-content align-center">
                 <h1 class="heading align-center">Tips&amp;Tricks</h1>
                 <div class="tips-and-tricks-wrapper">
@@ -31,7 +32,7 @@
                         <div class="list-item">o <strong class="bold">Build an Emergency Fund:</strong> One of the fundamental principles of zero-budgeting is being prepared for unexpected expenses. Allocate a portion of your income each month to build an emergency fund. Aim to save enough to cover at least three to six months' worth of living expenses.</div>
                     </div>
                     <div class="list-wrapper">
-                        <h2 class="links-heading-mb">Useful links</h2>
+                        <h2 class="heading">Useful links</h2>
                         <a href="https://www.anaplan.com/blog/zbb-zero-based-budgeting-guide/" class="tricks-link w-inline-block">
                             <div class="list-item">o The ultimate guide to zero-based budgeting (ZBB)</div>
                         </a>

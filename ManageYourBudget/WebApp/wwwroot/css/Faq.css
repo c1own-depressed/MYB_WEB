@@ -1,42 +1,92 @@
+﻿.faq-content {
+    display: flex;
+    flex-direction: column;
+    grid-row-gap: 2em;
+}
+
+.question-answer-wrapper {
+    width: 62.62em;
+}
+
+.question-dropdown-toggle {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    grid-column-gap: 3.74em;
+    grid-row-gap: 3.74em;
+}
+
+.question-dropdown-toggle.w--open {
+    margin-bottom: 7.01em;
+}
+
+.question-dropdown-list, .question-dropdown-list.w--open {
+    margin-left: 7.5em;
+}
+
+.question-details-wrapper {
+    display: flex;
+    flex-direction: row;
+    grid-column-gap: 5.61em;
+    grid-row-gap: 5.61em;
+}
+
+.dropdown-arrow {
+    width: 2em;
+}
+
+.question-answer-text {
+    font-size: 1.5em;
+}
+
+.question-text {
+    font-size: 2em;
+}
+
+.question-number {
+    font-family: Freehand, sans-serif;
+    font-size: 2em;
+}
+
+
+@media screen and (max-width: 479px) {
     .faq-content {
-        grid-column-gap: 9.3em;
-        grid-row-gap: 9.3em;
-    }
-
-    .question-answer-wrapper {
-        width: 62.62em;
-    }
-
-    .question-text {
-        font-size: 5.61em;
-    }
-
-    .question-dropdown-list, .question-dropdown-list.w--open {
-        margin-left: 14.95em;
-    }
-
-    .question-details-wrapper {
-        grid-column-gap: 5.61em;
-        grid-row-gap: 5.61em;
-    }
-
-    .dropdown-arrow {
-        width: 7.48em;
-    }
-
-    .question-answer-text {
-        font-size: 4.67em;
+        grid-row-gap: 6.68em;
     }
 
     .question-dropdown-toggle {
-        grid-column-gap: 3.74em;
-        grid-row-gap: 3.74em;
+        grid-column-gap: 5em;
+        grid-row-gap: 5em;
     }
 
-        .question-dropdown-toggle.w--open {
-            margin-bottom: 7.01em;
-        }
+    .question-dropdown-toggle.w--open {
+        margin-bottom: 23.39em;
+    }
+
+    .question-dropdown-list, .question-dropdown-list.w--open {
+        margin-left: 13.4em;
+    }
+
+    .question-details-wrapper {
+        grid-column-gap: 8em;
+        grid-row-gap: 8em;
+    }
+
+    .dropdown-arrow {
+        width: 6.68em;
+        flex-shrink: 0;
+    }
+
+    .question-answer-text {
+        font-size: 3.34em;
+    }
+
+    .question-text {
+        font-size: 5.01em;
+    }
 
     .question-number {
-        font-size: 9.35em;
+        font-family: Freehand, sans-serif;
+        font-size: 5.01em;
     }
+}

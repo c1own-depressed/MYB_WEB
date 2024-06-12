@@ -1,0 +1,13 @@
+﻿.tips-and-tricks-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4em;
+}
+
+.heading {
+    font-size: 4em;
+}
+
+.list-item {
+    font-size: 1.5em;
+}
