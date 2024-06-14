@@ -8,16 +8,18 @@
     {
         <div class="card-wrapper category-card-wrapper" id="card-wrapper">
             <div class="full-card-wrapper">
-                <div class="full-card-top">
-                    <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse_@category.Id" aria-expanded="true" aria-controls="collapseIncome">
+                <button class="full-card-top btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapse_@category.Id" aria-expanded="true" aria-controls="collapseIncome">
 
-                        <h2 class="mb-0">@category.Name</h2>
-                        <div class="card-header-right">
-                            <div class="card-header-right-text"><p>@Localizer["Planned:"] @category.PlannedBudget</p></div>
-                            <div class="card-header-right-text"><p>@Localizer["Remaining:"] @category.RemainingBudget</p></div>
+                    <h2 class="full-card-heading">@category.Name</h2>
+                    <div class="card-header-right">
+                        <div class="card-header-right-text">
+                            <p class="card-header-subheading">@Localizer["Planned:"] @category.PlannedBudget</p>
                         </div>
-                    </button>
-                </div> 
+                        <div class="card-header-right-text">
+                            <p class="card-header-subheading">@Localizer["Remaining:"] @category.RemainingBudget</p>
+                        </div>
+                    </div>
+                </button>
             </div>
             <div id="collapse_@category.Id" class="collapse" aria-labelledby="headingOne" data-parent="#card-wrapper">
                <div class="full-card-bottom">
@@ -28,31 +30,30 @@
                             <div class="card-item-info">
                                 <div class="card-item-text">@expense.Amount</div>
                                 <div class="edit-delete-buttons-wrapper">
-                                    <button class="btn card-edit" onclick="openEditExpenseModal('@expense.Id', '@expense.ExpenseName', '@expense.Amount', '@expense.Date')">
-                                        <div class="card-item-icon"> <i class="fas fa-pencil-alt"></i></div>@*  *@
+                                    <button class="my-btn card-edit" onclick="openEditExpenseModal('@expense.Id', '@expense.ExpenseName', '@expense.Amount', '@expense.Date')">
+                                        <div class="card-item-icon"><i class="fa fa-pencil icon-text"> </i></div>
                                     </button>
-                                    <button class="btn card-delete" onclick="removeExpense('@expense.Id')">
-                                        <div class="card-item-icon"><i class="fas fa-trash"></i></div>@*  *@
+                                    <button class="my-btn card-delete" onclick="removeExpense('@expense.Id')">
+                                        <div class="card-item-icon"><i class="fa fa-trash icon-text"> </i></div>
                                     </button>
                                 </div>
                             </div>
                         </div>
                     }
 
-                    <div class="card-footer-button">
-                        
 
-                        <div class="card-add-button">
-                            <button type="button" class="btn add-btn" onclick="openAddExpenseModal('@category.Id')">
+                    <div class="card-footer-button">
+                        <button type="button" class="add-btn" onclick="openAddExpenseModal('@category.Id')">
+                            <div class="card-add-button">
                                 <div class="card-add-button-text">+ @Localizer["Add Expense"]</div>
-                            </button>
-                        </div>
+                            </div>
+                        </button>
                         <div class="edit-delete-buttons-wrapper">
-                            <button class="btn card-edit" onclick="openEditCategoryModal('@category.Id', '@category.Name', '@category.PlannedBudget')">
-                                <div class="card-item-icon"><i class="fas fa-pencil-alt"></i></div>
+                            <button class="my-btn card-edit" onclick="openEditCategoryModal('@category.Id', '@category.Name', '@category.PlannedBudget')">
+                                <div class="card-item-icon"><i class="fa fa-pencil icon-text"> </i></div>
                             </button>
-                            <button class="btn card-delete" onclick="removeCategory('@category.Id')">
-                                <div class="card-item-icon"><i class="fas fa-trash"></i></div>
+                            <button class="my-btn card-delete" onclick="removeCategory('@category.Id')">
+                                <div class="card-item-icon"><i class="fa fa-trash icon-text"> </i></div>
                             </button>
                         </div>
                     </div>
@@ -68,7 +69,7 @@
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" id="addExpenseModalLabel">@Localizer["Add Expense"]</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeAddExpenseModalWindow()">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
@@ -76,21 +77,21 @@
                         <form id="add-expense-form">
                             <input type="hidden" id="selectedCategoryId" name="categoryId" />
                             <div class="form-group">
-                                <label for="expense-name">@Localizer["Expense Name"]</label>
+                                <label class="form-heading" for="expense-name">@Localizer["Expense Name"]</label>
                                 <input type="text" class="form-control" id="expense-name" name="expenseName" required>
                             </div>
                             <div class="form-group">
-                                <label for="expense-amount">@Localizer["Amount"]</label>
+                                <label class="form-heading" for="expense-amount">@Localizer["Amount"]</label>
                                 <input type="number" class="form-control" id="expense-amount" name="amount" required>
                             </div>
                             <div class="form-group">
-                                <label for="expense-date">@Localizer["Date"]</label>
+                                <label class="form-heading" for="expense-date">@Localizer["Date"]</label>
                                 <input type="date" class="form-control" id="expense-date" name="date" required>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">@Localizer["Close"]</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeAddExpenseModalWindow()">@Localizer["Close"]</button>
                         <button type="submit" class="btn btn-primary" form="add-expense-form">@Localizer["Add"]</button>
                     </div>
                 </div>
@@ -109,11 +110,11 @@
                     </div>
                     <div class="modal-body">
                         <div class="form-group">
-                            <label for="editCategoryName">@Localizer["Category Name"]</label>
+                            <label class="form-heading" for="editCategoryName">@Localizer["Category Name"]</label>
                             <input type="text" class="form-control" id="editCategoryName_@category.Id" value="@category.Name">
                         </div>
                         <div class="form-group">
-                            <label for="editPlannedBudget">@Localizer["Planned Budget"]</label>
+                            <label class="form-heading" for="editPlannedBudget">@Localizer["Planned Budget"]</label>
                             <input type="number" class="form-control" id="editPlannedBudget_@category.Id" value="@category.PlannedBudget">
                         </div>
                     </div>
@@ -127,8 +128,8 @@
     }
 
    
-    <div class="card-add-button">
-        <button type="button" class="btn add-category-button" data-toggle="modal" data-target="#addCategoryModal">
+    <div class="card-add-button margin-top-1em">
+        <button type="button" class="add-btn" data-toggle="modal" data-target="#addCategoryModal">
             <div class="card-add-button-text">+ @Localizer["Add Category"]</div>
         </button>
     </div>
@@ -147,15 +148,15 @@
                     <form id="edit-expense-form">
                         <input type="hidden" id="selectedExpenseId" name="expenseId" />
                         <div class="form-group">
-                            <label for="edit-expense-name">@Localizer["Expense Name"]</label>
+                            <label class="form-heading" for="edit-expense-name">@Localizer["Expense Name"]</label>
                             <input type="text" class="form-control" id="edit-expense-name" name="expenseName" required>
                         </div>
                         <div class="form-group">
-                            <label for="edit-expense-amount">@Localizer["Amount"]</label>
+                            <label class="form-heading" for="edit-expense-amount">@Localizer["Amount"]</label>
                             <input type="number" class="form-control" id="edit-expense-amount" name="amount" required>
                         </div>
                         <div class="form-group">
-                            <label for="edit-expense-date">@Localizer["Date"]</label>
+                            <label class="form-heading" for="edit-expense-date">@Localizer["Date"]</label>
                             <input type="date" class="form-control" id="edit-expense-date" name="date" required>
                         </div>
                     </form>
@@ -181,11 +182,11 @@
                 <div class="modal-body">
                     <form id="add-category-form">
                         <div class="form-group">
-                            <label for="category-title">@Localizer["Title of Expense Category"]</label>
+                            <label class="form-heading" for="category-title">@Localizer["Title of Expense Category"]</label>
                             <input type="text" class="form-control" id="category-title" name="title" required>
                         </div>
                         <div class="form-group">
-                            <label for="planned-budget">@Localizer["Planned Budget"]</label>
+                            <label class="form-heading" for="planned-budget">@Localizer["Planned Budget"]</label>
                             <input type="number" class="form-control" id="planned-budget" name="budget" required>
                         </div>
                     </form>
@@ -253,8 +254,12 @@
     <script>
         function closeEditCategoryModalWindow(categoryId) {
             $('#editCategoryModal_' + categoryId).modal('hide');
-
         }
+
+        function closeAddExpenseModalWindow() {
+            $('#addExpenseModal').modal('hide');
+        }
+
         function openEditCategoryModal(categoryId, categoryName, plannedBudget) {
             $('#editCategoryName_' + categoryId).val(categoryName); // Set the category name in the input field
             $('#editPlannedBudget_' + categoryId).val(plannedBudget); // Set the planned budget in the input field

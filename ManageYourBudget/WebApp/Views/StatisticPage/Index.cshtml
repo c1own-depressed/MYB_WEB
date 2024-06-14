@@ -1,80 +1,71 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
+﻿@{
     ViewData["Title"] = "Statistic";
 }
 @model IEnumerable<StatisticViewModel>
 <head>
     <meta charset="utf-8" />
     <title>Statistic</title>
-    @{
-        // string theme = ViewBag.Theme ?? "Dark"; // За замовчуванням використовується темна тема
-        // string cssFileName = $"Statistic_{theme}.css";
-        string cssFileName = $"Statistic_Light.css";
-    }
-
-    <link rel="stylesheet" href="~/css/@cssFileName">
     <meta content="width=device-width, initial-scale=1" name="viewport">
-    <style>
-        a.btn {
-            color: white;
-        }
-    </style>
+    <link rel="stylesheet" href="~/css/Statistic.css">
 </head>
 <body >
-    <div class="statistic" >
-        <div class="statistic-manipulation">
-            <div class="form-group">
-                <label for="startDate">Start Date:</label>
-                <input type="date" class="form-control" id="startDate" name="startDate" />
-            </div>
-            <div class="form-group">
-                <label for="endDate">End Date:</label>
-                <input type="date" class="form-control" id="endDate" name="endDate" />
-            </div>
+    <div class="section">
+        <div class="container">
+            <div class="statistic">
+                <div class="statistic-manipulation">
+                    <div class="form-group">
+                        <label class="statistic-text" for="startDate">Start Date:</label>
+                        <input class="statistic-text form-control" type="date" id="startDate" name="startDate" />
+                    </div>
+                    <div class="form-group">
+                        <label class="statistic-text" for="endDate">End Date:</label>
+                        <input class="statistic-text form-control" type="date" id="endDate" name="endDate" />
+                    </div>
 
-            <div class="button-grid">
-                <div class="custom-button-wrapper">
-                    <a id="getStatistics" class="custom-btn" href="@Url.Action("GetStatistics", "StatisticPage", new { startDate=DateTime.Today.AddMonths(-1), endDate=DateTime.Today, format="CSV" })">Show statistic</a>
+                    <div class="button-grid">
+                        <div class="custom-button-wrapper">
+                            <a id="getStatistics" class="custom-btn" href="@Url.Action("GetStatistics", "StatisticPage", new { startDate=DateTime.Today.AddMonths(-1), endDate=DateTime.Today, format="CSV" })">Show statistic</a>
+                        </div>
+                        <div class="custom-button-wrapper">
+                            <a id="exportCsvLink" class="custom-btn" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "CSV" })">Export CSV</a>
+                        </div>
+                        <div class="custom-button-wrapper">
+                            <a id="exportXmlLink" class="custom-btn" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "XML" })">Export XML</a>
+                        </div>
+                        <div class="custom-button-wrapper">
+                            <a id="exportXlsxLink" class="custom-btn" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "XLSX" })">Export XLSX</a>
+                        </div>
+                    </div>
+
                 </div>
-                <div class="custom-button-wrapper">
-                    <a id="exportCsvLink" class="custom-btn" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "CSV" })">Export CSV</a>
-                </div>
-                <div class="custom-button-wrapper">
-                    <a id="exportXmlLink" class="custom-btn" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "XML" })">Export XML</a>
-                </div>
-                <div class="custom-button-wrapper">
-                    <a id="exportXlsxLink" class="custom-btn" href="@Url.Action("ExportStatistics", "StatisticPage", new { startDate = DateTime.Today.AddMonths(-1), endDate = DateTime.Today, format = "XLSX" })">Export XLSX</a>
+
+                <div class="table">
+                    <table id="statisticsTable">
+                        <thead>
+                            <tr>
+                                <th>Income</th>
+                                <th>Summary Expenses</th>
+                                <th>Saved</th>
+                                <th>Month</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var statistic in Model)
+                            {
+                                <tr>
+                                    <td>@statistic.Incomes</td>
+                                    <td>@statistic.SummaryExpenses</td>
+                                    <td>@statistic.Savings</td>
+                                    <td>@statistic.Date.ToString("MMMM, yyyy")</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
                 </div>
             </div>
-
-        </div>
-
-        <div class="table">
-            <table id="statisticsTable">
-                <thead>
-                    <tr>
-                        <th>Income</th>
-                        <th>Summary Expenses</th>
-                        <th>Saved</th>
-                        <th>Month</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var statistic in Model)
-                    {
-                        <tr>
-                            <td>@statistic.Incomes</td>
-                            <td>@statistic.SummaryExpenses</td>
-                            <td>@statistic.Savings</td>
-                            <td>@statistic.Date.ToString("MMMM, yyyy")</td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
         </div>
     </div>
+    
     <script>
        
         var startDateInput = document.getElementById('startDate');

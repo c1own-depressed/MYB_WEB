@@ -5,17 +5,15 @@
 }
 
 <!DOCTYPE html>
-<!-- saved from url=(0043)https://myb-site-854d38.webflow.io/settings -->
-<html data-wf-domain="myb-site-854d38.webflow.io" data-wf-page="663aef056f80bd247597bdf6" data-wf-site="663aef046f80bd247597bd93" lang="en" class="w-mod-js wf-inter-n5-active wf-inter-n6-active wf-inter-n7-active wf-inter-n4-active wf-active">
 <html>
 <head>
       <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-      <style>.wf-force-outline-none[tabindex="-1"]:focus{outline:none;}</style>
+   @*    <style>.wf-force-outline-none[tabindex="-1"]:focus{outline:none;}</style>
       <title>1</title>
       <meta content="1" property="og:title">
-      <meta content="1" property="twitter:title">
+      <meta content="1" property="twitter:title"> *@
       <meta content="width=device-width, initial-scale=1" name="viewport">
-      <meta content="Webflow" name="generator">
+@*       <meta content="Webflow" name="generator">
       <link href="./1_files/myb-site-854d38.webflow.b1ac5a189.css" rel="stylesheet" type="text/css">
       <link href="https://fonts.googleapis.com/" rel="preconnect">
       <link href="https://fonts.gstatic.com/" rel="preconnect" crossorigin="anonymous">
@@ -37,8 +35,8 @@
     @{
         string theme = ViewBag.Theme ?? "Dark"; // За замовчуванням використовується темна тема
         string cssFileName = $"Settings_{theme}.css";
-    }
-    <link rel="stylesheet" href="~/css/@cssFileName">
+    } *@
+    <link rel="stylesheet" href="~/css/Settings_Dark.css">
    </head>
 <body>
     <section class="settings-section">

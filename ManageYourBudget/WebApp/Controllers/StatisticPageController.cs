@@ -117,45 +117,5 @@ namespace WebApp.Controllers
 
             return File(result.FileContents, result.ContentType, result.FileName);
         }
-
-        //[HttpGet]
-        //public async Task<IActionResult> ExportStatistics(DateTime startDate, DateTime endDate, ExportFormat format)
-        //{
-        //    string userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        //    try
-        //    {
-        //        byte[] fileContents;
-        //        string contentType;
-        //        string fileName;
-
-        //        switch (format)
-        //        {
-        //            case ExportFormat.CSV:
-        //                var csvData = await _exportDataService.ExportDataToCSV(startDate, endDate, userId);
-        //                fileContents = Encoding.UTF8.GetBytes(csvData);
-        //                contentType = "text/csv";
-        //                fileName = "statistics.csv";
-        //                break;
-        //            case ExportFormat.XML:
-        //                fileContents = await _exportDataService.ExportDataToXML(startDate, endDate, userId);
-        //                contentType = "application/xml";
-        //                fileName = "statistics.xml";
-        //                break;
-        //            case ExportFormat.XLSX:
-        //                fileContents = await _exportDataService.ExportDataToXLSX(startDate, endDate, userId);
-        //                contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-        //                fileName = "statistics.xlsx";
-        //                break;
-        //            default:
-        //                return BadRequest("Unsupported format");
-        //        }
-
-        //        return File(fileContents, contentType, fileName);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return StatusCode(500, "Failed to export data.");
-        //    }
-        //}
     }
 }

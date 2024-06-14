@@ -1,0 +1,27 @@
+﻿.tips-and-tricks-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 4em;
+}
+
+.heading {
+    font-size: 4em;
+}
+
+.list-item {
+    font-size: 1.5em;
+}
+
+@media screen and (max-width: 479px) {
+    .tips-and-tricks-wrapper {
+        gap: 11.16em;
+    }
+
+    .heading {
+        font-size: 11.16em;
+    }
+
+    .list-item {
+        font-size: 5.01em;
+    }
+}

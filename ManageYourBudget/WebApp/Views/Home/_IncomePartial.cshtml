@@ -7,31 +7,26 @@
 
 <div class="card-wrapper" id="card-wrapper">
        
-    <div class="full-card-top">
-        <div class="full-card-heading">
-            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseIncome" aria-expanded="true" aria-controls="collapseIncome">
-                <h2 class="mb-0">@Localizer["Incomes"]</h2>
-            </button>
-        </div>
-    </div>
+    <button class="full-card-top btn-link btn-block" type="button" data-toggle="collapse" data-target="#collapseIncome" aria-expanded="true" aria-controls="collapseIncome">
+        <h2 class="full-card-heading">@Localizer["Incomes"]</h2>
+    </button>
 
     <div id="collapseIncome" class="collapse" aria-labelledby="headingOne" data-parent="#card-wrapper">
             <div class="full-card-bottom">
                 @foreach (var income in Model)
                 {
                     <div class="card-bottom-item">
-                    <div class="card-item-text">@income.IncomeName</div>
-                    <div class="card-item-info">
-                        <div class="card-item-text">@income.Amount @income.CurrencyEmblem</div>
-                        <div class="edit-delete-buttons-wrapper">
-                            <button class="btn card-edit" onclick="openEditIncomeModal('@income.Id', '@income.IncomeName', '@income.Amount')">
-                                <div class="card-item-icon"><i class="fas fa-pencil-alt"> </i></div>@*  *@
-                            </button>
-                            <button class="btn card-delete" onclick="removeIncome('@income.Id')">
-                                <div class="card-item-icon"><i class="fas fa-trash"></i></div>@*  *@
-                            </button>
-                               
-                        </div>
+                        <div class="card-item-text">@income.IncomeName</div>
+                        <div class="card-item-info">
+                            <div class="card-item-text">@income.Amount @income.CurrencyEmblem</div>
+                            <div class="edit-delete-buttons-wrapper">
+                                <button class="my-btn card-edit" onclick="openEditIncomeModal('@income.Id', '@income.IncomeName', '@income.Amount')">
+                                    <div class="card-item-icon"><i class="fa fa-pencil icon-text"> </i></div>
+                                </button>
+                                <button class="my-btn card-delete" onclick="removeIncome('@income.Id')">
+                                    <div class="card-item-icon"><i class="fa fa-trash icon-text"> </i></div>
+                                </button>  
+                            </div>
                         </div>
                     </div>
                     <!-- Edit Income Modal -->
@@ -40,22 +35,22 @@
                             <div class="modal-content">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="editIncomeModalLabel_@income.Id">@Localizer["Edit Income"]</h5>
-                                    <button type="button" class="close" data-dismiss="modal" onclick="closeModalWindow('@income.Id')" aria-label="Close">
+                                    <button type="button" class="close" data-dismiss="modal" onclick="closeEditIncomeModal('@income.Id')" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
                                 </div>
                                 <div class="modal-body">
                                     <div class="form-group">
-                                        <label for="editIncomeName_@income.Id">@Localizer["Income Name"]</label>
+                                    <label class="form-heading" for="editIncomeName_@income.Id">@Localizer["Income Name"]</label>
                                         <input type="text" class="form-control" id="editIncomeName_@income.Id" value="@income.IncomeName">
                                     </div>
                                     <div class="form-group">
-                                        <label for="editAmount_@income.Id">@Localizer["Amount"]</label>
+                                        <label class="form-heading" for="editAmount_@income.Id">@Localizer["Amount"]</label>
                                         <input type="number" class="form-control" id="editAmount_@income.Id" value="@income.Amount">
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModalWindow('@income.Id')">@Localizer["Close"]</button>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeEditIncomeModal('@income.Id')">@Localizer["Close"]</button>
                                     <button type="button" class="btn btn-primary" onclick="editIncome('@income.Id')">@Localizer["Save changes"]</button>
                                 </div>
                             </div>
@@ -65,7 +60,7 @@
                 }
                 <div class="card-footer">
                     <!-- Add Income Button -->
-                    <button type="button" class="btn add-btn" data-toggle="modal" data-target="#addIncomeModal">
+                    <button type="button" class="add-btn" data-toggle="modal" data-target="#addIncomeModal">
                         <div class="card-add-button">
                             <div class="card-add-button-text">+ @Localizer["Add Income"]</div>
                         </div>
@@ -86,20 +81,20 @@
                 <div class="modal-body">
                     <form id="add-income-form">
                         <div class="form-group">
-                            <label for="income-name">@Localizer["Income Name"]</label>
+                            <label class="form-heading" for="income-name">@Localizer["Income Name"]</label>
                             <input type="text" class="form-control" id="income-name" name="name" required>
                         </div>
                         <div class="form-group">
-                            <label for="income-amount">@Localizer["Amount"]</label>
+                            <label class="form-heading" for="income-amount">@Localizer["Amount"]</label>
                             <input type="number" class="form-control" id="income-amount" name="amount" required>
                         </div>
                         <div class="form-group">
-                            <label for="income-date">@Localizer["Date"]</label>
+                            <label class="form-heading" for="income-date">@Localizer["Date"]</label>
                             <input type="datetime-local" class="form-control" id="income-date" name="date">
                         </div>
                         <div class="form-group form-check">
-                            <input type="checkbox" class="form-check-input" id="income-regular" name="isRegular">
-                            <label class="form-check-label" for="income-regular">@Localizer["Regular Income"]</label>
+                            <input class="form-heading form-check-input" type="checkbox" id="income-regular" name="isRegular">
+                            <label class="form-heading form-check-label" for="income-regular">@Localizer["Regular Income"]</label>
                         </div>
                     </form>
                 </div>
@@ -170,7 +165,7 @@
             });
         }
     }
-    function closeModalWindow(incomeId) {
+    function closeEditIncomeModal(incomeId) {
         $('#editIncomeModal_' + incomeId).modal('hide');
     }
     function openEditIncomeModal(incomeId, incomeName, Amount) {

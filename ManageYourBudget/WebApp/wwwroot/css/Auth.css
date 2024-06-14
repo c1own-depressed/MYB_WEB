@@ -1,0 +1,143 @@
+﻿.login-section {
+    padding-top: 5em;
+    padding-bottom: 5em;
+}
+
+.login-content {
+    grid-column-gap: 1.88em;
+    grid-row-gap: 1.88em;
+    color: var(--black-light);
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: center;
+    display: flex;
+}
+
+.form-field-label {
+    margin-bottom: 0;
+    font-size: 1.5em;
+    line-height: 150%;
+}
+
+.form-line-wrapper {
+    grid-column-gap: .75em;
+    grid-row-gap: .75em;
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: center;
+    display: flex;
+}
+
+.signup-form {
+    grid-column-gap: 3.5em;
+    grid-row-gap: 3.5em;
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: center;
+    display: flex;
+}
+
+.hidden {
+    display: none;
+}
+
+.login-button {
+    background-color: var(--accent-dark);
+    color: var(--white);
+    cursor: pointer;
+    border-radius: 1.63em;
+    width: 14.37em;
+    padding: .94em;
+}
+
+.login-button-text {
+    text-align: center;
+    font-size: 1.5em;
+    line-height: 100%;
+}
+
+.text-field-wrapper {
+    color: var(--black);
+    border-radius: 3.13em;
+    width: 21.88em;
+    height: 4.38em;
+    overflow: hidden;
+}
+
+.form-text-field {
+    color: var(--black);
+    background-color: #b0c3b0;
+    border-radius: 2.76991em;
+    width: 100%;
+    height: 100%;
+    margin-bottom: 0;
+    padding: 0 1.66372em;
+    font-size: 1.13em;
+}
+
+.signup-section {
+    padding-top: 5em;
+    padding-bottom: 5em;
+}
+
+.signup-content {
+    grid-column-gap: 1.88em;
+    grid-row-gap: 1.88em;
+    color: var(--black-light);
+    flex-flow: column;
+    justify-content: flex-start;
+    align-items: center;
+    display: flex;
+}
+
+
+@media screen and (max-width: 479px) {
+    .login-section {
+        padding-top: 18.6em;
+        padding-bottom: 18.6em;
+    }
+
+    .login-content {
+        grid-column-gap: 4.65em;
+        grid-row-gap: 4.65em;
+    }
+
+    .form-field-label {
+        font-size: 5.58em;
+    }
+
+    .signup-form {
+        grid-column-gap: 10.47em;
+        grid-row-gap: 10.47em;
+    }
+
+    .login-button {
+        border-radius: 11.63em;
+        width: 41.86em;
+        padding: 3.49em;
+    }
+
+    .login-button-text {
+        font-size: 5.58em;
+    }
+
+    .text-field-wrapper {
+        width: 63.95em;
+        height: 12.79em;
+    }
+
+    .form-text-field {
+        border-radius: 11.63em;
+        font-size: 4.19em;
+    }
+
+    .signup-section {
+        padding-top: 18.6em;
+        padding-bottom: 18.6em;
+    }
+
+    .signup-content {
+        grid-column-gap: 4.65em;
+        grid-row-gap: 4.65em;
+    }
+}

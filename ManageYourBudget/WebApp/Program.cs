@@ -1,3 +1,5 @@
+using System.Globalization;
+using System.Net;
 using Application.Interfaces;
 using Application.Services;
 using Application.Validators;
@@ -12,7 +14,6 @@ using Persistence;
 using Persistence.AuthService;
 using Persistence.Services;
 using Serilog;
-using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,6 +22,7 @@ if (!Directory.Exists(logDirectory))
 {
     Directory.CreateDirectory(logDirectory);
 }
+
 // Configure Serilog
 builder.Host.UseSerilog((ctx, lc) => lc
     .WriteTo.Console()
@@ -209,6 +211,11 @@ app.MapControllerRoute(
     name: "logout",
     pattern: "logout",
     defaults: new { controller = "Account", action = "Logout" });
+
+app.MapControllerRoute(
+    name: "testpage",
+    pattern: "testpage",
+    defaults: new { controller = "TestPage", action = "Index" });
 
 // TODO: after the application is deployed
 // app.UseCors(options => options.WithOrigins("https://example.com")); // Adjust accordingly

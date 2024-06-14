@@ -1,0 +1,97 @@
+﻿.custom-button-wrapper {
+    padding: 1em;
+    display: flex;
+    justify-content: center;
+}
+
+.custom-btn {
+    padding: 0.75em 1.5em;
+    text-align: center;
+    background-color: #007BFF;
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    display: block;
+    transition: .35s;
+}
+
+.custom-btn:hover {
+    background-color: #0056b3;
+    color: white;
+    text-decoration: underline;
+}
+
+.form-control, .statistic-text {
+    font-size: 1.5em;
+}
+
+.button-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.63em;
+    padding: 1.25em;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th, td {
+    text-align: left;
+    padding: 0.5em;
+}
+
+.form-group {
+    margin-top: 1.5em;
+}
+
+@media (max-width: 1200px) {
+    .button-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+
+@media screen and (max-width: 479px) {
+    .button-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .custom-btn {
+        font-size: 3em;
+        padding: 1em 2em; 
+    }
+
+    .statistic-manipulation {
+        flex-direction: column; 
+    }
+
+    .btn {
+        width: 100%;
+        margin-top: 1em;
+    }
+
+    .form-control, .statistic-text {
+        font-size: 3em;
+    }
+    
+    .form-group {
+        width: 100%;
+    }
+
+    table {
+        font-size: 3em; 
+    }
+
+    th, td {
+        display: block;
+        text-align: right;
+    }
+
+    td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+    }
+}
