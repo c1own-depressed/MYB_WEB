@@ -11,3 +11,17 @@
 .list-item {
     font-size: 1.5em;
 }
+
+@media screen and (max-width: 479px) {
+    .tips-and-tricks-wrapper {
+        gap: 11.16em;
+    }
+
+    .heading {
+        font-size: 11.16em;
+    }
+
+    .list-item {
+        font-size: 5.01em;
+    }
+}
