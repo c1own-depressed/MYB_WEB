@@ -13,6 +13,14 @@
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <title>@Localizer["Home"]</title>
     @* <link rel="stylesheet" href="~/css/Home.css"> *@
+    @{
+        string theme = ViewBag.Theme ?? "Dark"; // За замовчуванням використовується темна тема
+        string cssFileName = $"Modal_{theme}.css";
+    }
+
+
+    @* <link rel="stylesheet" href="~/css/@cssFileName"> *@
+    <link rel="stylesheet" href="~/css/Home.css">
 </head>
 <body>
     <div class="section">
@@ -26,7 +34,7 @@
                         @Html.Partial("_SavingsPartial", firstHomeData.Savings)
                     }
                 </div>
-               @*  <div>
+                 <div>
                     @if (Model.Data != null && Model.Data.Any())
                     {
                         var firstHomeData = Model.Data.FirstOrDefault();
@@ -39,7 +47,7 @@
                         var firstHomeData = Model.Data.FirstOrDefault();
                         @Html.Partial("_ExpenseCategoryPartial", firstHomeData.Categories)
                     }
-                </div> *@
+                </div> 
             </div>
         </div>
     </div>

@@ -2,28 +2,14 @@
 
 @using Application.DTOs.SavingsDTOs
 @model IEnumerable<SavingsDTO>
-<head>
-    @{
-        string theme = ViewBag.Theme ?? "Dark"; // За замовчуванням використовується темна тема
-        string cssFileName = $"Modal_{theme}.css";
-    }
-
-
-    <link rel="stylesheet" href="~/css/@cssFileName">
-    <link rel="stylesheet" href="~/css/Home.css">
-</head>
-
 
 
 <div class="card-wrapper savings-card-wrapper" id="card-wrapper">
     <div class="full-card-wrapper">
-        <div class="full-card-top">
-            <div class="full-card-heading">
-            <button class="btn btn-link btn-block text-left" type="button" data-toggle="collapse" data-target="#collapseSavings" aria-expanded="true" aria-controls="collapseIncome">
-                <h2 class="mb-0">@Localizer["Savings"]</h2>
-                </button>
-            </div>
-        </div>
+        <button class="full-card-top btn-link btn-block" type="button" data-toggle="collapse" data-target="#collapseSavings" aria-expanded="true" aria-controls="collapseIncome">
+             <h2 class="full-card-heading">@Localizer["Savings"]</h2>
+        </button>
+
         <div id="collapseSavings" class="collapse" aria-labelledby="headingOne" data-parent="#card-wrapper">
             <div class="full-card-bottom">
             
@@ -34,11 +20,11 @@
                         <div class="card-item-info">
                             <div class="card-item-text">@savings.Amount @savings.CurrencyEmblem</div>
                             <div class="edit-delete-buttons-wrapper">
-                                <button class="btn card-edit" onclick="openEditSavingsModal('@savings.Id', '@savings.SavingsName', '@savings.Amount')">
-                                    <div class="card-item-icon"><i class="fas fa-pencil-alt"> </i></div>
+                                <button class="my-btn card-edit" onclick="openEditSavingsModal('@savings.Id', '@savings.SavingsName', '@savings.Amount')">
+                                    <div class="card-item-icon"><i class="fa fa-pencil icon-text"> </i></div>
                                 </button>
-                                <button class="btn card-delete" onclick="removeSavings('@savings.Id')">
-                                    <div class="card-item-icon"><i class="fas fa-trash"> </i></div>
+                                <button class="my-btn card-delete" onclick="removeSavings('@savings.Id')">
+                                    <div class="card-item-icon"><i class="fa fa-trash icon-text"> </i></div>
                                 </button>
                             </div>
                         </div>
@@ -47,23 +33,24 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="editSavingsModalLabel_@savings.Id">@Localizer["EditModalTitle"]</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModalWindow('@savings.Id')">
+                                        <h5 class="modal-title" id="editSavingsModalLabel_@savings.Id">@Localizer["EditModalTitle"]</h5>@*  *@
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeEditSavingsWindow('@savings.Id')">
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
                                     <div class="modal-body">
                                         <div class="form-group">
-                                            <label for="editSavingsName">@Localizer["SavingsNameLabel"]</label>
+                                            <label class="form-heading" for="editSavingsName">@Localizer["SavingsNameLabel"]</label>
                                             <input type="text" class="form-control" id="editSavingsName_@savings.Id" value="@savings.SavingsName">
                                         </div>
                                         <div class="form-group">
-                                            <label for="editAmount">@Localizer["AmountLabel"]</label>
+                                            <label class="form-heading" for="editAmount">@Localizer["AmountLabel"]</label>
                                             <input type="number" class="form-control" id="editAmount_@savings.Id" value="@savings.Amount">
                                         </div>
                                     </div>
                                     <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModalWindow('@savings.Id')">@Localizer["CloseButton"]</button>
+                                        @* <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModalWindow('@income.Id')">@Localizer["Close"]</button> *@
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeEditSavingsWindow('@savings.Id')" aria-label="Close">@Localizer["CloseButton"]</button>
                                         <button type="button" class="btn btn-primary" onclick="editSavings('@savings.Id')">@Localizer["SaveChangesButton"]</button>
                                     </div>
                                 </div>
@@ -73,18 +60,11 @@
                  }
             
                 <div class="card-footer">
-                    @* <div class="card-add-button">
-                        <div class="card-add-button-text">+ Add Expense</div>
-                    </div> *@
-                    <button type="button" class="btn add-btn" data-toggle="modal" data-target="#addSavingsModal">
+                    <button type="button" class="add-btn" data-toggle="modal" data-target="#addSavingsModal">
                         <div class="card-add-button">
                             <div class="card-add-button-text">+ @Localizer["AddSavingsButton"]</div>
                         </div>
                     </button>
-                    @* <div class="edit-delete-buttons-wrapper">
-                        <div class="card-item-icon"></div>
-                        <div class="card-item-icon"></div>
-                    </div> *@
                 </div>
             </div>
         </div>
@@ -103,15 +83,15 @@
                 <div class="modal-body">
                     <form id="add-savings-form">
                         <div class="form-group">
-                            <label for="savings-name">@Localizer["SavingsNameLabel"]</label>
+                            <label class="form-heading" for="savings-name">@Localizer["SavingsNameLabel"]</label>
                             <input type="text" class="form-control" id="savings-name" name="name" required>
                         </div>
                         <div class="form-group">
-                            <label for="savings-amount">@Localizer["AmountLabel"]</label>
+                            <label class="form-heading" for="savings-amount">@Localizer["AmountLabel"]</label>
                             <input type="number" class="form-control" id="savings-amount" name="amount" required>
                         </div>
                         <div class="form-group">
-                            <label for="savings-date">@Localizer["DateLabel"]</label>
+                            <label class="form-heading" for="savings-date">@Localizer["DateLabel"]</label>
                             <input type="datetime-local" class="form-control" id="savings-date" name="date">
                         </div>
                     </form>
@@ -176,7 +156,7 @@
     </script>
 
     <script>
-        function closeModalWindow(savingsId) {
+        function closeEditSavingsWindow(savingsId) {
             $('#editSavingsModal_' + savingsId).modal('hide');
         }
         function openEditSavingsModal(savingsId, savingsName, Amount) {

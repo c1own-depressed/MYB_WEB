@@ -16,6 +16,5 @@ namespace Application.DTOs
         public IEnumerable<IncomeDTO> Incomes { get; set; }
 
         public IEnumerable<SavingsDTO> Savings { get; set; }
-
     }
 }

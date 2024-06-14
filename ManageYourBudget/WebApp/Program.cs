@@ -1,3 +1,4 @@
+using System.Net;
 using Application.Interfaces;
 using Application.Services;
 using Application.Validators;
@@ -12,7 +13,6 @@ using Persistence;
 using Persistence.AuthService;
 using Persistence.Services;
 using Serilog;
-using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 

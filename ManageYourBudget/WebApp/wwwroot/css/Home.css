@@ -20,8 +20,9 @@
     border-radius: 1.88em 1.88em 0 0;
     justify-content: space-between;
     align-items: center;
-    padding: 1.25em 4.38em;
+    padding: 2.5em 4.38em;
     display: flex;
+    border: 0px solid white;
 }
 
 .full-card-bottom {
@@ -32,9 +33,11 @@
 }
 
 .full-card-heading {
-    font-size: 2em;
-    font-weight: 700;
+    font-size: 3em;
+    font-weight: 600;
     line-height: 100%;
+    text-decoration: none;
+    margin-bottom: 0px;
 }
 
 .card-header-right {
@@ -48,17 +51,34 @@
     font-size: 1.13em;
 }
 
+.card-header-subheading {
+    font-size: 1.5em;
+    line-height: 100%;
+    margin: 0px;
+}
+
 .card-bottom-item {
     border-bottom: 2px solid rgba(0, 0, 0, .5);
     justify-content: space-between;
     padding: .63em;
     display: flex;
+
 }
 
 .card-item-text {
     color: #777575;
     font-size: 1.5em;
     line-height: 100%;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.card-edit, .card-delete {
+    padding: 0px;
+}
+
+.icon-text {
+    font-size: 1.5em;
 }
 
 .card-item-info {
@@ -80,10 +100,24 @@
     line-height: 100%;
 }
 
+.card-footer {
+    background-color: rgba(0, 0, 0, 0);
+}
+
 .card-footer-button {
     justify-content: space-between;
     padding: 1.25em .63em 1.25em 2em;
     display: flex;
+}
+
+.my-btn {
+    background-color: transparent;
+    border: 0px solid white;
+}
+
+.add-btn {
+    background-color: transparent;
+    border: 0px solid white;
 }
 
 .card-add-button-text {
@@ -97,12 +131,19 @@
     cursor: pointer;
 }
 
-/*
-@media screen and (max-width:479px) {
-    body {
+.margin-top-1em {
+    margin-top: 1em;
+}
+
+.form-heading {
+    font-size: 16px;
+}
+
+@media screen and (max-width: 479px) {
+    /* body {
         font-size: 1vw;
-    }
- 
+    }*/
+
     .full-card-top {
         grid-column-gap: 2.33em;
         grid-row-gap: 2.33em;
@@ -124,11 +165,11 @@
 
     .card-header-right {
         justify-content: space-between;
+        align-items: center;
     }
 
-    .card-header-right-text {
-        font-size: 1em;
-        line-height: 100%;
+    .card-header-subheading {
+        font-size: 3.72em;
     }
 
     .card-bottom-item {
@@ -149,8 +190,8 @@
         justify-content: space-between;
     }
 
-    .card-item-icon {
-        font-size: 1em;
+    .icon-text {
+        font-size: 4.19em;
     }
 
     .card-footer-button {
@@ -158,8 +199,11 @@
     }
 
     .card-add-button-text {
-        font-size: 1.19em;
+        font-size: 4.19em;
         line-height: 100%;
     }
+
+    .margin-top-1em {
+        margin-top: 4.79em;
+    }
 }
-*/
