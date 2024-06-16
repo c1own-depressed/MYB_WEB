@@ -13,5 +13,7 @@
         public string CurrencyEmblem { get; set; } = "$";
 
         required public string UserId { get; set; }
+
+        public string Note { get; set; }
     }
 }

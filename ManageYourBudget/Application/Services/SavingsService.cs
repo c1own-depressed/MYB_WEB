@@ -13,6 +13,7 @@ namespace Application.Services
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<SavingsService> _logger;
+
         public SavingsService(IUnitOfWork unitOfWork, ILogger<SavingsService> logger)
         {
             _unitOfWork = unitOfWork;
@@ -36,6 +37,7 @@ namespace Application.Services
                     Amount = s.Amount,
                     CurrencyEmblem = currencyRepresentation,
                     UserId = userId,
+                    Note = s.Note,
                 });
 
                 _logger.LogInformation($"Successfully fetched savings for user {userId}.");
@@ -50,7 +52,7 @@ namespace Application.Services
 
         public async Task<ServiceResult> AddSavingsAsync(CreateSavingsDTO model, string userId)
         {
-            _logger.LogInformation($"Adding savings for user {userId}.");
+            _logger.LogInformation($"Adding savings for user {userId}. {model.Note}");
             try
             {
                 var validator = new CreateSavingsDTOValidator();
@@ -68,6 +70,7 @@ namespace Application.Services
                     Date = model.Date,
                     SavingsName = model.SavingsName,
                     Amount = model.Amount,
+                    Note = model.Note,
                 };
 
                 await _unitOfWork.Savings.AddAsync(savings);
@@ -131,6 +134,7 @@ namespace Application.Services
                 // Update savings properties with values from DTO
                 savings.SavingsName = model.SavingsName;
                 savings.Amount = model.Amount;
+                savings.Note = model.Note;
 
                 await _unitOfWork.CompleteAsync();
 

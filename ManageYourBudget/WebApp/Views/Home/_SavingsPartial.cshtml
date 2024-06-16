@@ -47,9 +47,13 @@
                                             <label class="form-heading" for="editAmount">@Localizer["AmountLabel"]</label>
                                             <input type="number" class="form-control" id="editAmount_@savings.Id" value="@savings.Amount">
                                         </div>
+                                        <div class="form-group">
+                                            <label class="form-heading" for="editAmount">Note</label>
+                                            <input type="text" class="form-control" id="editNote_@savings.Id" value="@savings.Note">
+                                        </div>
+
                                     </div>
                                     <div class="modal-footer">
-                                        @* <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModalWindow('@income.Id')">@Localizer["Close"]</button> *@
                                         <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeEditSavingsWindow('@savings.Id')" aria-label="Close">@Localizer["CloseButton"]</button>
                                         <button type="button" class="btn btn-primary" onclick="editSavings('@savings.Id')">@Localizer["SaveChangesButton"]</button>
                                     </div>
@@ -94,6 +98,10 @@
                             <label class="form-heading" for="savings-date">@Localizer["DateLabel"]</label>
                             <input type="datetime-local" class="form-control" id="savings-date" name="date">
                         </div>
+                        <div class="form-group">
+                            <label class="form-heading" for="savings-note">Note</label>
+                            <input type="text" class="form-control" id="savings-note" name="note">
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -116,6 +124,7 @@
                         SavingsName: $('#savings-name').val(),
                         Amount: $('#savings-amount').val(),
                         Date: new Date($('#savings-date').val()),
+                        Note: $('#savings-note').val(),
                     }),
                     success: function (response) {
                         $('#addSavingsModal').modal('hide');
@@ -169,6 +178,7 @@
         function editSavings(savingsId) {
             var newName = $('#editSavingsName_' + savingsId).val();
             var newAmount = $('#editAmount_' + savingsId).val();
+            var newNote = $('#editNote_' + savingsId).val();
 
             $.ajax({
                 url: '@Url.Action("EditSavings", "Home")',
@@ -177,7 +187,8 @@
                 data: JSON.stringify({
                     Id: savingsId,
                     SavingsName: newName,
-                    Amount: newAmount
+                    Amount: newAmount,
+                    Note: newNote
                 }),
                 success: function (response) {
                     $('#editSavingsModal_' + savingsId).modal('hide'); // Hide the modal
