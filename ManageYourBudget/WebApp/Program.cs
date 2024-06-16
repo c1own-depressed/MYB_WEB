@@ -3,6 +3,7 @@ using System.Net;
 using Application.Interfaces;
 using Application.Services;
 using Application.Validators;
+using DocumentFormat.OpenXml.Office2016.Drawing.ChartDrawing;
 using Domain.Entities;
 using Domain.Interfaces;
 using FluentAssertions.Common;
@@ -32,7 +33,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
 
 // var connectionString = builder.Configuration.GetConnectionString("ConnectionString");
 // Configuration
-var connectionString = builder.Configuration.GetConnectionString("RomanConnection");
+var connectionString = builder.Configuration.GetConnectionString("AndriyConnection");
 //var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__AppDbContext");
 //var connectionString = builder.Configuration.GetConnectionString("RomanConnection");
 
@@ -63,7 +64,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IExportDataService, ExportDataService>();
 builder.Services.AddScoped<IHomeService, HomeService>();
 builder.Services.AddScoped<ICultureService, CultureService>();
-
+builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
 
 builder.Services.AddControllersWithViews()
@@ -217,6 +218,10 @@ app.MapControllerRoute(
     pattern: "testpage",
     defaults: new { controller = "TestPage", action = "Index" });
 
+app.MapControllerRoute(
+    name: "reviews",
+    pattern: "reviews",
+    defaults: new { controller = "ReviewPage", action = "Index" });
 // TODO: after the application is deployed
 // app.UseCors(options => options.WithOrigins("https://example.com")); // Adjust accordingly
 app.Run();

@@ -12,11 +12,25 @@ namespace Persistence
         private ExpenseCategoryRepository? _expenseCategoryRepository;
         private IncomeRepository? _incomeRepository;
         private SavingsRepository? _savingsRepository;
+        private ReviewRepository? _reviewRepository;
         private bool _disposed = false;
 
         public UnitOfWork(MYBDbContext context)
         {
             _context = context;
+        }
+
+        public IReviewRepository Reviews
+        {
+            get
+            {
+                if (_reviewRepository == null)
+                {
+                    _reviewRepository = new ReviewRepository(_context);
+                }
+
+                return _reviewRepository;
+            }
         }
 
         public IUserRepository Users

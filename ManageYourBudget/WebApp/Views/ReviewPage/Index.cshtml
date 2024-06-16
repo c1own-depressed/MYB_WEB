@@ -1,0 +1,31 @@
+﻿@model IEnumerable<Application.DTOs.ReviewDTOs.ReviewDTO>
+
+@{
+    ViewData["Title"] = "Reviews";
+}
+
+<h1>Reviews</h1>
+<p>
+    <a asp-action="Create" class="btn btn-primary">Add New Review</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>User Name</th>
+            <th>Rating</th>
+            <th>Text</th>
+            <th>Created At</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var review in Model)
+        {
+            <tr>
+                <td>@review.UserName</td>
+                <td>@review.Rating</td>
+                <td>@review.Text</td>
+                <td>@review.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+            </tr>
+        }
+    </tbody>
+</table>

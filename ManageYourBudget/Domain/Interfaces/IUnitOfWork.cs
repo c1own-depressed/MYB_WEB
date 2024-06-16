@@ -14,6 +14,8 @@ namespace Domain.Interfaces
 
         IIncomeRepository Incomes { get; }
 
+        IReviewRepository Reviews { get; }
+
         Task<int> CompleteAsync();
     }
 }

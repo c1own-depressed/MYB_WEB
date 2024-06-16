@@ -22,6 +22,8 @@ namespace Persistence
 
         public DbSet<Expense> Expenses { get; set; }
 
+        public DbSet<Review> Reviews { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder); // This ensures Identity configs are initialized
@@ -32,6 +34,7 @@ namespace Persistence
             modelBuilder.Entity<Income>().ToTable("Income");
             modelBuilder.Entity<ExpenseCategory>().ToTable("ExpenseCategory");
             modelBuilder.Entity<Expense>().ToTable("Expense");
+            modelBuilder.Entity<Review>().ToTable("Reviews");
         }
     }
 }
