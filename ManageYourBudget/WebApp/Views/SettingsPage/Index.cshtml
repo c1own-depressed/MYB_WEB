@@ -48,6 +48,14 @@
                         <div class="div-block-3">
                             <div class="settings-option">
                                 <div class="settings-label-wrapper">
+                                    <div class="settings-label-text">@localizer["UserName"]</div>
+                                </div>
+                                <div class="select-wrapper">
+                                    <input type="text" id="userName" name="UserName" class="select-field w-input" value="@Model.UserName" />
+                                </div>
+                            </div>
+                            <div class="settings-option">
+                                <div class="settings-label-wrapper">
                                     <div class="settings-label-text">@localizer["Language"]</div>
                                 </div>
                                 <div class="select-wrapper">
@@ -88,12 +96,15 @@
             </div>
         </div>
     </section>
-    
 
     <script>
+        var userName = '@Model.UserName';
         var isLightTheme = '@Model.IsLightTheme.ToString().ToLower()';
         var language = '@Model.Language.ToLower()';
         var currency = '@Model.Currency.ToLower()';
+
+        // Set UserName
+        document.getElementById('userName').value = userName;
 
         // Select Language
         if (language === 'en-us') {
@@ -115,6 +126,7 @@
         } else {
             document.getElementById('usdOption').setAttribute('selected', 'selected');
         }
+
         function submitForm() {
             document.getElementById("email-form").submit();
         }

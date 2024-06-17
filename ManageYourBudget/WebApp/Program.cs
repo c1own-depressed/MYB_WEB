@@ -32,7 +32,7 @@ builder.Host.UseSerilog((ctx, lc) => lc
 
 // var connectionString = builder.Configuration.GetConnectionString("ConnectionString");
 // Configuration
-var connectionString = builder.Configuration.GetConnectionString("AndriyConnection");
+var connectionString = builder.Configuration.GetConnectionString("DimaConnection");
 //var connectionString = Environment.GetEnvironmentVariable("ConnectionStrings__AppDbContext");
 //var connectionString = builder.Configuration.GetConnectionString("RomanConnection");
 
